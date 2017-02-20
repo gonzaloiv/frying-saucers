@@ -11,7 +11,10 @@ public class Config {
 
 }
 
-public enum CollisionLayer {}
+public enum CollisionLayer {
+  Player = 8,
+  Enemy = 9
+}
 
 public enum EnemyType {
   UFO

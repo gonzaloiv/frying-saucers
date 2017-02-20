@@ -1,10 +1,21 @@
-﻿using UnityEngine.Events;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
 #region Player Input Events
 
 public class EscapeInput : UnityEvent {}
 public class ReturnInput : UnityEvent {}
+
+public class ClickInput : UnityEvent {
+
+  public Vector2 Position { get { return position; } }
+  private Vector2 position;
+
+  public ClickInput(Vector2 position) {
+    this.position = position;  
+  }
+
+}
 
 #endregion
 

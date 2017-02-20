@@ -16,7 +16,7 @@ public class WaveController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-	  enemyController = Instantiate(enemyPrefab, transform).GetComponent<EnemyController>(); 
+  	enemyController = Instantiate(enemyPrefab, transform).GetComponent<EnemyController>(); 
   }
 
   #endregion
@@ -29,7 +29,7 @@ public class WaveController : MonoBehaviour {
       currentWaveObjects.Add(enemyController.Enemy(enemy)); 
     return currentWaveObjects;
   }
-
+  
   #endregion
 
 }

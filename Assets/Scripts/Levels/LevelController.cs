@@ -9,7 +9,11 @@ public class LevelController : MonoBehaviour {
   [SerializeField] private GameObject wavePrefab;
   private WaveController waveController;
 
+  [SerializeField] private GameObject playerPrefab;
+  private PlayerSpawner playerSpawner;
+
   private Level currentLevel;
+  private List<GameObject> currentLevelObjects;
 
   #endregion
 
@@ -17,7 +21,8 @@ public class LevelController : MonoBehaviour {
 
   void Awake() {
     currentLevel = Data.Level1;
-    waveController = Instantiate(wavePrefab, transform).GetComponent<WaveController>(); 
+    waveController = Instantiate(wavePrefab, transform).GetComponent<WaveController>();
+    playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
   }
 
   void OnDisable() {
@@ -29,6 +34,8 @@ public class LevelController : MonoBehaviour {
   #region Public Behaviour
 
   public void Level() {
+    currentLevelObjects = new List<GameObject>();
+    playerSpawner.SpawnPlayer();
     StartCoroutine(LevelRoutine());
   }
 
@@ -38,7 +45,7 @@ public class LevelController : MonoBehaviour {
 
   private IEnumerator LevelRoutine() {
     while (currentLevel.HasMoreWaves()) {
-      waveController.Wave(currentLevel.CurrentWave());
+      waveController.Wave(currentLevel.CurrentWave()).ForEach(x => currentLevelObjects.Add(x));
       yield return new WaitForSeconds(1);
     }
   }

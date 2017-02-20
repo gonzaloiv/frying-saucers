@@ -11,27 +11,27 @@ public class Data {
       new Wave(
         new List<Enemy> ( 
           new Enemy[] {
-            new Enemy(EnemyType.UFO, Vector2.zero),
             new Enemy(EnemyType.UFO, Vector2.one),
-            new Enemy(EnemyType.UFO, -Vector2.one)
+            new Enemy(EnemyType.UFO, Vector2.one * 2),
+            new Enemy(EnemyType.UFO, Vector2.one * 3)
           }
         )
       ),
       new Wave(
         new List<Enemy> ( 
           new Enemy[] {
-            new Enemy(EnemyType.UFO, Vector2.zero),
-            new Enemy(EnemyType.UFO, Vector2.one),
-            new Enemy(EnemyType.UFO, -Vector2.one)
+            new Enemy(EnemyType.UFO, -Vector2.one),
+            new Enemy(EnemyType.UFO, -Vector2.one * 2),
+            new Enemy(EnemyType.UFO, -Vector2.one * 3)
           }
         )
       ),
       new Wave(
         new List<Enemy> ( 
           new Enemy[] {
-            new Enemy(EnemyType.UFO, Vector2.zero),
-            new Enemy(EnemyType.UFO, Vector2.one),
-            new Enemy(EnemyType.UFO, -Vector2.one)
+            new Enemy(EnemyType.UFO, Vector2.one * 4),
+            new Enemy(EnemyType.UFO, Vector2.one * 5),
+            new Enemy(EnemyType.UFO, Vector2.one * 6)
           }
         )
       )
