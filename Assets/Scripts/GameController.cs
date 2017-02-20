@@ -9,16 +9,19 @@ public class GameController : MonoBehaviour {
   [SerializeField] private GameObject levelPrefab;
   private LevelController levelController;
 
+  private Board board;
+
   #endregion
 
 	#region Mono Behaviour
 
   void Awake() {
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
+    board = new Board(Config.BoardSize);
   }
 
   void Start() {
-    levelController.Initialize();
+    levelController.Level();
   }
 
   #endregion

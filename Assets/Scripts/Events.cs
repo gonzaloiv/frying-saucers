@@ -12,7 +12,7 @@ public class ReturnInput : UnityEvent {}
 
 public class EnemyHitEvent : UnityEvent {
 	public EnemyHitEvent() {
-		Debug.Log("EnemyHitEvent");
+	  Debug.Log("EnemyHitEvent");
   }
 }
 
@@ -26,4 +26,3 @@ public class GameOverEvent : UnityEvent {
 
 #region UI Events 
 #endregion
-
