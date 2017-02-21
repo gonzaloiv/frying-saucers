@@ -9,8 +9,6 @@ public class EnemyController : MonoBehaviour {
 
   private EnemySpawner enemySpawner;
 
-  private 
-
   #endregion
 
   #region Mono Behaviour
@@ -23,8 +21,8 @@ public class EnemyController : MonoBehaviour {
 
   #region Public Behaviour
 
-  public GameObject Enemy(Enemy enemy) {
-    return enemySpawner.SpawnEnemy(enemy);
+  public GameObject Enemy(Enemy enemy, GameObject player) {
+    return enemySpawner.SpawnEnemy(enemy, player);
   }
 
   #endregion

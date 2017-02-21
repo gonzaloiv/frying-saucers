@@ -24,10 +24,12 @@ public class EnemySpawner : MonoBehaviour {
 
   #region Public Behaviour
 
-  public GameObject SpawnEnemy(Enemy enemy) {
+  public GameObject SpawnEnemy(Enemy enemy, GameObject player) {
     GameObject enemyObject = enemyPools[(int) enemy.EnemyType].PopObject();
     enemyObject.transform.position = enemy.Position;
+    enemyObject.GetComponent<IEnemyBehaviour>().Initialize(player);
     enemyObject.SetActive(true);
+    enemyObject.GetComponent<IEnemyBehaviour>().Play(); // TODO: repensar cómo se inician los comportamientos de los enemigos
     return enemyObject;
   }
 

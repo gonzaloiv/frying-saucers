@@ -13,8 +13,10 @@ public class PlayerSpawner : MonoBehaviour {
   
   #region Public Behaviour
 
-  public GameObject SpawnPlayer() {
+  public GameObject SpawnPlayer(Vector2 position) {
     ship = Instantiate(shipPrefab, transform);
+    ship.transform.position = position;
+
     return ship;
   }
 

@@ -23,10 +23,10 @@ public class WaveController : MonoBehaviour {
 
   #region Public Behaviour
 
-  public List<GameObject> Wave(Wave wave) {
+  public List<GameObject> Wave(Wave wave, GameObject player) {
     currentWaveObjects = new List<GameObject>();
     foreach(Enemy enemy in wave.Enemies)
-      currentWaveObjects.Add(enemyController.Enemy(enemy)); 
+      currentWaveObjects.Add(enemyController.Enemy(enemy, player)); 
     return currentWaveObjects;
   }
   

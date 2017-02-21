@@ -9,6 +9,12 @@ public class Config {
 
   #endregion
 
+  #region Physics
+
+  public const float Gravity = 3f; // IPAD DIMENSIONS
+
+  #endregion
+
 }
 
 public enum CollisionLayer {

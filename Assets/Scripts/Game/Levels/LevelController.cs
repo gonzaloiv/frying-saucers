@@ -35,17 +35,17 @@ public class LevelController : MonoBehaviour {
 
   public void Level() {
     currentLevelObjects = new List<GameObject>();
-    playerSpawner.SpawnPlayer();
-    StartCoroutine(LevelRoutine());
+	  GameObject player = playerSpawner.SpawnPlayer(currentLevel.PlayerPosition);
+    StartCoroutine(LevelRoutine(player));
   }
 
   #endregion
 
   #region Private Behaviour
 
-  private IEnumerator LevelRoutine() {
+  private IEnumerator LevelRoutine(GameObject player) {
     while (currentLevel.HasMoreWaves()) {
-      waveController.Wave(currentLevel.CurrentWave()).ForEach(x => currentLevelObjects.Add(x));
+      waveController.Wave(currentLevel.CurrentWave(), player).ForEach(x => currentLevelObjects.Add(x));
       yield return new WaitForSeconds(1);
     }
   }
