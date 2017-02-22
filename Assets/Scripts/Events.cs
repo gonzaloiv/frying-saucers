@@ -21,10 +21,21 @@ public class ClickInput : UnityEvent {
 
 #region Game Mechanics Events 
 
-public class EnemyHitEvent : UnityEvent {
-	public EnemyHitEvent() {
-	  Debug.Log("EnemyHitEvent");
+public class NewLevelEvent : UnityEvent {
+  public NewLevelEvent() {
+    Debug.Log("NewLevelEvent");
   }
+}
+
+public class EnemyHitEvent : UnityEvent {
+
+  public int Score { get { return score; } }
+  private int score;
+
+	public EnemyHitEvent(int score) {
+    this.score = score;
+  }
+
 }
 
 public class GameOverEvent : UnityEvent {

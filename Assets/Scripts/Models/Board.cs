@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Board {
+public struct Board {
 
   #region Fields
 

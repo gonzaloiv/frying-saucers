@@ -12,6 +12,9 @@ public class UFO : MonoBehaviour, IEnemy {
   private Animator animator;
   private IEnemyBehaviour behaviour;
 
+  private bool activeCollider;
+  private const int score = 10;
+
   #endregion
 
   #region Mono Behaviour
@@ -22,17 +25,23 @@ public class UFO : MonoBehaviour, IEnemy {
     behaviour = GetComponent<IEnemyBehaviour>();
   }
 
+  void OnEnable() {
+    activeCollider = true;
+  }
+
   void OnParticleCollision(GameObject particle) {
-    if (particle.layer == (int) CollisionLayer.Player) {
+    if (activeCollider && particle.layer == (int) CollisionLayer.Player) {
       animator.Play("Disable");
       explosion.Play();
+      activeCollider = false;
+      EventManager.TriggerEvent(new EnemyHitEvent(score));
     }
   }
 
   #endregion
 
   #region Public Behaviour
- 
+  
   public void Disable() {
     gameObject.SetActive(false);
   }

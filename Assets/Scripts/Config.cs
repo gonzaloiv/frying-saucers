@@ -11,7 +11,7 @@ public class Config {
 
   #region Physics
 
-  public const float Gravity = 3f; // IPAD DIMENSIONS
+  public const float Gravity = 3f;
 
   #endregion
 
