@@ -7,7 +7,7 @@ public class PlayerSpawner : MonoBehaviour {
   #region Fields
 
   [SerializeField] private GameObject shipPrefab;
-  private GameObject ship;
+  public static GameObject ship;
 
   #endregion
   

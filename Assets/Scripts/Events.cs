@@ -38,13 +38,21 @@ public class EnemyHitEvent : UnityEvent {
 
 }
 
+public class EnemyShotEvent : UnityEvent {
+
+  public Vector2 EnemyPosition { get { return enemyPosition; } }
+  private Vector2 enemyPosition;
+
+  public EnemyShotEvent(Vector2 enemyPosition) {
+    this.enemyPosition = enemyPosition;
+  }
+
+}
+
 public class GameOverEvent : UnityEvent {
   public GameOverEvent() {
     Debug.Log("GameOverEvent");
   }
 }
 
-#endregion
-
-#region UI Events 
 #endregion

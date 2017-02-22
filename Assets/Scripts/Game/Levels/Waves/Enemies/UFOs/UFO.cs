@@ -12,7 +12,7 @@ public class UFO : MonoBehaviour, IEnemy {
   private Animator animator;
   private IEnemyBehaviour behaviour;
 
-  private bool activeCollider;
+  private bool activeCollider; // TODO: repensar como controlar sólo una colisión por grupo de partículas
   private const int score = 10;
 
   #endregion
@@ -27,6 +27,11 @@ public class UFO : MonoBehaviour, IEnemy {
 
   void OnEnable() {
     activeCollider = true;
+  }
+
+  void OnCollisionEnter2D(Collision2D collision) {
+    if (activeCollider && collision.gameObject.layer == (int) CollisionLayer.Board)
+      Disable();
   }
 
   void OnParticleCollision(GameObject particle) {

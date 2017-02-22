@@ -22,7 +22,7 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
   void Update() {
     transform.rotation = Quaternion.Slerp(transform.rotation, QuaternionToPlayer(), 1);
     if (transform.position.y > -10)
-      transform.Translate(Vector2.down * Config.Gravity * Time.deltaTime, Space.World);
+      transform.Translate(Vector2.down * Config.GRAVITY * Time.deltaTime, Space.World);
   }
 
   void OnDisable() {
@@ -47,8 +47,9 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
 
   private IEnumerator ShootingRoutine() {
     while(gameObject.activeSelf) {
+      EventManager.TriggerEvent(new EnemyShotEvent(transform.position));
       laserController.Emit();
-      yield return new WaitForSeconds(0.5f);
+      yield return new WaitForSeconds(1f);
     }
   }
 

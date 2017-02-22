@@ -6,15 +6,18 @@ public struct Board {
 
   #region Fields
 
-  public Vector2 BoardSize { get { return boardSize; } set { boardSize = value; } }
-  private Vector2 boardSize;
+  public static Vector2 BoardSize { get { return boardSize; } }
+  private static Vector2 boardSize = new Vector2(5, 5);
+
+  public static Vector2 ScreenSize { get { return screenSize; } set { screenSize = value; } }
+  private static Vector2 screenSize;
 
   #endregion
 
   #region Public Behaviour	
 
-  public Board (Vector2 boardSize) {
-    this.boardSize = boardSize;
+  public Board (Vector2 screenSize) {
+    Board.screenSize = screenSize;
 	}
 	
   #endregion

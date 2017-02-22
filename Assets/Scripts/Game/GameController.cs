@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour {
 
   void Awake() {
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
-    board = new Board(Config.BoardSize);
+    board = new Board(Config.BOARD_SIZE);
 
     Screen.orientation = ScreenOrientation.Portrait;
   }
