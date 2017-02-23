@@ -15,6 +15,9 @@ public class LevelController : MonoBehaviour {
 	[SerializeField] private GameObject hudPrefab;
   private HUDController hudController;
 
+  [SerializeField] private GameObject backgroundPrefab;
+  private BackgroundController backgroundController;
+
   private Level currentLevel;
   private List<GameObject> currentLevelObjects;
 
@@ -27,6 +30,7 @@ public class LevelController : MonoBehaviour {
     waveController = Instantiate(wavePrefab, transform).GetComponent<WaveController>();
     playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
     hudController = Instantiate(hudPrefab, transform).GetComponent<HUDController>();
+    backgroundController = Instantiate(backgroundPrefab, transform).GetComponent<BackgroundController>();
   }
 
   void OnDisable() {
@@ -38,10 +42,16 @@ public class LevelController : MonoBehaviour {
   #region Public Behaviour
 
   public void Level() {
+
+    // GAME OBJECTS
     currentLevelObjects = new List<GameObject>();
 	  GameObject player = playerSpawner.SpawnPlayer(currentLevel.PlayerPosition);
+
+    // LEVEL OBJECTS
+    backgroundController.NewLevel();
     hudController.gameObject.SetActive(true);
-    EventManager.TriggerEvent(new NewLevelEvent());
+    hudController.NewLevel();
+
     StartCoroutine(LevelRoutine(player));
   }
 

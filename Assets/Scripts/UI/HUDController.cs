@@ -30,7 +30,6 @@ public class HUDController : MonoBehaviour {
   }
  
   void OnEnable() {
-    EventManager.StartListening<NewLevelEvent>(OnNewLevelEvent);
     EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
   }
   
@@ -42,7 +41,6 @@ public class HUDController : MonoBehaviour {
   }
 
   void OnDisable() {
-    EventManager.StopListening<NewLevelEvent>(OnNewLevelEvent);
     EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
   }
 
@@ -50,13 +48,17 @@ public class HUDController : MonoBehaviour {
 
   #region Event Behaviour
 
-  void OnNewLevelEvent(NewLevelEvent newLevelEvent) {
-    level++;
-    levelLabel.text = levelText + level;
-  }
-
   void OnEnemyHitEvent(EnemyHitEvent enemyHitEvent) {
     score += enemyHitEvent.Score;
+  }
+
+  #endregion
+
+  #region Public Behaviour
+
+  public void NewLevel() {
+    level++;
+    levelLabel.text = levelText + level;
   }
 
   #endregion
