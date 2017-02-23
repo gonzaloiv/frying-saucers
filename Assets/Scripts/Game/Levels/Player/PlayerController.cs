@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour {
 
   public void Initialize() {
     playerWeapon.enabled = true;
+
   }
 
   #endregion

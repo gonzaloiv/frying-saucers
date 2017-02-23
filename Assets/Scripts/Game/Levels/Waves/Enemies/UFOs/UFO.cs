@@ -32,6 +32,10 @@ public class UFO : MonoBehaviour, IEnemy {
   void OnCollisionEnter2D(Collision2D collision) {
     if (activeCollider && collision.gameObject.layer == (int) CollisionLayer.Board)
       Disable();
+    if (activeCollider && collision.gameObject.layer == (int) CollisionLayer.Player) {
+      animator.Play("Disable");
+      explosion.Play();
+    }
   }
 
   void OnParticleCollision(GameObject particle) {
@@ -46,7 +50,7 @@ public class UFO : MonoBehaviour, IEnemy {
   #endregion
 
   #region Public Behaviour
-  
+
   public void Disable() {
     gameObject.SetActive(false);
   }

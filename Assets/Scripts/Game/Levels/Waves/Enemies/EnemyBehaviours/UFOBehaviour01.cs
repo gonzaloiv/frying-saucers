@@ -20,7 +20,6 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
   }
 
   void Update() {
-    transform.rotation = Quaternion.Slerp(transform.rotation, QuaternionToPlayer(), 1);
     if (transform.position.y > -10)
       transform.Translate(Vector2.down * Config.GRAVITY * Time.deltaTime, Space.World);
   }
@@ -48,6 +47,7 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
   private IEnumerator ShootingRoutine() {
     while(gameObject.activeSelf) {
       EventManager.TriggerEvent(new EnemyShotEvent(transform.position));
+      transform.rotation = QuaternionToPlayer();
       laserController.Emit();
       yield return new WaitForSeconds(1f);
     }

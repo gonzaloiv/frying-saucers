@@ -45,8 +45,8 @@ public class LevelController : MonoBehaviour {
 
     // GAME OBJECTS
     currentLevelObjects = new List<GameObject>();
-	  GameObject player = playerSpawner.SpawnPlayer(currentLevel.PlayerPosition);
-
+	  GameObject player = playerSpawner.SpawnPlayer(currentLevel.PlayerPosition, currentLevelObjects);
+    
     // LEVEL OBJECTS
     backgroundController.NewLevel();
     hudController.gameObject.SetActive(true);
@@ -61,8 +61,8 @@ public class LevelController : MonoBehaviour {
 
   private IEnumerator LevelRoutine(GameObject player) {
     while (currentLevel.HasMoreWaves()) {
-      waveController.Wave(currentLevel.CurrentWave(), player).ForEach(x => currentLevelObjects.Add(x));
       yield return new WaitForSeconds(1);
+      waveController.Wave(currentLevel.CurrentWave(), player).ForEach(x => currentLevelObjects.Add(x));
     }
   }
 
