@@ -8,7 +8,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
   #region Fields
 
-  public static Vector2 INITIAL_POSITION = new Vector2(0, -2);
+  public static Vector2 INITIAL_POSITION = new Vector2(0, -3);
   public const float MAX_SPEED = 0.06f;
   public const int INITIAL_ROW = 2;
 
@@ -28,18 +28,20 @@ public class PlayerBehaviour : MonoBehaviour {
   }
 
   void Update() {
-  	if(!returning)
-      transform.position = Vector2.Lerp(transform.position, nextPosition, MAX_SPEED);
-    else
-      transform.position = Vector2.Lerp(transform.position, INITIAL_POSITION, MAX_SPEED);
+    if (!returning)
+      transform.position = Vector2.Lerp(transform.position, nextPosition, MAX_SPEED * Time.timeScale);
+    else {
+      transform.position = Vector2.Lerp(transform.position, INITIAL_POSITION, MAX_SPEED * Time.timeScale);
+      transform.Rotate(0, 90 * Time.deltaTime, 0);
+    }
   }
 
   void OnEnable() {
-  	StartCoroutine(ReturnToInitialPosition());
+    StartCoroutine(ReturnToInitialPosition());
   }
 
   void OnDisable() {
-  	StopAllCoroutines();
+    StopAllCoroutines();
   }
 
   #endregion
@@ -99,7 +101,7 @@ public class PlayerBehaviour : MonoBehaviour {
       position += new Vector2(new int[] { -row, row }[Random.Range(0, 2)], -transform.position.y);
     } else if (transform.position.y >= 0) {
       position += new Vector2(new int[] { -row, row }[Random.Range(0, 2)], -transform.position.y);
-    }else {
+    } else {
       position += new Vector2(new int[] { -row, row }[Random.Range(0, 2)], new int[] { -row, row }[Random.Range(0, 2)] / 2);
     }
 
@@ -107,14 +109,15 @@ public class PlayerBehaviour : MonoBehaviour {
       
   }
 
-	private IEnumerator ReturnToInitialPosition() {
+  private IEnumerator ReturnToInitialPosition() {
     while (gameObject.activeSelf) {
       yield return new WaitForSeconds(Random.Range(3f, 4f));
-      if (transform.position.x <= -Board.BOARD_SIZE.x || transform.position.x >= Board.BOARD_SIZE.x || transform.position.y <= -Board.BOARD_SIZE.y) {
+//      if (transform.position.x <= -Board.BOARD_SIZE.x || transform.position.x >= Board.BOARD_SIZE.x || transform.position.y <= -Board.BOARD_SIZE.y) {
         anim.Play("Return");
         returning = true;
-      }
+//      }
       yield return new WaitForSeconds(Random.Range(0.4f, 0.9f));
+      transform.rotation = Quaternion.identity;
       returning = false;
     }
   }

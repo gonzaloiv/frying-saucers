@@ -7,37 +7,41 @@ public class HUDController : MonoBehaviour {
 
   #region Fields
 
-  private const string levelText = "LEVEL ";
-  private const string scoreTextLabel = "AUDIENCE ";
-  private int scoreTextNumber = 0;
+  private const string LEVEL_TEXT = "LEVEL ";
+  private const string SCORE_TEXT = "AUDIENCE ";
+
+  private Canvas canvas;
 
   [SerializeField] private GameObject scopePrefab;
   private GameObject scope;
 
-  private Canvas canvas;
+  [SerializeField] private GameObject gameOverScreenPrefab;
+  private GameObject gameOverScreen;
+
   private Text levelLabel;
   private Text scoreLabel;
 
   private int level = 0;
   private int score = 0;
+  private int scoreTextNumber = 0;
 
   #endregion
 
   #region Mono Behaviour
 
   void Awake() {
-	  canvas = GetComponent<Canvas>();
+    canvas = GetComponent<Canvas>();
+    canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); // Sets world camera after instantiation
+    canvas.sortingLayerName = "UI";
     levelLabel = GetComponentsInChildren<Text>()[1];
     scoreLabel = GetComponentsInChildren<Text>()[0];
-    canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); // Sets world camera after instantiation
     scope = Instantiate(scopePrefab, transform);
-    scope.GetComponent<SpriteRenderer>().enabled = false;
   }
  
   void Update() {
     if(scoreTextNumber < score) {
       scoreTextNumber++;
-      scoreLabel.text = scoreTextLabel + scoreTextNumber;
+      scoreLabel.text = SCORE_TEXT + scoreTextNumber;
     }
   }
 
@@ -71,7 +75,7 @@ public class HUDController : MonoBehaviour {
 
   public void NewLevel() {
     level++;
-    levelLabel.text = levelText + level;
+    levelLabel.text = LEVEL_TEXT + level;
   }
 
   #endregion

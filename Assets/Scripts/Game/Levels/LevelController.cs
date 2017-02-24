@@ -13,14 +13,14 @@ public class LevelController : MonoBehaviour {
   [SerializeField] private GameObject playerPrefab;
   private PlayerSpawner playerSpawner;
 
-	[SerializeField] private GameObject hudPrefab;
-  private HUDController hudController;
-
   [SerializeField] private GameObject backgroundPrefab;
   private BackgroundController backgroundController;
 
+  [SerializeField] private GameObject hudPrefab;
+  private HUDController hudController;
+
   private Level currentLevel;
-  private List<GameObject> currentLevelObjects;
+  private List<GameObject> currentLevelObjects = new List<GameObject>();
 
   #endregion
 
@@ -30,11 +30,23 @@ public class LevelController : MonoBehaviour {
     currentLevel = Data.Level1;
     waveController = Instantiate(wavePrefab, transform).GetComponent<WaveController>();
     playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
-    hudController = Instantiate(hudPrefab, transform).GetComponent<HUDController>();
     backgroundController = Instantiate(backgroundPrefab, transform).GetComponent<BackgroundController>();
+    hudController = Instantiate(hudPrefab, transform).GetComponent<HUDController>();
+  }
+
+  void OnEnable() {
+    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
   }
 
   void OnDisable() {
+    EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
+  }
+
+  #endregion
+
+  #region Even Behaviour
+
+  void OnGameOverEvent(GameOverEvent gameOverEvent) {
     StopAllCoroutines();
   }
 
@@ -44,16 +56,22 @@ public class LevelController : MonoBehaviour {
 
   public void Level() {
 
-    // GAME OBJECTS
+    // LEVEL RESET
+    if(currentLevelObjects.Count != 0) 
+      currentLevelObjects.ForEach(x => x.SetActive(false));
+
+    // LEVEL GAME OBJECTS
     currentLevelObjects = new List<GameObject>();
 	  GameObject player = playerSpawner.SpawnPlayer(currentLevel.PlayerPosition, currentLevelObjects);
+    currentLevelObjects.Add(player);
     
-    // LEVEL OBJECTS
+    // LEVEL UI & ENVIRONMENT
     backgroundController.NewLevel();
     hudController.gameObject.SetActive(true);
     hudController.NewLevel();
 
     StartCoroutine(LevelRoutine(player));
+
   }
 
   #endregion

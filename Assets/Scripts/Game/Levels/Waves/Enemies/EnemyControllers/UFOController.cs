@@ -11,7 +11,6 @@ public class UFOController : MonoBehaviour, IEnemy {
   private ParticleSystem explosion;
 
   private Animator animator;
-  private UFO ufo;
 
   private bool activeCollider; // TODO: repensar como controlar sólo una colisión por grupo de partículas
 
@@ -22,7 +21,6 @@ public class UFOController : MonoBehaviour, IEnemy {
   void Awake() {
     explosion = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
     animator = GetComponent<Animator>();
-    ufo = new UFO();
   }
 
   void OnEnable() {
@@ -43,7 +41,7 @@ public class UFOController : MonoBehaviour, IEnemy {
       animator.Play("Disable");
       explosion.Play();
       activeCollider = false;
-      EventManager.TriggerEvent(new EnemyHitEvent(ufo.Score));
+      EventManager.TriggerEvent(new EnemyHitEvent((int) EnemyScore.UFO));
     }
   }
 

@@ -32,6 +32,12 @@ public class LongClickInput : UnityEvent {
 
 #region Game Mechanics Events 
 
+public class NewGameEvent : UnityEvent {
+  public NewGameEvent() {
+    Debug.Log("NewGameEvent");
+  }
+}
+
 public class NewLevelEvent : UnityEvent {
   public NewLevelEvent() {
     Debug.Log("NewLevelEvent");

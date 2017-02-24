@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c0356bf76fa7143f6b323c4dbd3d3c4a
+timeCreated: 1488017833
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Niconne
+  fontNames:
+  - Niconne
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

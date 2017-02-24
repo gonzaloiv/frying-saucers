@@ -19,11 +19,26 @@ public class GameController : MonoBehaviour {
   void Awake() {
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
     board = new Board(Config.BOARD_SIZE);
-
     Screen.orientation = ScreenOrientation.Portrait;
   }
 
   void Start() {
+    levelController.Level();
+  }
+
+  void OnEnable() {
+    EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
+  }
+
+  void OnDisable() {
+    EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
+  }
+
+  #endregion
+
+  #region Event Behaviour
+
+  void OnNewGameEvent(NewGameEvent newGameEvent) {
     levelController.Level();
   }
 
