@@ -17,6 +17,17 @@ public class ClickInput : UnityEvent {
 
 }
 
+public class LongClickInput : UnityEvent {
+
+  public Vector2 Position { get { return position; } }
+  private Vector2 position;
+
+  public LongClickInput(Vector2 position) {
+    this.position = position;  
+  }
+
+}
+
 #endregion
 
 #region Game Mechanics Events 

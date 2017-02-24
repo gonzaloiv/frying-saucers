@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour {
 
   #region Fields
 
+  [SerializeField] GameObject jetPrefab;
+  private ParticleSystemController particleSystemController;
+
   private PlayerWeapon playerWeapon;
 
   #endregion
@@ -13,6 +16,7 @@ public class PlayerController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
+    particleSystemController = Instantiate(jetPrefab, transform).GetComponent<ParticleSystemController>();
     playerWeapon = GetComponent<PlayerWeapon>();
   }
 
@@ -21,8 +25,8 @@ public class PlayerController : MonoBehaviour {
   #region Public Behaviour
 
   public void Initialize() {
+    particleSystemController.enabled = true;
     playerWeapon.enabled = true;
-
   }
 
   #endregion

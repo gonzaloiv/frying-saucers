@@ -9,6 +9,9 @@ public class PlayerWeapon : MonoBehaviour {
   [SerializeField] private GameObject laserPrefab;
 	private ParticleSystem laser;
 
+  [SerializeField] private GameObject powerWavePrefab;
+  private ParticleSystemController powerWaveController;
+
   private Vector2 clickPosition = Vector2.zero;
 
   #endregion
@@ -17,6 +20,7 @@ public class PlayerWeapon : MonoBehaviour {
 
   void Awake() {
     laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
+    powerWaveController = Instantiate(powerWavePrefab, transform.parent).GetComponent<ParticleSystemController>();
   }
 
   void Update() {
@@ -25,10 +29,12 @@ public class PlayerWeapon : MonoBehaviour {
 
   void OnEnable() {
     EventManager.StartListening<ClickInput>(OnClickInput);
+    EventManager.StartListening<LongClickInput>(OnLongClickInput);
   }
 
   void OnDisable() {
     EventManager.StopListening<ClickInput>(OnClickInput);
+    EventManager.StopListening<LongClickInput>(OnLongClickInput);
   }
 
   #endregion
@@ -37,7 +43,11 @@ public class PlayerWeapon : MonoBehaviour {
 
   void OnClickInput(ClickInput clickInput) {
     clickPosition = clickInput.Position;
-	laser.Play();
+    laser.Play();
+  }
+
+  void OnLongClickInput(LongClickInput longClickInput) {
+    powerWaveController.Play(transform.position);
   }
 
   #endregion
@@ -56,7 +66,6 @@ public class PlayerWeapon : MonoBehaviour {
 
     return quaternion;
   }
-
 
   #endregion
 

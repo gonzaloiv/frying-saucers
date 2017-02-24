@@ -16,7 +16,7 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-		laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
+	laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
   }
 
   void Update() {
