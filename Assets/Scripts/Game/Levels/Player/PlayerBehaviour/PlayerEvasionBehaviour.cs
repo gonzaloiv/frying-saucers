@@ -40,6 +40,7 @@ public class PlayerEvasionBehaviour : MonoBehaviour {
 
   void OnEnemyShotEvent(EnemyShotEvent enemyShotEvent) {
     PlayerBehaviourPositions.AddPosition(transform.position);
+	playerBehaviour.SetNextPosition();
   }
 
   #endregion

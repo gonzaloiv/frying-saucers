@@ -1,43 +1,47 @@
-﻿using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine;
+using Models;
 
-public struct Level {
+namespace Models {
 
-  #region Fields
+  public struct Level {
 
-  public int LevelNumber { get { return levelNumber; } }
-  private int levelNumber;
+    #region Fields
 
-  public List<Wave> Waves { get { return waves; } }
-  private List<Wave> waves;
+    public int LevelNumber { get { return levelNumber; } }
+    private int levelNumber;
 
-  public Vector2 PlayerPosition { get { return playerPosition; } }
-  private Vector2 playerPosition; 
+    public List<Wave> Waves { get { return waves; } }
+    private List<Wave> waves;
 
-  private int currentWave;
+    public Vector2 PlayerPosition { get { return playerPosition; } }
+    private Vector2 playerPosition;
 
-  #endregion 
+    private int currentWave;
 
-  #region Public Behaviour
+    #endregion
 
-  public Level(int levelNumber, Vector2 playerPosition, List<Wave> waves) {
-    this.levelNumber = levelNumber;
-    this.playerPosition = playerPosition;
-    this.waves = waves;
-    this.currentWave = 0;
-  }
+    #region Public Behaviour
 
-  public Wave CurrentWave() {
-    Wave wave = waves[currentWave];
+    public Level(int levelNumber, Vector2 playerPosition, List<Wave> waves) {
+      this.levelNumber = levelNumber;
+      this.playerPosition = playerPosition;
+      this.waves = waves;
+      this.currentWave = 0;
+    }
+
+    public Wave CurrentWave() {
+      Wave wave = waves[currentWave];
 //    currentWave++; => Always same wave for debug
-    return wave;
-  }
+      return wave;
+    }
 
-  public bool HasMoreWaves() {
-    return currentWave < waves.Count;
-  }
+    public bool HasMoreWaves() {
+      return currentWave < waves.Count;
+    }
 
-  #endregion
+    #endregion
 	
+  }
+
 }

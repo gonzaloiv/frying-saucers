@@ -7,7 +7,7 @@ public class PlayerWeapon : MonoBehaviour {
   #region Fields
 
   [SerializeField] private GameObject laserPrefab;
-  private LaserController laserController;
+	private ParticleSystem laser;
 
   private Vector2 clickPosition = Vector2.zero;
 
@@ -16,7 +16,7 @@ public class PlayerWeapon : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    laserController = Instantiate(laserPrefab, transform).GetComponent<LaserController>();
+    laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
   }
 
   void Update() {
@@ -37,7 +37,7 @@ public class PlayerWeapon : MonoBehaviour {
 
   void OnClickInput(ClickInput clickInput) {
     clickPosition = clickInput.Position;
-    laserController.Emit();
+	laser.Play();
   }
 
   #endregion

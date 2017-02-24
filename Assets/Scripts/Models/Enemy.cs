@@ -1,18 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Models;
 
-public struct Enemy {
+namespace Models {
 
-  public EnemyType EnemyType { get { return enemyType; } }
-  private EnemyType enemyType;
+  public struct Enemy {
 
-  public Vector2 Position { get { return position; } }
-  private Vector2 position;
+    public EnemyType EnemyType { get { return enemyType; } }
+    private EnemyType enemyType;
 
-  public Enemy(EnemyType enemyType, Vector2 position) {
-    this.enemyType = enemyType;
-    this.position = position;
-  }
+    public Vector2 Position { get { return position; } }
+    private Vector2 position;
+
+    public Enemy(EnemyType enemyType, Vector2 position) {
+      this.enemyType = enemyType;
+      this.position = position;
+    }
 	
+  }
+
 }

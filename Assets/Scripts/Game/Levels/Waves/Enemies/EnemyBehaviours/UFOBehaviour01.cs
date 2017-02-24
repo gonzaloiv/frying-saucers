@@ -7,7 +7,7 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
   #region Fields
 
   [SerializeField] private GameObject laserPrefab;
-  private LaserController laserController;
+  private ParticleSystem laser;
 
   private GameObject player;
 
@@ -16,7 +16,7 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    laserController = Instantiate(laserPrefab, transform).GetComponent<LaserController>();
+		laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
   }
 
   void Update() {
@@ -48,7 +48,7 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
     while(gameObject.activeSelf) {
       EventManager.TriggerEvent(new EnemyShotEvent(transform.position));
       transform.rotation = QuaternionToPlayer();
-      laserController.Emit();
+      laser.Play();
       yield return new WaitForSeconds(1f);
     }
   }

@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Models;
 
-public class UFO : MonoBehaviour, IEnemy {
+public class UFOController : MonoBehaviour, IEnemy {
 
   #region Fields
 
@@ -10,10 +11,9 @@ public class UFO : MonoBehaviour, IEnemy {
   private ParticleSystem explosion;
 
   private Animator animator;
-  private IEnemyBehaviour behaviour;
+  private UFO ufo;
 
   private bool activeCollider; // TODO: repensar como controlar sólo una colisión por grupo de partículas
-  private const int score = 10;
 
   #endregion
 
@@ -22,7 +22,7 @@ public class UFO : MonoBehaviour, IEnemy {
   void Awake() {
     explosion = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
     animator = GetComponent<Animator>();
-    behaviour = GetComponent<IEnemyBehaviour>();
+    ufo = new UFO();
   }
 
   void OnEnable() {
@@ -30,9 +30,9 @@ public class UFO : MonoBehaviour, IEnemy {
   }
 
   void OnCollisionEnter2D(Collision2D collision) {
-    if (activeCollider && collision.gameObject.layer == (int) CollisionLayer.Board)
+    if (collision.gameObject.layer == (int) CollisionLayer.Board)
       Disable();
-    if (activeCollider && collision.gameObject.layer == (int) CollisionLayer.Player) {
+    if (collision.gameObject.layer == (int) CollisionLayer.Player) {
       animator.Play("Disable");
       explosion.Play();
     }
@@ -43,7 +43,7 @@ public class UFO : MonoBehaviour, IEnemy {
       animator.Play("Disable");
       explosion.Play();
       activeCollider = false;
-      EventManager.TriggerEvent(new EnemyHitEvent(score));
+      EventManager.TriggerEvent(new EnemyHitEvent(ufo.Score));
     }
   }
 

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Models;
 
 public class PlayerBehaviour : MonoBehaviour {
 
   #region Fields
 
-  public static Vector2 INITIAL_POSITION = Vector2.zero;
+  public static Vector2 INITIAL_POSITION = new Vector2(0, -2);
   public const float MAX_SPEED = 0.06f;
   public const int INITIAL_ROW = 2;
 

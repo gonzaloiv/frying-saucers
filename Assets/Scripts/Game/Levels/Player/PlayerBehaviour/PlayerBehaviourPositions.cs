@@ -7,7 +7,7 @@ public class PlayerBehaviourPositions {
 
   #region Fields
 
-  private const int MAX_POSITIONS = 3;
+  private const int MAX_POSITIONS = 5;
 
   public static List<Vector2> Positions { get { return positions; } }
   private static List<Vector2> positions = new List<Vector2>();

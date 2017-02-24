@@ -1,25 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Models;
 using UnityEngine;
 
-public struct Board {
+namespace Models {
 
-  #region Fields
+  public struct Board {
 
-  public static Vector2 BOARD_SIZE { get { return boardSize; } }
-  private static Vector2 boardSize = new Vector2(5, 4);
+    #region Fields
 
-  public static Vector2 SCREEN_SIZE { get { return screenSize; } set { screenSize = value; } }
-  private static Vector2 screenSize;
+    public static Vector2 BOARD_SIZE { get { return boardSize; } }
+    private static Vector2 boardSize = new Vector2(5, 4);
 
-  #endregion
+    public static Vector2 SCREEN_SIZE { get { return screenSize; } set { screenSize = value; } }
+    private static Vector2 screenSize;
 
-  #region Public Behaviour	
+    #endregion
 
-  public Board (Vector2 screenSize) {
-    Board.screenSize = screenSize;
-	}
-	
-  #endregion
+    #region Public Behaviour
+
+    public Board(Vector2 screenSize) {
+      Board.screenSize = screenSize;
+    }
+
+    #endregion
+
+  }
 
 }
