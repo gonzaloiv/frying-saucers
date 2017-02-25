@@ -13,9 +13,7 @@ public class Data {
       new Wave(
         new List<Enemy> ( 
           new Enemy[] {
-            new Enemy(EnemyType.UFO, new Vector2(3, 10)),
-            new Enemy(EnemyType.UFO, new Vector2(3, 10)),
-            new Enemy(EnemyType.UFO, new Vector2(3, 10))
+            new Enemy(EnemyType.UFO, new Vector2(3, 6))
           }
         )
       )

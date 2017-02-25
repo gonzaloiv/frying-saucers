@@ -11,15 +11,21 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
 
   private GameObject player;
 
+  private Vector3 rotation;
+  private bool shooting = false;
+
   #endregion
 
   #region Mono Behaviour
 
   void Awake() {
-	laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
+	  laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
+    rotation = new Vector3(0, 0, Random.Range(-10, 10));
   }
 
   void Update() {
+    if(!shooting)
+      transform.rotation = transform.rotation * Quaternion.Euler(rotation  * Time.timeScale);
     if (transform.position.y > -10)
       transform.Translate(Vector2.down * Config.GRAVITY * Time.deltaTime, Space.World);
   }
@@ -47,9 +53,12 @@ public class UFOBehaviour01 : MonoBehaviour, IEnemyBehaviour {
   private IEnumerator ShootingRoutine() {
     while(gameObject.activeSelf) {
       EventManager.TriggerEvent(new EnemyShotEvent(transform.position));
+      shooting = true;
       transform.rotation = QuaternionToPlayer();
       laser.Play();
-      yield return new WaitForSeconds(1f);
+      yield return new WaitForSeconds(0.3f);
+      shooting = false;
+      yield return new WaitForSeconds(0.7f);
     }
   }
 

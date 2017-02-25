@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Config {
 
   public static Vector2 BOARD_SIZE = new Vector2(768, 1024); // IPAD DIMENSIONS
-  public const float GRAVITY = 9f;
+  public const float GRAVITY = 6f;
   public const int TIME_SCALE = 1;
 
 }

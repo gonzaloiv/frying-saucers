@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c06289ce6b87a43c498f00975c7bda17
+timeCreated: 1488046926
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: American Purpose
+  fontNames:
+  - American Purpose
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

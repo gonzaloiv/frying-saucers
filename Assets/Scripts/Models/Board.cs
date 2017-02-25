@@ -9,7 +9,7 @@ namespace Models {
     #region Fields
 
     public static Vector2 BOARD_SIZE { get { return boardSize; } }
-    private static Vector2 boardSize = new Vector2(5, 4);
+    private static Vector2 boardSize = new Vector2(2, 4);
 
     public static Vector2 SCREEN_SIZE { get { return screenSize; } set { screenSize = value; } }
     private static Vector2 screenSize;
