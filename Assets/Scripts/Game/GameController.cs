@@ -20,10 +20,12 @@ public class GameController : MonoBehaviour {
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
     board = new Board(Config.BOARD_SIZE);
     Screen.orientation = ScreenOrientation.Portrait;
+	Screen.SetResolution(512, 683, false);
   }
 
   void Start() {
     levelController.Level();
+	print(Application.persistentDataPath);
   }
 
   void OnEnable() {

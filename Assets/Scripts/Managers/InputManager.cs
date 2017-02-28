@@ -30,14 +30,16 @@ public class InputManager : MonoBehaviour {
 
     }
 
-    if (Input.GetKeyDown(KeyCode.Return))
-        EventManager.TriggerEvent(new ReturnInput());
-
-    if (Input.GetKeyDown(KeyCode.Escape))
-      EventManager.TriggerEvent(new EscapeInput());
+//    if (Input.GetKeyDown(KeyCode.Return))
+//        EventManager.TriggerEvent(new ReturnInput());
+//
+//    if (Input.GetKeyDown(KeyCode.Escape))
+//      EventManager.TriggerEvent(new EscapeInput());
 
   }
 
   #endregion
 
 }
+
+

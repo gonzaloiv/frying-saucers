@@ -58,6 +58,9 @@ public class PlayerBehaviour : MonoBehaviour {
 
   public void SetNextPosition() {
 
+    if(Moving())
+      return;
+
     List<Vector2> testedPositions = new List<Vector2>();      
     Vector2 testPosition;
     Vector2 newPosition = Vector2.one;
@@ -120,6 +123,10 @@ public class PlayerBehaviour : MonoBehaviour {
       transform.rotation = Quaternion.identity;
       returning = false;
     }
+  }
+
+  private bool Moving() {
+    return (nextPosition - (Vector2) transform.position).sqrMagnitude > 1f;
   }
 
   #endregion

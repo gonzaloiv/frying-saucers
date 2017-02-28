@@ -7,6 +7,7 @@ public class PlayerEvasionBehaviour : MonoBehaviour {
 
   #region Fields
 
+  private Rigidbody2D rb;
   private PlayerBehaviour playerBehaviour;
   private int previousCollision;
 
@@ -15,6 +16,7 @@ public class PlayerEvasionBehaviour : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
+	rb = GetComponent<Rigidbody2D>();
     playerBehaviour = GetComponent<PlayerBehaviour>();
   }
 
@@ -40,7 +42,7 @@ public class PlayerEvasionBehaviour : MonoBehaviour {
 
   void OnEnemyShotEvent(EnemyShotEvent enemyShotEvent) {
     PlayerBehaviourPositions.AddPosition(transform.position);
-	playerBehaviour.SetNextPosition();
+	  playerBehaviour.SetNextPosition();
   }
 
   #endregion
