@@ -7,18 +7,15 @@ public class EnemySpawner : MonoBehaviour {
 
 	#region Fields
 
-  [SerializeField] GameObject ufoPrefab;
-  private GameObjectPool ufoPool;
-
-  private List<IPool> enemyPools = new List<IPool>();
+  [SerializeField] GameObject[] ufoPrefabs;
+  private GameObjectArrayPool ufoPool;
 
   #endregion
 
   #region Mono Behaviour
 
   void Awake() {
-    ufoPool = new GameObjectPool("UFOPool", ufoPrefab, 5, transform);
-    enemyPools.Add(ufoPool);
+    ufoPool = new GameObjectArrayPool("UFOPool", ufoPrefabs, 5, transform);
   }
 
   #endregion
@@ -26,11 +23,13 @@ public class EnemySpawner : MonoBehaviour {
   #region Public Behaviour
 
   public GameObject SpawnEnemy(Enemy enemy, GameObject player) {
-    GameObject enemyObject = enemyPools[(int) enemy.EnemyType].PopObject();
-    enemyObject.transform.position = new Vector2(Random.Range(-Board.BOARD_SIZE.x / 2, Board.BOARD_SIZE.x / 2),enemy.Position.y);
-    enemyObject.GetComponent<IEnemyBehaviour>().Initialize(player);
+    GameObject enemyObject = ufoPool.PopObject((int) enemy.EnemyType);
+    enemyObject.transform.position = enemy.Position;
     enemyObject.SetActive(true);
-    enemyObject.GetComponent<IEnemyBehaviour>().Play(); // TODO: repensar cómo se inician los comportamientos de los enemigos
+    enemyObject.transform.rotation = Quaternion.identity;
+    enemyObject.GetComponent<UFOController>().Initialize(enemy.EnemyType);
+    enemyObject.GetComponent<IEnemyBehaviour>().Initialize(player);
+    enemyObject.GetComponent<IEnemyBehaviour>().Play();
     return enemyObject;
   }
 

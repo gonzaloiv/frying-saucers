@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using Models;
 
-public class PlayerBehaviour : MonoBehaviour {
+public class PlayerBehaviour01 : MonoBehaviour {
 
   #region Fields
 

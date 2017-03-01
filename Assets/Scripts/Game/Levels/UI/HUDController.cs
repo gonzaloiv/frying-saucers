@@ -8,7 +8,7 @@ public class HUDController : MonoBehaviour {
   #region Fields
 
   private const string LEVEL_TEXT = "LEVEL ";
-  private const string SCORE_TEXT = "AUDIENCE ";
+  private const string SCORE_TEXT = "SCORE  ";
 
   private Canvas canvas;
 

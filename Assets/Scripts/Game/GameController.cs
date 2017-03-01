@@ -10,22 +10,23 @@ public class GameController : MonoBehaviour {
   [SerializeField] private GameObject levelPrefab;
   private LevelController levelController;
 
+  private Camera camera;
   private Board board;
 
   #endregion
 
-	#region Mono Behaviour
+  #region Mono Behaviour
 
   void Awake() {
+    camera = GameObject.FindObjectOfType<Camera>();
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
-    board = new Board(Config.BOARD_SIZE);
+    board = new Board(camera, Config.BOARD_SIZE);
     Screen.orientation = ScreenOrientation.Portrait;
-	Screen.SetResolution(512, 683, false);
+    Screen.SetResolution((int) Config.BOARD_SIZE.x, (int) Config.BOARD_SIZE.y, false);
   }
 
   void Start() {
     levelController.Level();
-	print(Application.persistentDataPath);
   }
 
   void OnEnable() {

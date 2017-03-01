@@ -8,7 +8,7 @@ public class PlayerEvasionBehaviour : MonoBehaviour {
   #region Fields
 
   private Rigidbody2D rb;
-  private PlayerBehaviour playerBehaviour;
+  private PlayerBehaviour02 playerBehaviour;
   private int previousCollision;
 
   #endregion
@@ -17,7 +17,7 @@ public class PlayerEvasionBehaviour : MonoBehaviour {
 
   void Awake() {
 	rb = GetComponent<Rigidbody2D>();
-    playerBehaviour = GetComponent<PlayerBehaviour>();
+    playerBehaviour = GetComponent<PlayerBehaviour02>();
   }
 
   void OnEnable() {

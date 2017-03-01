@@ -3,10 +3,23 @@ using System.Collections.Generic;
 
 public class Config {
 
-  public static Vector2 BOARD_SIZE = new Vector2(768, 1024); // IPAD DIMENSIONS
+  #region Game
+  
+  public static Vector2 BOARD_SIZE = new Vector2(768 / 2, 1024 / 2); // IPAD DIMENSIONS
   public const float GRAVITY = 6f;
   public const int TIME_SCALE = 1;
-  public const int GESTURE_TIME = 1;
+  public const float GESTURE_TIME = 1.5f;
+  public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -2.5f);
+
+  #endregion
+
+  #region Level 
+
+  public const int ENEMY_GRID_ROW_SIZE = 4;
+  public const int ENEMY_GRID_COL_SIZE = 4;
+  public const int ENEMY_WAVE_AMOUNT = 4;
+
+  #endregion
 
 }
 
@@ -16,10 +29,30 @@ public enum CollisionLayer {
   Board = 10
 }
 
+public enum SortingLayer {
+  Default = 0,
+  Background = 1,
+  Level = 2,
+  UI = 3,
+  Top = 4
+}
+
 public enum EnemyScore {
   UFO = 10
 }
 
 public enum EnemyType {
-  UFO
+  Circle,
+  Triangle,
+  Square,
+  Cross,
+  Victory
+}
+
+public enum GestureType {
+  Circle,
+  Triangle,
+  Square,
+  Cross,
+  Victory
 }

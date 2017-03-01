@@ -68,6 +68,7 @@ public class GestureManager : MonoBehaviour {
         
         Transform tmpGesture = Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform;
         currentGestureLineRenderer = tmpGesture.GetComponent<LineRenderer>();
+        currentGestureLineRenderer.sortingLayerName = SortingLayer.UI.ToString();
         
         gestureLinesRenderer.Add(currentGestureLineRenderer);
         
@@ -94,9 +95,7 @@ public class GestureManager : MonoBehaviour {
   private IEnumerator ListenToGestures() {
     listening = true;
     yield return new WaitForSeconds(Config.GESTURE_TIME);
-    Gesture candidate = new Gesture(points.ToArray());
-    Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
-    Debug.Log(gestureResult.GestureClass + " " + gestureResult.Score);
+    EventManager.TriggerEvent(new GestureInput(PointCloudRecognizer.Classify(new Gesture(points.ToArray()), trainingSet.ToArray())));
     recognized = true;
     listening = false;
   }

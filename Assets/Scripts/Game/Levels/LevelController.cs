@@ -27,7 +27,7 @@ public class LevelController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    currentLevel = Data.Level1;
+    currentLevel = new Level(1, 4);
     waveController = Instantiate(wavePrefab, transform).GetComponent<WaveController>();
     playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
     backgroundController = Instantiate(backgroundPrefab, transform).GetComponent<BackgroundController>();
@@ -62,7 +62,7 @@ public class LevelController : MonoBehaviour {
 
     // LEVEL GAME OBJECTS
     currentLevelObjects = new List<GameObject>();
-	  GameObject player = playerSpawner.SpawnPlayer(currentLevel.PlayerPosition, currentLevelObjects);
+	  GameObject player = playerSpawner.SpawnPlayer(currentLevelObjects);
     currentLevelObjects.Add(player);
     
     // LEVEL UI & ENVIRONMENT
@@ -81,7 +81,7 @@ public class LevelController : MonoBehaviour {
   private IEnumerator LevelRoutine(GameObject player) {
     while (currentLevel.HasMoreWaves()) {
       yield return new WaitForSeconds(1);
-      waveController.Wave(currentLevel.CurrentWave(), player).ForEach(x => currentLevelObjects.Add(x));
+      waveController.Wave(player).ForEach(x => currentLevelObjects.Add(x));
     }
   }
 

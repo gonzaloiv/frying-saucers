@@ -10,6 +10,9 @@ public class WaveController : MonoBehaviour {
   [SerializeField] private GameObject enemyPrefab;
   private EnemyController enemyController;
 
+  private Wave currentWave;
+  private Wave previousWave;
+
   private List<GameObject> currentWaveObjects;
 
   #endregion
@@ -17,12 +20,19 @@ public class WaveController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    enemyController = Instantiate(enemyPrefab, transform).GetComponent<EnemyController>(); 
+    enemyController = Instantiate(enemyPrefab, transform).GetComponent<EnemyController>();
   }
 
   #endregion
 
   #region Public Behaviour
+
+  public List<GameObject> Wave(GameObject player) {
+    previousWave = currentWave;
+    currentWave = previousWave != null ? new Wave(++previousWave.WavePosition) : new Wave(0);
+
+    return Wave(currentWave, player);
+  }
 
   public List<GameObject> Wave(Wave wave, GameObject player) {
     currentWaveObjects = new List<GameObject>();

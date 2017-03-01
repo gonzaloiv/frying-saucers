@@ -13,10 +13,10 @@ public class PlayerSpawner : MonoBehaviour {
 
   #region Public Behaviour
 
-  public GameObject SpawnPlayer(Vector2 position, List<GameObject> levelObjects) {
+  public GameObject SpawnPlayer(List<GameObject> levelObjects) {
     ship = Instantiate(shipPrefab, transform);
-    ship.transform.position = position;
-    ship.GetComponent<PlayerBehaviour>().Initialize(levelObjects);
+    ship.transform.position = Config.PLAYER_INITIAL_POSITION;
+//    ship.GetComponent<PlayerBehaviour>().Initialize(levelObjects);
 
     return ship;
   }

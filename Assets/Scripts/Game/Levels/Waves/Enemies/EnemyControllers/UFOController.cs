@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Models;
 
-public class UFOController : MonoBehaviour, IEnemy {
+public class UFOController : MonoBehaviour, IEnemyController {
 
   #region Fields
 
@@ -12,6 +12,7 @@ public class UFOController : MonoBehaviour, IEnemy {
 
   private Animator animator;
 
+  private EnemyType enemyType;
   private bool activeCollider; // TODO: repensar como controlar sólo una colisión por grupo de partículas
 
   #endregion
@@ -25,6 +26,11 @@ public class UFOController : MonoBehaviour, IEnemy {
 
   void OnEnable() {
     activeCollider = true;
+    EventManager.StartListening<GestureInput>(OnGestureInput);
+  }
+
+  void OnDisable() {
+    EventManager.StopListening<GestureInput>(OnGestureInput);
   }
 
   void OnCollisionEnter2D(Collision2D collision) {
@@ -44,10 +50,25 @@ public class UFOController : MonoBehaviour, IEnemy {
       EventManager.TriggerEvent(new EnemyHitEvent((int) EnemyScore.UFO));
     }
   }
+  #endregion
+
+  #region Event Behaviour
+
+  void OnGestureInput(GestureInput gestureInput) {
+    if((int) gestureInput.Type == (int) enemyType) {
+      animator.Play("Disable");
+      explosion.Play();
+      EventManager.TriggerEvent(new EnemyHitEvent((int) EnemyScore.UFO));
+    }
+  }
 
   #endregion
 
   #region Public Behaviour
+
+  public void Initialize(EnemyType enemyType) {
+    this.enemyType = enemyType;
+  }
 
   public void Disable() {
     gameObject.SetActive(false);

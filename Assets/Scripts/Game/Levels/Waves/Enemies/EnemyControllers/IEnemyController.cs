@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEnemy{
+public interface IEnemyController {
 
+  void Initialize(EnemyType enemyType);
   void Disable();
 	
 }
