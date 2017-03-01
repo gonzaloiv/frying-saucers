@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Models;
+using System.Linq;
 
 public class LevelController : MonoBehaviour {
 
@@ -21,6 +22,9 @@ public class LevelController : MonoBehaviour {
 
   private Level currentLevel;
   private List<GameObject> currentLevelObjects = new List<GameObject>();
+  GameObject player;
+
+  bool waveRoutine = false;
 
   #endregion
 
@@ -34,12 +38,21 @@ public class LevelController : MonoBehaviour {
     hudController = Instantiate(hudPrefab, transform).GetComponent<HUDController>();
   }
 
+  void Update() {
+    currentLevelObjects.RemoveAll(x => !x.activeInHierarchy);
+    if (currentLevelObjects.Count() == 0 && !waveRoutine) {
+      StopCoroutine(ShootingRoutine());
+      StartCoroutine(WaveRoutine());      
+    }
+  }
+
   void OnEnable() {
     EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
   }
 
   void OnDisable() {
     EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
+    StopAllCoroutines();
   }
 
   #endregion
@@ -56,21 +69,15 @@ public class LevelController : MonoBehaviour {
 
   public void Level() {
 
-    // LEVEL RESET
-    if(currentLevelObjects.Count != 0) 
-      currentLevelObjects.ForEach(x => x.SetActive(false));
-
     // LEVEL GAME OBJECTS
     currentLevelObjects = new List<GameObject>();
-	  GameObject player = playerSpawner.SpawnPlayer(currentLevelObjects);
-    currentLevelObjects.Add(player);
+	  player = playerSpawner.SpawnPlayer(currentLevelObjects);
     
     // LEVEL UI & ENVIRONMENT
     backgroundController.NewLevel();
     hudController.gameObject.SetActive(true);
-    hudController.NewLevel();
 
-    StartCoroutine(LevelRoutine(player));
+    StartCoroutine(ShootingRoutine());
 
   }
 
@@ -78,10 +85,18 @@ public class LevelController : MonoBehaviour {
 
   #region Private Behaviour
 
-  private IEnumerator LevelRoutine(GameObject player) {
-    while (currentLevel.HasMoreWaves()) {
-      yield return new WaitForSeconds(1);
-      waveController.Wave(player).ForEach(x => currentLevelObjects.Add(x));
+  private IEnumerator WaveRoutine() {
+    waveRoutine = true;
+    yield return new WaitForSeconds(0.5f);
+    waveController.Wave(player).ForEach(x => currentLevelObjects.Add(x));
+    waveRoutine = false;
+  }
+
+  private IEnumerator ShootingRoutine() {
+    while(gameObject.activeSelf){
+      yield return new WaitForSeconds(3);
+      if(!waveRoutine)
+        currentLevelObjects[Random.Range(0, currentLevelObjects.Count())].GetComponent<IEnemyBehaviour>().Play();
     }
   }
 

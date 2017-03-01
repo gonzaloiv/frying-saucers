@@ -24,12 +24,11 @@ public class EnemySpawner : MonoBehaviour {
 
   public GameObject SpawnEnemy(Enemy enemy, GameObject player) {
     GameObject enemyObject = ufoPool.PopObject((int) enemy.EnemyType);
-    enemyObject.transform.position = enemy.Position;
+    enemyObject.transform.position = BoardManager.GetRandomOutOfBoardPosition();
     enemyObject.SetActive(true);
-    enemyObject.transform.rotation = Quaternion.identity;
-    enemyObject.GetComponent<UFOController>().Initialize(enemy.EnemyType);
+    enemyObject.GetComponent<IEnemyController>().Initialize(enemy);
     enemyObject.GetComponent<IEnemyBehaviour>().Initialize(player);
-    enemyObject.GetComponent<IEnemyBehaviour>().Play();
+
     return enemyObject;
   }
 

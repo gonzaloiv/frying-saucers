@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour {
   private LevelController levelController;
 
   private Camera camera;
-  private Board board;
+  private BoardManager boardManager;
 
   #endregion
 
@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour {
   void Awake() {
     camera = GameObject.FindObjectOfType<Camera>();
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
-    board = new Board(camera, Config.BOARD_SIZE);
+    boardManager = new BoardManager(camera, Config.BOARD_SIZE);
     Screen.orientation = ScreenOrientation.Portrait;
     Screen.SetResolution((int) Config.BOARD_SIZE.x, (int) Config.BOARD_SIZE.y, false);
   }

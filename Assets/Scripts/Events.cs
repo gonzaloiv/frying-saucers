@@ -81,11 +81,11 @@ public class EnemyHitEvent : UnityEvent {
 
 public class EnemyShotEvent : UnityEvent {
 
-  public Vector2 EnemyPosition { get { return enemyPosition; } }
-  private Vector2 enemyPosition;
+  public EnemyType EnemyType { get { return enemyType; } }
+  private EnemyType enemyType;
 
-  public EnemyShotEvent(Vector2 enemyPosition) {
-    this.enemyPosition = enemyPosition;
+  public EnemyShotEvent(EnemyType enemyType) {
+    this.enemyType = enemyType;
   }
 
 }

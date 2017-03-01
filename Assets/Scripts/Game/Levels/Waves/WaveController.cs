@@ -8,7 +8,7 @@ public class WaveController : MonoBehaviour {
   #region Fields
 
   [SerializeField] private GameObject enemyPrefab;
-  private EnemyController enemyController;
+  private EnemySpawner enemySpawner;
 
   private Wave currentWave;
   private Wave previousWave;
@@ -20,7 +20,7 @@ public class WaveController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    enemyController = Instantiate(enemyPrefab, transform).GetComponent<EnemyController>();
+    enemySpawner = Instantiate(enemyPrefab, transform).GetComponent<EnemySpawner>();
   }
 
   #endregion
@@ -29,7 +29,8 @@ public class WaveController : MonoBehaviour {
 
   public List<GameObject> Wave(GameObject player) {
     previousWave = currentWave;
-    currentWave = previousWave != null ? new Wave(++previousWave.WavePosition) : new Wave(0);
+//    currentWave = previousWave != null ? new Wave(++previousWave.WavePosition) : new Wave(3);
+    currentWave = new Wave(3);
 
     return Wave(currentWave, player);
   }
@@ -37,7 +38,8 @@ public class WaveController : MonoBehaviour {
   public List<GameObject> Wave(Wave wave, GameObject player) {
     currentWaveObjects = new List<GameObject>();
     foreach (Enemy enemy in wave.Enemies)
-      currentWaveObjects.Add(enemyController.Enemy(enemy, player)); 
+      currentWaveObjects.Add(enemySpawner.SpawnEnemy(enemy, player)); 
+
     return currentWaveObjects;
   }
 

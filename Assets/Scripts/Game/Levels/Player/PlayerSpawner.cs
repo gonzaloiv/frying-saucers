@@ -16,7 +16,7 @@ public class PlayerSpawner : MonoBehaviour {
   public GameObject SpawnPlayer(List<GameObject> levelObjects) {
     ship = Instantiate(shipPrefab, transform);
     ship.transform.position = Config.PLAYER_INITIAL_POSITION;
-//    ship.GetComponent<PlayerBehaviour>().Initialize(levelObjects);
+    ship.GetComponent<PlayerBehaviour>().Initialize(levelObjects);
 
     return ship;
   }

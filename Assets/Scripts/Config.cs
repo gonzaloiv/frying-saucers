@@ -8,7 +8,7 @@ public class Config {
   public static Vector2 BOARD_SIZE = new Vector2(768 / 2, 1024 / 2); // IPAD DIMENSIONS
   public const float GRAVITY = 6f;
   public const int TIME_SCALE = 1;
-  public const float GESTURE_TIME = 1.5f;
+  public const float GESTURE_TIME = 1f;
   public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -2.5f);
 
   #endregion
@@ -18,6 +18,7 @@ public class Config {
   public const int ENEMY_GRID_ROW_SIZE = 4;
   public const int ENEMY_GRID_COL_SIZE = 4;
   public const int ENEMY_WAVE_AMOUNT = 4;
+  public const float ENEMY_MAX_SPEED = 0.1f;
 
   #endregion
 
@@ -38,21 +39,25 @@ public enum SortingLayer {
 }
 
 public enum EnemyScore {
-  UFO = 10
+  Circle = 10,
+  Cross = 10,
+  Square = 10,
+  Triangle = 10,
+  Victory = 10
 }
 
 public enum EnemyType {
   Circle,
-  Triangle,
-  Square,
   Cross,
+  Square,
+  Triangle,
   Victory
 }
 
 public enum GestureType {
   Circle,
-  Triangle,
-  Square,
   Cross,
+  Square,
+  Triangle,
   Victory
 }
