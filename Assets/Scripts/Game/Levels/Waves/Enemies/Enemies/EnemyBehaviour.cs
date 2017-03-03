@@ -74,10 +74,10 @@ public class EnemyBehaviour : MonoBehaviour, IEnemyBehaviour {
     yield return new WaitForSeconds(0.2f);
     if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Disable")) {
       animator.Play("Shooting");
-      yield return new WaitForSeconds(0.8f);
+      yield return new WaitForSeconds(1.2f);
       transform.rotation = QuaternionToPlayer();
       laser.Play();
-      yield return new WaitForSeconds(1f);
+      yield return new WaitForSeconds(0.8f);
     }
     animator.Play("Idle");
     playing = false;

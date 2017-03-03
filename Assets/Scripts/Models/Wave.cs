@@ -2,6 +2,7 @@
 using UnityEngine;
 using Models;
 using System.Linq;
+using System;
 
 public class Wave {
 
@@ -35,8 +36,11 @@ public class Wave {
     List<Enemy> enemies = new List<Enemy>();
 
     for (int i = 0; i < Config.ENEMY_WAVE_AMOUNT; i++) {
+      EnemyType enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length);
       Vector2 enemyPosition = BoardManager.GetEnemyGridPosition(i, wavePosition);
-      enemies.Add(new Enemy((EnemyType) Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length), enemyPosition)); 
+      EnemyScore enemyScore = (EnemyScore) Enum.Parse(typeof(EnemyScore), enemyType.ToString());
+
+      enemies.Add(new Enemy(enemyType, enemyPosition, enemyScore)); 
     }
 
     return enemies;

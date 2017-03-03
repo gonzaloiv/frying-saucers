@@ -74,6 +74,7 @@ public class EnemyHitEvent : UnityEvent {
   private int score;
 
 	public EnemyHitEvent(int score) {
+    Debug.Log("EnemyHitEvent: " + score);
     this.score = score;
   }
 

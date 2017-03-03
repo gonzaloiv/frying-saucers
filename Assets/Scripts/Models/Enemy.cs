@@ -14,13 +14,17 @@ namespace Models {
     public Vector2 Position { get { return position; } }
     private Vector2 position;
 
+    public EnemyScore EnemyScore { get { return enemyScore; } }
+    private EnemyScore enemyScore;
+
     #endregion
 
     #region Public Behaviour
 
-    public Enemy(EnemyType enemyType, Vector2 position) {
+    public Enemy(EnemyType enemyType, Vector2 position, EnemyScore enemyScore) {
       this.enemyType = enemyType;
       this.position = position;
+      this.enemyScore = enemyScore;
     }
 
     #endregion

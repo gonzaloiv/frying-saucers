@@ -3,35 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using Models;
 using System.Linq;
+using LevelStates;
 
-public class LevelController : MonoBehaviour {
+public class LevelController : StateMachine {
 
   #region Fields
 
   [SerializeField] private GameObject wavePrefab;
+  public WaveController WaveController { get { return waveController; } }
   private WaveController waveController;
 
   [SerializeField] private GameObject playerPrefab;
+  public PlayerSpawner PlayerSpawner { get { return playerSpawner; } }
   private PlayerSpawner playerSpawner;
 
   [SerializeField] private GameObject backgroundPrefab;
+  public BackgroundController BackgroundController { get { return backgroundController; } }
   private BackgroundController backgroundController;
 
   [SerializeField] private GameObject hudPrefab;
+  public HUDController HUDController { get { return hudController; } }
   private HUDController hudController;
 
-  private Level currentLevel;
+  public List<GameObject> CurrentLevelObjects { get { return currentLevelObjects; } set { currentLevelObjects = value; } } 
   private List<GameObject> currentLevelObjects = new List<GameObject>();
-  GameObject player;
 
-  bool waveRoutine = false;
+  public GameObject Player { get { return player; } set { player = value; } } 
+  private GameObject player;
 
   #endregion
 
   #region Mono Behaviour
 
   void Awake() {
-    currentLevel = new Level(1, 4);
     waveController = Instantiate(wavePrefab, transform).GetComponent<WaveController>();
     playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
     backgroundController = Instantiate(backgroundPrefab, transform).GetComponent<BackgroundController>();
@@ -40,27 +44,8 @@ public class LevelController : MonoBehaviour {
 
   void Update() {
     currentLevelObjects.RemoveAll(x => !x.activeInHierarchy);
-    if (currentLevelObjects.Count() == 0 && !waveRoutine) {
-      StopCoroutine(ShootingRoutine());
-      StartCoroutine(WaveRoutine());      
-    }
-  }
-
-  void OnEnable() {
-    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
-  }
-
-  void OnDisable() {
-    EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
-    StopAllCoroutines();
-  }
-
-  #endregion
-
-  #region Even Behaviour
-
-  void OnGameOverEvent(GameOverEvent gameOverEvent) {
-    StopAllCoroutines();
+    if (currentLevelObjects.Count() == 0 && CurrentState is PlayState)
+      StartCoroutine(LevelRoutine());
   }
 
   #endregion
@@ -68,36 +53,18 @@ public class LevelController : MonoBehaviour {
   #region Public Behaviour
 
   public void Level() {
-
-    // LEVEL GAME OBJECTS
-    currentLevelObjects = new List<GameObject>();
-	  player = playerSpawner.SpawnPlayer(currentLevelObjects);
-    
-    // LEVEL UI & ENVIRONMENT
-    backgroundController.NewLevel();
-    hudController.gameObject.SetActive(true);
-
-    StartCoroutine(ShootingRoutine());
-
+    ChangeState<NewLevelState>();
+    StartCoroutine(LevelRoutine());
   }
 
   #endregion
 
   #region Private Behaviour
 
-  private IEnumerator WaveRoutine() {
-    waveRoutine = true;
-    yield return new WaitForSeconds(0.5f);
-    waveController.Wave(player).ForEach(x => currentLevelObjects.Add(x));
-    waveRoutine = false;
-  }
-
-  private IEnumerator ShootingRoutine() {
-    while(gameObject.activeSelf){
-      yield return new WaitForSeconds(3);
-      if(!waveRoutine)
-        currentLevelObjects[Random.Range(0, currentLevelObjects.Count())].GetComponent<IEnemyBehaviour>().Play();
-    }
+  private IEnumerator LevelRoutine() {
+    ChangeState<NewWaveState>();
+    yield return new WaitForSeconds(0.2f);
+    ChangeState<PlayState>();
   }
 
   #endregion

@@ -9,6 +9,8 @@ public class GestureLabelController : MonoBehaviour {
 
   private Image[] gestures; // Same order as EnemyType
   private Image currentGesture;
+  private int currentGestureIndex = 0;
+  private bool shooting = false;
 
   #endregion
 
@@ -18,8 +20,15 @@ public class GestureLabelController : MonoBehaviour {
     gestures = GetComponentsInChildren<Image>();
   }
 
+  void FixedUpdate() {
+    if (!shooting) {
+      EnableImage(currentGestureIndex);
+      currentGestureIndex = currentGestureIndex == gestures.Length - 1 ? 0 : currentGestureIndex + 1;
+    }
+  }
+
   void OnEnable() {
-    EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);  
+    EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
   }
 
   void OnDisable() {
@@ -31,12 +40,27 @@ public class GestureLabelController : MonoBehaviour {
   #region Event Behaviour
 
   void OnEnemyShotEvent(EnemyShotEvent enemyShotEvent) {
-    if(currentGesture != null)
-      currentGesture.enabled = false;
-    currentGesture = gestures[(int) enemyShotEvent.EnemyType];
-    currentGesture.enabled = true;
+    StartCoroutine(EnemyShotEventRoutine((int) enemyShotEvent.EnemyType));
   }
 
+  #endregion
+
+  #region Private Behaviour
+
+  private IEnumerator EnemyShotEventRoutine(int index) {
+    shooting = true;
+    EnableImage(index);
+    yield return new WaitForSeconds(1);
+    shooting = false;
+  }
+
+  private void EnableImage(int index) {
+    if(currentGesture != null)
+      currentGesture.enabled = false;
+    currentGesture = gestures[index];
+    currentGesture.enabled = true;
+  }
+    
   #endregion
 	
 }

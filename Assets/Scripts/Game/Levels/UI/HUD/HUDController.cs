@@ -7,7 +7,7 @@ public class HUDController : MonoBehaviour {
 
   #region Fields
 
-  private const string SCORE_TEXT = "SCORE  ";
+  private const string SCORE_TEXT = "SCORE ";
 
   private Canvas canvas;
 

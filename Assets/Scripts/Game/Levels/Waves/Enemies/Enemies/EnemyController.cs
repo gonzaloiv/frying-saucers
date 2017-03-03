@@ -35,7 +35,7 @@ public class EnemyController : MonoBehaviour, IEnemyController {
   public void DisableRoutine() {
     animator.Play("Disable");
     explosion.Play();
-    EventManager.TriggerEvent(new EnemyHitEvent((int) enemy.EnemyType));
+    EventManager.TriggerEvent(new EnemyHitEvent((int) enemy.EnemyScore));
   }
 
   public void Initialize(Enemy enemy) {
