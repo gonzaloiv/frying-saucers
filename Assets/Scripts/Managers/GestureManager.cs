@@ -25,7 +25,8 @@ public class GestureManager : MonoBehaviour {
   private List<LineRenderer> gestureLinesRenderer = new List<LineRenderer>();
   private LineRenderer currentGestureLineRenderer;
 
-  private bool recognized = false; // TODO: corregir el uso de banderas de la demo...
+  // TODO: corregir el uso de banderas de la demo...
+  private bool recognized = false;
   private bool listening = false;
 
   #endregion
@@ -44,7 +45,7 @@ public class GestureManager : MonoBehaviour {
 
   void Update() {
 
-    if(recognized)
+    if (recognized)
       Reset(); 
 
     if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
@@ -61,7 +62,7 @@ public class GestureManager : MonoBehaviour {
 
       if (Input.GetMouseButtonDown(0)) {
 
-        if(!listening)
+        if (!listening)
           StartCoroutine(ListenToGestures());
 
         ++strokeId;
@@ -95,7 +96,13 @@ public class GestureManager : MonoBehaviour {
   private IEnumerator ListenToGestures() {
     listening = true;
     yield return new WaitForSeconds(Config.GESTURE_TIME);
-    EventManager.TriggerEvent(new GestureInput(PointCloudRecognizer.Classify(new Gesture(points.ToArray()), trainingSet.ToArray())));
+
+    Result result = PointCloudRecognizer.Classify(new Gesture(points.ToArray()), trainingSet.ToArray());
+    if (result.Score < Config.GESTURE_MIN_SCORE)
+      EventManager.TriggerEvent(new WrongGestureInput(result));
+    else
+      EventManager.TriggerEvent(new GestureInput(result));
+
     recognized = true;
     listening = false;
   }

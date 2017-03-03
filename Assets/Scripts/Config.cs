@@ -10,6 +10,7 @@ public class Config {
   public const int TIME_SCALE = 1;
   public const float GESTURE_TIME = 1f;
   public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -2.5f);
+  public const float GESTURE_MIN_SCORE = 0.89f;
 
   #endregion
 

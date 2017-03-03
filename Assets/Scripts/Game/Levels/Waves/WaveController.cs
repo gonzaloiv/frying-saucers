@@ -29,7 +29,6 @@ public class WaveController : MonoBehaviour {
 
   public List<GameObject> Wave(GameObject player) {
     previousWave = currentWave;
-//    currentWave = previousWave != null ? new Wave(++previousWave.WavePosition) : new Wave(3);
     currentWave = new Wave(3);
 
     return Wave(currentWave, player);

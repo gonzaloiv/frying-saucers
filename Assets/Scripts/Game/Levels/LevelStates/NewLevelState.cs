@@ -9,7 +9,6 @@ namespace LevelStates {
     #region State Behaviour
 
     public override void Enter() {
-      player = playerSpawner.SpawnPlayer(currentLevelObjects);
       backgroundController.NewLevel();
       hudController.gameObject.SetActive(true);
     }

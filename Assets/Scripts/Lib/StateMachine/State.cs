@@ -22,6 +22,8 @@ public abstract class State : MonoBehaviour {
     RemoveListeners();
   }
 
+  public virtual void Play() {}
+
   #endregion
 
   #region Protected Behaviour

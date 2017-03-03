@@ -31,7 +31,7 @@ namespace LevelStates {
 
     private IEnumerator WaveRoutine() {
       while(currentLevelObjects.Count > 0) {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2.5f);
         currentLevelObjects[Random.Range(0, currentLevelObjects.Count())].GetComponent<IEnemyBehaviour>().Play();
       }
     }

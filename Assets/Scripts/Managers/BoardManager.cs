@@ -16,7 +16,7 @@ public class BoardManager {
   private static Vector2[,] enemyGrid;
 
   public static Vector2 ENEMY_SHOT_POSITION { get { return enemyShotPosition; } }
-  private static Vector2 enemyShotPosition = Vector2.zero;
+  private static Vector2 enemyShotPosition = new Vector2(0, 1);
 
   private Camera camera;
 

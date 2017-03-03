@@ -35,8 +35,31 @@ public class GestureInput : UnityEvent {
   private  GestureType type;
 
   public GestureInput(Result result) {
-    Debug.Log(result.GestureClass + " " + result.Score);
-    
+    Debug.Log("Right: " + result.GestureClass + " " + result.Score);
+
+    if (result.GestureClass.ToString().ToUpper() == GestureType.Circle.ToString().ToUpper()) {
+      type = GestureType.Circle;
+    } else if (result.GestureClass.ToString().ToUpper() == GestureType.Square.ToString().ToUpper()) {
+      type = GestureType.Square;
+    } else if (result.GestureClass.ToString().ToUpper() == GestureType.Triangle.ToString().ToUpper()) {
+      type = GestureType.Triangle;
+    } else if (result.GestureClass.ToString().ToUpper() == GestureType.Cross.ToString().ToUpper()) {
+      type = GestureType.Cross;
+    } else if (result.GestureClass.ToString().ToUpper() == GestureType.Victory.ToString().ToUpper()) {
+      type = GestureType.Victory;
+    }
+  }
+
+}
+
+public class WrongGestureInput : UnityEvent {
+
+  public GestureType Type { get { return type; } }
+  private  GestureType type;
+
+  public WrongGestureInput(Result result) {
+    Debug.Log("Wrong: " + result.GestureClass + " " + result.Score);
+
     if (result.GestureClass.ToString().ToUpper() == GestureType.Circle.ToString().ToUpper()) {
       type = GestureType.Circle;
     } else if (result.GestureClass.ToString().ToUpper() == GestureType.Square.ToString().ToUpper()) {

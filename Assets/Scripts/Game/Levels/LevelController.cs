@@ -53,6 +53,7 @@ public class LevelController : StateMachine {
   #region Public Behaviour
 
   public void Level() {
+    player = playerSpawner.SpawnPlayer(currentLevelObjects);
     ChangeState<NewLevelState>();
     StartCoroutine(LevelRoutine());
   }
