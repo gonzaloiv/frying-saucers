@@ -43,6 +43,10 @@ public class BoardManager {
       return new Vector2(Random.Range(-boardSize.x, boardSize.x), boardSize.y);
   }
 
+  public static Vector2 GetRandomEnemyShotPosition() {
+    return new Vector2(Random.Range(-BOARD_SIZE.x, BOARD_SIZE.x), 1);
+  }
+
   #endregion
 
   #region Private Behaviour

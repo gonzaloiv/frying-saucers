@@ -12,6 +12,8 @@ public class PlayerWeapon : MonoBehaviour {
   [SerializeField] private GameObject powerWavePrefab;
   private ParticleSystemController powerWaveController;
 
+  private Vector2 enemyPosition;
+
   #endregion
 
   #region Mono Behaviour
@@ -27,10 +29,12 @@ public class PlayerWeapon : MonoBehaviour {
 
   void OnEnable() {
     EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
+    EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
   }
 
   void OnDisable() {
     EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
+    EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
   }
 
   #endregion
@@ -41,6 +45,10 @@ public class PlayerWeapon : MonoBehaviour {
     laser.Play();
   }
 
+  void OnEnemyAttackEvent(EnemyAttackEvent enemyAttackEvent) {
+    enemyPosition = enemyAttackEvent.Position;
+  }
+
   #endregion
 
   #region Private Behaviour
@@ -48,7 +56,7 @@ public class PlayerWeapon : MonoBehaviour {
   private Quaternion QuaternionToClick() { 
 
     Quaternion quaternion = Quaternion.identity;
-    Vector2 moveDirection = (Vector2) transform.position - BoardManager.ENEMY_SHOT_POSITION;
+    Vector2 moveDirection = (Vector2) transform.position - enemyPosition;
 
     if (moveDirection != Vector2.zero) {
       float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;

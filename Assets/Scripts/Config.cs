@@ -9,7 +9,7 @@ public class Config {
   public const float GRAVITY = 6f;
   public const int TIME_SCALE = 1;
   public const float GESTURE_TIME = 1f;
-  public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -2.5f);
+  public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -1f);
   public const float GESTURE_MIN_SCORE = 0.85f;
 
   #endregion

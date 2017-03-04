@@ -10,11 +10,20 @@ namespace LevelStates {
     #region State Behaviour
     
     public override void Enter() {
-      waveController.Wave(player).ForEach(x => currentLevelObjects.Add(x));
+      StartCoroutine(NewWaveRoutine());
     }
 
     #endregion 
-      	
+
+    #region Private Behaviour
+
+    private IEnumerator NewWaveRoutine() {
+      yield return new WaitForSeconds(0.5f);
+      waveController.Wave(player).ForEach(x => currentLevelObjects.Add(x));
+    }
+
+    #endregion
+                   	
   }
 
 }

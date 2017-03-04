@@ -82,8 +82,12 @@ public class EnemyAttackEvent : UnityEvent {
   public EnemyType EnemyType { get { return enemyType; } }
   private EnemyType enemyType;
 
-  public EnemyAttackEvent(EnemyType enemyType) {
+  public Vector2 Position { get { return position; } }
+  private Vector2 position;
+
+  public EnemyAttackEvent(EnemyType enemyType, Vector2 position) {
     this.enemyType = enemyType;
+    this.position = position;
   }
 
 }

@@ -54,17 +54,22 @@ public class LevelController : StateMachine {
 
   public void Level() {
     player = playerSpawner.SpawnPlayer(currentLevelObjects);
-    ChangeState<NewLevelState>();
-    StartCoroutine(LevelRoutine());
+    StartCoroutine(NewLevelRoutine());
   }
 
   #endregion
 
   #region Private Behaviour
 
+  private IEnumerator NewLevelRoutine() {
+    yield return new WaitForSeconds(0.6f);
+    ChangeState<NewLevelState>();
+    StartCoroutine(LevelRoutine());
+  }
+
   private IEnumerator LevelRoutine() {
     ChangeState<NewWaveState>();
-    yield return new WaitForSeconds(0.2f);
+    yield return new WaitForSeconds(0.5f);
     ChangeState<PlayState>();
   }
 

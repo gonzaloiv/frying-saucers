@@ -11,6 +11,9 @@ namespace LevelStates {
 
     private IEnumerator waveRoutine;
 
+    private GameObject currentEnemy;
+    private GameObject previousEnemy;
+
     #endregion
 
     #region State Behaviour
@@ -30,10 +33,23 @@ namespace LevelStates {
     #region Private Behaviour
 
     private IEnumerator WaveRoutine() {
-      while(currentLevelObjects.Count > 0) {
-        yield return new WaitForSeconds(1f);
-        currentLevelObjects[Random.Range(0, currentLevelObjects.Count())].GetComponent<IEnemyBehaviour>().Play();
+      while (currentLevelObjects.Count > 0) {
+        yield return new WaitForSeconds(2.1f);
+        SetCurrentEnemy();
+        if(currentEnemy == previousEnemy)        
+          yield return new WaitForSeconds(0.5f);
+        currentEnemy.GetComponent<IEnemyBehaviour>().Play();
+        previousEnemy = currentEnemy;
       }
+    }
+
+    private void SetCurrentEnemy() {
+      currentEnemy = previousEnemy;
+      if (currentLevelObjects.Count() > 1)
+        while (currentEnemy == previousEnemy)
+          currentEnemy = currentLevelObjects[Random.Range(0, currentLevelObjects.Count())];
+      else
+        currentEnemy = currentLevelObjects[0];     
     }
 
     #endregion

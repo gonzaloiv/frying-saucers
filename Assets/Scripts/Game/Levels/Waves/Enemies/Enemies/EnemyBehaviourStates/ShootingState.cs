@@ -5,12 +5,19 @@ using UnityEngine;
 namespace EnemyBehaviourStates {
 
   public class ShootingState : BaseState {
+    
+    #region Fields
 
+    Vector2 shootingPosition;
+
+    #endregion
+    
     #region State Behaviour
 
     public override void Enter() {
       base.Enter();
-      EventManager.TriggerEvent(new EnemyAttackEvent(enemyController.Enemy.EnemyType));
+      shootingPosition = BoardManager.GetRandomEnemyShotPosition();
+      EventManager.TriggerEvent(new EnemyAttackEvent(enemyController.Enemy.EnemyType, shootingPosition));
       if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Disable"))
        StartCoroutine(ShootingRoutine());
     }
@@ -20,7 +27,7 @@ namespace EnemyBehaviourStates {
     }
 
     public override void Play() {
-      transform.position = Vector2.Lerp(transform.position, BoardManager.ENEMY_SHOT_POSITION, Config.ENEMY_MAX_SPEED * Time.timeScale);
+      transform.position = Vector2.Lerp(transform.position, shootingPosition, Config.ENEMY_MAX_SPEED * Time.timeScale);
     }
 
     protected override void AddListeners() {
@@ -45,6 +52,7 @@ namespace EnemyBehaviourStates {
 
       } else { // Hit
         EventManager.TriggerEvent(new RightGestureInput(gestureInput)); 
+        RemoveListeners();
         enemyController.DisableRoutine();
       }
 
@@ -62,7 +70,7 @@ namespace EnemyBehaviourStates {
       GetComponent<SpriteRenderer>().flipY = true;
       laser.Play();
       EventManager.TriggerEvent(new EnemyShotEvent(transform.position));
-//      yield return new WaitForSeconds(0.8f);
+      yield return new WaitForSeconds(0.8f);
       GetComponent<SpriteRenderer>().flipY = false;
     }
 
