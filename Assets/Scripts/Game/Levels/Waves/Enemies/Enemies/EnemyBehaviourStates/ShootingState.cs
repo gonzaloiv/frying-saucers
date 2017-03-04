@@ -10,10 +10,13 @@ namespace EnemyBehaviourStates {
 
     public override void Enter() {
       base.Enter();
-      EventManager.TriggerEvent(new EnemyShotEvent(enemyController.Enemy.EnemyType));
-      Debug.Log("Shooting routine: " + gameObject);
+      EventManager.TriggerEvent(new EnemyAttackEvent(enemyController.Enemy.EnemyType));
       if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Disable"))
        StartCoroutine(ShootingRoutine());
+    }
+
+    public override void Exit() {
+      base.Exit();
     }
 
     public override void Play() {
@@ -33,8 +36,18 @@ namespace EnemyBehaviourStates {
     #region Event Behaviour
 
     void OnGestureInput(GestureInput gestureInput) {
-      if ((int) gestureInput.Type == (int) enemyController.Enemy.EnemyType)
+
+      if (gestureInput.Score < Config.GESTURE_MIN_SCORE)       // Low score
+        EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
+
+      if ((int) gestureInput.Type != (int) enemyController.Enemy.EnemyType) { // Wrong gesture
+        EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
+
+      } else { // Hit
+        EventManager.TriggerEvent(new RightGestureInput(gestureInput)); 
         enemyController.DisableRoutine();
+      }
+
     }
 
     #endregion
@@ -46,8 +59,11 @@ namespace EnemyBehaviourStates {
       animator.Play("Shooting");
       yield return new WaitForSeconds(1f);
       transform.rotation = QuaternionToPlayer();
+      GetComponent<SpriteRenderer>().flipY = true;
       laser.Play();
-      yield return new WaitForSeconds(0.8f);
+      EventManager.TriggerEvent(new EnemyShotEvent(transform.position));
+//      yield return new WaitForSeconds(0.8f);
+      GetComponent<SpriteRenderer>().flipY = false;
     }
 
     private Quaternion QuaternionToPlayer() {

@@ -17,8 +17,12 @@ public class PlayerEvasionBehaviour : MonoBehaviour {
     playerBehaviour = GetComponent<PlayerBehaviour>();
   }
 
-  void OnParticleCollision(GameObject particle) {
-    PlayerMove(particle);
+  void OnEnable() {
+    EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
+  }
+
+  void OnDisable() {
+    EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
   }
 
   #endregion
@@ -26,12 +30,10 @@ public class PlayerEvasionBehaviour : MonoBehaviour {
 
   #region Private Behaviour
 
-  private void PlayerMove(GameObject obj) {
-    if (obj.layer == (int) CollisionLayer.Enemy) {
-      Vector2 distance = obj.transform.position - transform.position;
-      PlayerBehaviourPositions.AddPosition((Vector2) transform.position + distance.normalized);
-      playerBehaviour.SetNextPosition();
-    }
+  private void OnEnemyShotEvent(EnemyShotEvent enemyShotEvent) {
+    Vector2 distance = enemyShotEvent.Position - (Vector2) transform.position;
+    PlayerBehaviourPositions.AddPosition((Vector2) transform.position + distance.normalized);
+    playerBehaviour.SetNextPosition();
   }
 
   #endregion

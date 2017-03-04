@@ -6,11 +6,11 @@ public class BoardManager {
 
   #region Fields
 
-  public static Vector2 BOARD_SIZE { get { return boardSize; } }
-  private static Vector2 boardSize;
-
   public static Vector2 SCREEN_SIZE { get { return screenSize; } set { screenSize = value; } }
   private static Vector2 screenSize;
+
+  public static Vector2 BOARD_SIZE { get { return boardSize; } }
+  private static Vector2 boardSize;
 
   public static Vector2[,] ENEMY_GRID { get { return enemyGrid; } set { enemyGrid = value; } }
   private static Vector2[,] enemyGrid;

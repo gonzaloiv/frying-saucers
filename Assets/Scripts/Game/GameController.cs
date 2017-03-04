@@ -20,9 +20,9 @@ public class GameController : MonoBehaviour {
   void Awake() {
     camera = GameObject.FindObjectOfType<Camera>();
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
-    boardManager = new BoardManager(camera, Config.BOARD_SIZE);
+    boardManager = new BoardManager(camera, Config.SCREEN_SIZE);
     Screen.orientation = ScreenOrientation.Portrait;
-    Screen.SetResolution((int) Config.BOARD_SIZE.x, (int) Config.BOARD_SIZE.y, false);
+    Screen.SetResolution((int) Config.SCREEN_SIZE.x, (int) Config.SCREEN_SIZE.y, false);
   }
 
   void Start() {

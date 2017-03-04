@@ -10,8 +10,8 @@ public class PlayerBehaviour : MonoBehaviour {
 
   public static Vector2 INITIAL_POSITION = Config.PLAYER_INITIAL_POSITION;
   public const float MAX_SPEED = 0.1f;
-  public const int INITIAL_ROW = 3;
-
+  public const int INITIAL_ROW = 2;
+ 
   private string[] animations = new string[] {"Return01", "Return02"};
   private Animator animator;
 

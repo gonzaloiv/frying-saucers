@@ -11,9 +11,6 @@ public class HUDController : MonoBehaviour {
 
   private Canvas canvas;
 
-  [SerializeField] private GameObject scopePrefab;
-  private GameObject scope;
-
   [SerializeField] private GameObject gameOverScreenPrefab;
   private GameObject gameOverScreen;
 
@@ -31,7 +28,6 @@ public class HUDController : MonoBehaviour {
     canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); // Sets world camera after instantiation
     canvas.sortingLayerName = "UI";
     scoreLabel = GetComponentsInChildren<Text>()[0];
-    scope = Instantiate(scopePrefab, transform);
   }
  
   void Update() {
@@ -42,24 +38,17 @@ public class HUDController : MonoBehaviour {
   }
 
   void OnEnable() {
-    EventManager.StartListening<ClickInput>(OnClickInput);
     EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
   }
   
 
   void OnDisable() {
-    EventManager.StopListening<ClickInput>(OnClickInput);
     EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
   }
 
   #endregion
 
   #region Event Behaviour
-
-  void OnClickInput(ClickInput clickInput) {
-    scope.transform.position = clickInput.Position;
-    scope.GetComponent<SpriteRenderer>().enabled = true;
-  }
 
   void OnEnemyHitEvent(EnemyHitEvent enemyHitEvent) {
     score += enemyHitEvent.Score;

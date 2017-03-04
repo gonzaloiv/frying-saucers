@@ -5,12 +5,12 @@ public class Config {
 
   #region Game
   
-  public static Vector2 BOARD_SIZE = new Vector2(768 / 2, 1024 / 2); // IPAD DIMENSIONS
+  public static Vector2 SCREEN_SIZE = new Vector2(768 / 2, 1024 / 2); // IPAD DIMENSIONS
   public const float GRAVITY = 6f;
   public const int TIME_SCALE = 1;
   public const float GESTURE_TIME = 1f;
   public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -2.5f);
-  public const float GESTURE_MIN_SCORE = 0.89f;
+  public const float GESTURE_MIN_SCORE = 0.85f;
 
   #endregion
 

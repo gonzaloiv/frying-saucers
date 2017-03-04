@@ -28,26 +28,26 @@ public class GestureLabelController : MonoBehaviour {
   }
 
   void OnEnable() {
-    EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
+    EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
   }
 
   void OnDisable() {
-    EventManager.StopListening<EnemyShotEvent>(OnEnemyShotEvent);
+    EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
   }
 
   #endregion
 
   #region Event Behaviour
 
-  void OnEnemyShotEvent(EnemyShotEvent enemyShotEvent) {
-    StartCoroutine(EnemyShotEventRoutine((int) enemyShotEvent.EnemyType));
+  void OnEnemyAttackEvent(EnemyAttackEvent enemyShotEvent) {
+    StartCoroutine(EnemyAttackEventRoutine((int) enemyShotEvent.EnemyType));
   }
 
   #endregion
 
   #region Private Behaviour
 
-  private IEnumerator EnemyShotEventRoutine(int index) {
+  private IEnumerator EnemyAttackEventRoutine(int index) {
     shooting = true;
     EnableImage(index);
     yield return new WaitForSeconds(1);

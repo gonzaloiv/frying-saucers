@@ -26,18 +26,18 @@ public class PlayerWeapon : MonoBehaviour {
   }
 
   void OnEnable() {
-    EventManager.StartListening<GestureInput>(OnGestureInput);
+    EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
   }
 
   void OnDisable() {
-    EventManager.StopListening<GestureInput>(OnGestureInput);
+    EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
   }
 
   #endregion
 
   #region Event Behaviour
 
-  void OnGestureInput(GestureInput gestureInput) {
+  void OnRightGestureInput(RightGestureInput rightGestureInput) {
     laser.Play();
   }
 
@@ -45,7 +45,7 @@ public class PlayerWeapon : MonoBehaviour {
 
   #region Private Behaviour
 
-  private Quaternion QuaternionToClick() {
+  private Quaternion QuaternionToClick() { 
 
     Quaternion quaternion = Quaternion.identity;
     Vector2 moveDirection = (Vector2) transform.position - BoardManager.ENEMY_SHOT_POSITION;
