@@ -36,7 +36,7 @@ public class GestureRecognizer : MonoBehaviour {
   public void NewLine(Transform p) {
     currentGestureLine = gestureSpawner.SpawnGestureLineRenderer(transform);
     gestureLines.Add(currentGestureLine);
-    
+
     ++strokeId;
     vertexCount = 0;
   }

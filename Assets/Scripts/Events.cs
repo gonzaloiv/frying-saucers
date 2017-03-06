@@ -115,12 +115,8 @@ public class GameOverEvent : UnityEvent {
 
 public class EnemyHitEvent : UnityEvent {
 
-  public int Score { get { return score; } }
-  private int score;
-
-  public EnemyHitEvent(int score) {
-    Debug.Log("EnemyHitEvent: " + score);
-    this.score = score;
+  public EnemyHitEvent() {
+    Debug.Log("EnemyHitEvent");
   }
 
 }

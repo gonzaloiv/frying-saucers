@@ -8,18 +8,21 @@ public class HUDController : MonoBehaviour {
   #region Fields
 
   private const string SCORE_TEXT = "SCORE";
-  private static string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "ʘ‿ʘ" };
-
-  private Canvas canvas;
+  private static string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
+  private const string COMBO_TEXT = "x";
 
   [SerializeField] private GameObject gameOverScreenPrefab;
   private GameObject gameOverScreen;
 
+  private Canvas canvas;
   private Text scoreLabel;
   private Text emojiLabel;
+  private Text comboLabel;
+  private Animator comboLabelAnimator;
 
   private int score = 0;
   private int scoreTextNumber = 0;
+  private int combo = 1;
 
   #endregion
 
@@ -31,23 +34,24 @@ public class HUDController : MonoBehaviour {
     canvas.sortingLayerName = "UI";
     scoreLabel = GetComponentsInChildren<Text>()[0];
     emojiLabel = GetComponentsInChildren<Text>()[1];
+    comboLabel = GetComponentsInChildren<Text>()[2];
+    comboLabelAnimator = GetComponentInChildren<Animator>();
   }
- 
+
   void Update() {
-    if(scoreTextNumber < score) {
+    if (scoreTextNumber < score)
       scoreTextNumber++;
-      scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
-    }
+    scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
+    comboLabel.text = COMBO_TEXT + combo;
   }
 
   void OnEnable() {
-    EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
+    EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
   }
-  
 
   void OnDisable() {
-    EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
+    EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StopListening<WrongGestureInput>(OnWrongGestureInput);
   }
 
@@ -55,22 +59,32 @@ public class HUDController : MonoBehaviour {
 
   #region Event Behaviour
 
-  void OnEnemyHitEvent(EnemyHitEvent enemyHitEvent) {
-    score += enemyHitEvent.Score;
-    StartCoroutine(EmojiRoutine(EMOJIS[2]));
+  void OnRightGestureInput(RightGestureInput rightGestureInput) {
+
+    if (combo >= 5)
+      StartCoroutine(EmojiRoutine(EMOJIS[3], 3));
+    else
+      StartCoroutine(EmojiRoutine(EMOJIS[2], 1));
+
+    score += Config.ENEMY_SCORE * combo;
+
+    combo++;
+    comboLabelAnimator.Play("Spawn");
+
   }
 
   void OnWrongGestureInput(WrongGestureInput wrongGestureInput) {
-    StartCoroutine(EmojiRoutine(EMOJIS[1]));
+    combo = 1;
+    StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
   }
 
   #endregion
 
   #region Private Behaviour
 
-  private IEnumerator EmojiRoutine(string emoji) {
+  private IEnumerator EmojiRoutine(string emoji, float time) {
     emojiLabel.text = emoji;
-    yield return new WaitForSeconds(1);
+    yield return new WaitForSeconds(time);
     emojiLabel.text = EMOJIS[0];
   }
 

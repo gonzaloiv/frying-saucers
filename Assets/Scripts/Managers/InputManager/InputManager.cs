@@ -17,6 +17,7 @@ public class InputManager : MonoBehaviour {
   private Vector3 virtualKeyPosition = Vector2.zero;
 
   private bool listening = false; // TODO: corregir esto con extensiones para las Coroutines
+  private bool mouseUp = true;
 
   #endregion
 
@@ -42,21 +43,20 @@ public class InputManager : MonoBehaviour {
     // MOUSE & TOUCH
     
     if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
-      if (Input.touchCount > 0) {
+      if (Input.touchCount > 0)
         virtualKeyPosition = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y);
-      }
     } else {
-      if (Input.GetMouseButton(0)) {
+      if (Input.GetMouseButton(0))
         virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
-      }
     }
 
     if (drawArea.Contains(virtualKeyPosition)) {
 
       if (Input.GetMouseButtonDown(0)) {
+        gestureRecognizer.NewLine(transform);
+        mouseUp = false;
         if (!listening)
           StartCoroutine(GestureRoutine());
-        gestureRecognizer.NewLine(transform);
       }
 
       if (Input.GetMouseButton(0)) {
@@ -66,8 +66,8 @@ public class InputManager : MonoBehaviour {
 
     }
 
-//    if (Input.GetMouseButtonUp(0))
-//        handController.RemoveHand();
+    if (Input.GetMouseButtonUp(0))
+      mouseUp = true; 
 
   }
 
@@ -78,7 +78,13 @@ public class InputManager : MonoBehaviour {
   private IEnumerator GestureRoutine() {
     listening = true;
 
-    yield return new WaitForSeconds(Config.GESTURE_TIME);
+    while (!mouseUp)
+      yield return null;
+
+    yield return new WaitForSeconds(Config.GESTURE_STROKE_TIME);
+
+    while (!mouseUp)
+      yield return null;
 
     Result result = gestureRecognizer.RecognizeGesture();
     EventManager.TriggerEvent(new GestureInput(result.GestureClass.ToString(), result.Score));
@@ -89,5 +95,3 @@ public class InputManager : MonoBehaviour {
   #endregion
 
 }
-
-

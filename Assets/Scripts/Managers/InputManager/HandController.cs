@@ -15,6 +15,7 @@ public class HandController : MonoBehaviour {
 
   private GameObject currentHand = null;
   private Vector2 currentPosition;
+  private GameObject currentParticle = null;
 
   #endregion
 
@@ -79,19 +80,21 @@ public class HandController : MonoBehaviour {
 
   #region Private Behaviour
 
-  public void SetHandParticle(Vector2 position) {
-    GameObject trace = tracePool.PopObject();
-    trace.transform.position = position;
-    trace.SetActive(true);
-    trace.GetComponent<ParticleSystem>().Play();
-  }
-
   private IEnumerator GestureRoutine(int index) {
     SetHand(index, currentPosition);
     yield return new WaitForSeconds(1);
     RemoveHand();
   }
 
+  public void SetHandParticle(Vector2 position) {
+    if(currentParticle != null)
+      currentParticle.SetActive(false);
+    GameObject trace = tracePool.PopObject();
+    trace.transform.position = position;
+    trace.SetActive(true);
+    trace.GetComponent<ParticleSystem>().Play();
+  }
+  
   #endregion
 
 }
