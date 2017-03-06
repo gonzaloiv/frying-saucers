@@ -28,6 +28,7 @@ public class PlayerWeapon : MonoBehaviour {
   }
 
   void OnEnable() {
+    enemyPosition = Vector2.zero;
     EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
   }

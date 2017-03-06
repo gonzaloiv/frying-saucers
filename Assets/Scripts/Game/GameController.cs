@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour {
   [SerializeField] private GameObject levelPrefab;
   private LevelController levelController;
 
-  private Camera camera;
+  private InputManager inputManager;
   private BoardManager boardManager;
 
   #endregion
@@ -18,22 +18,23 @@ public class GameController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    camera = GameObject.FindObjectOfType<Camera>();
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
-    boardManager = new BoardManager(camera, Config.SCREEN_SIZE);
+    inputManager = GameObject.FindObjectOfType<InputManager>();
+    boardManager = new BoardManager(GameObject.FindObjectOfType<Camera>());
     Screen.orientation = ScreenOrientation.Portrait;
-    Screen.SetResolution((int) Config.SCREEN_SIZE.x, (int) Config.SCREEN_SIZE.y, false);
   }
 
   void Start() {
-    levelController.Level();
+    levelController.Play();
   }
 
   void OnEnable() {
+    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
     EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
   }
 
   void OnDisable() {
+    EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
     EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
   }
 
@@ -41,8 +42,14 @@ public class GameController : MonoBehaviour {
 
   #region Event Behaviour
 
+  void OnGameOverEvent(GameOverEvent gameOverEvent) {
+    inputManager.enabled = false;
+    levelController.Stop();
+  }
+
   void OnNewGameEvent(NewGameEvent newGameEvent) {
-    levelController.Level();
+    inputManager.enabled = true;
+    levelController.Play();
   }
 
   #endregion

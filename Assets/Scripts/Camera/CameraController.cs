@@ -17,18 +17,18 @@ public class CameraController : MonoBehaviour {
   #region Mono Behaviour
 
   void OnEnable() {
-    EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
+    EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
   }
 
   void OnDisable() {
-    EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
+    EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
   }
 
   #endregion
 
   #region Event Behaviour
 
-  void OnEnemyShotEvent(EnemyShotEvent enemyShotEvent) {
+  void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
     StartCoroutine(CameraShakeRoutine());
   }
 

@@ -30,12 +30,14 @@ public class InputManager : MonoBehaviour {
     drawArea = new Rect(0, 0, Screen.width, Screen.height);
   } 
 
+  void OnDisable() {
+    gestureRecognizer.ResetGestureLines();
+    handController.RemoveHand();
+  }
+
   void Update() {
 
     // KEYBOARD
-
-    if (Input.GetKeyDown(KeyCode.Return))
-      EventManager.TriggerEvent(new ReturnInput());
 
     if (Input.GetKeyDown(KeyCode.Escape))
       EventManager.TriggerEvent(new EscapeInput());
@@ -67,7 +69,7 @@ public class InputManager : MonoBehaviour {
     }
 
     if (Input.GetMouseButtonUp(0))
-      mouseUp = true; 
+      mouseUp = true;
 
   }
 
@@ -86,8 +88,12 @@ public class InputManager : MonoBehaviour {
     while (!mouseUp)
       yield return null;
 
-    Result result = gestureRecognizer.RecognizeGesture();
-    EventManager.TriggerEvent(new GestureInput(result.GestureClass.ToString(), result.Score));
+    if (mouseUp && gestureRecognizer.CurrentPointAmount > 5) { // The library doesn't support one click inputs 
+      Result result = gestureRecognizer.RecognizeGesture();
+      EventManager.TriggerEvent(new GestureInput(result.GestureClass.ToString(), result.Score));
+    }
+
+    gestureRecognizer.ResetGestureLines();
 
     listening = false;
   }

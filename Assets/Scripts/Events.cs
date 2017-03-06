@@ -103,22 +103,26 @@ public class EnemyShotEvent : UnityEvent {
 
 }
 
-public class GameOverEvent : UnityEvent {
-  public GameOverEvent() {
-    Debug.Log("GameOverEvent");
-  }
-}
-
-#endregion
-
-#region UI Events
-
 public class EnemyHitEvent : UnityEvent {
 
   public EnemyHitEvent() {
     Debug.Log("EnemyHitEvent");
   }
 
+}
+
+public class PlayerHitEvent : UnityEvent {
+
+  public PlayerHitEvent() {
+    Debug.Log("PlayerHitEvent");
+  }
+
+}
+
+public class GameOverEvent : UnityEvent {
+  public GameOverEvent() {
+    Debug.Log("GameOverEvent");
+  }
 }
 
 #endregion

@@ -12,6 +12,8 @@ namespace EnemyBehaviourStates {
     protected GameObject player;
     protected ParticleSystem laser;
     protected EnemyController enemyController;
+    protected bool hit;
+    protected float routineTime;
 
     private EnemyBehaviour enemyBehaviour;
 
@@ -25,6 +27,8 @@ namespace EnemyBehaviourStates {
       player = enemyBehaviour.Player;
       laser = enemyBehaviour.Laser;
       enemyController = GetComponent<EnemyController>();
+      hit = enemyBehaviour.Hit;
+      routineTime = enemyBehaviour.RoutineTime;
     }
 
     #endregion

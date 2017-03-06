@@ -5,17 +5,18 @@ public class Config {
 
   #region Game
   
-  public static Vector2 SCREEN_SIZE = new Vector2(768 / 2, 1024 / 2); // IPAD DIMENSIONS
   public const float GRAVITY = 6f;
   public const int TIME_SCALE = 1;
   public const float GESTURE_TIME = 1f;
-  public const float GESTURE_STROKE_TIME = 0.5f;
-  public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -1f);
+  public const float GESTURE_STROKE_TIME = 0.3f;
   public const float GESTURE_MIN_SCORE = 0.85f;
 
   #endregion
 
   #region Level 
+
+  public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -1f);
+  public const int PLAYER_INITIAL_LIVES = 1;
 
   public const int ENEMY_GRID_ROW_SIZE = 4;
   public const int ENEMY_GRID_COL_SIZE = 4;

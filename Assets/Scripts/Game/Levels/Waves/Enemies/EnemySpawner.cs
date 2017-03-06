@@ -15,7 +15,7 @@ public class EnemySpawner : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    ufoPool = new GameObjectArrayPool("UFOPool", ufoPrefabs, 5, transform);
+    ufoPool = new GameObjectArrayPool("UFOPool", ufoPrefabs, 12, transform);
   }
 
   #endregion

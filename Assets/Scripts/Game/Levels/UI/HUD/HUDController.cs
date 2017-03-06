@@ -10,19 +10,23 @@ public class HUDController : MonoBehaviour {
   private const string SCORE_TEXT = "SCORE";
   private static string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
   private const string COMBO_TEXT = "x";
+  private const string LIVES_TEXT = "LIVES";
 
   [SerializeField] private GameObject gameOverScreenPrefab;
   private GameObject gameOverScreen;
 
   private Canvas canvas;
   private Text scoreLabel;
-  private Text emojiLabel;
   private Text comboLabel;
   private Animator comboLabelAnimator;
+  private Text emojiLabel;
 
-  private int score = 0;
-  private int scoreTextNumber = 0;
-  private int combo = 1;
+  private int score;
+  private int scoreTextNumber;
+  private int combo;
+  private Text livesLabel;
+  private int lives;
+
 
   #endregion
 
@@ -35,6 +39,7 @@ public class HUDController : MonoBehaviour {
     scoreLabel = GetComponentsInChildren<Text>()[0];
     emojiLabel = GetComponentsInChildren<Text>()[1];
     comboLabel = GetComponentsInChildren<Text>()[2];
+    livesLabel = GetComponentsInChildren<Text>()[3];
     comboLabelAnimator = GetComponentInChildren<Animator>();
   }
 
@@ -48,11 +53,13 @@ public class HUDController : MonoBehaviour {
   void OnEnable() {
     EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
+    EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
   }
 
   void OnDisable() {
     EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StopListening<WrongGestureInput>(OnWrongGestureInput);
+    EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
   }
 
   #endregion
@@ -76,6 +83,26 @@ public class HUDController : MonoBehaviour {
   void OnWrongGestureInput(WrongGestureInput wrongGestureInput) {
     combo = 1;
     StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
+  }
+
+  void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
+    lives--;
+    if(lives < 1) 
+      EventManager.TriggerEvent(new GameOverEvent());
+    else
+      livesLabel.text = LIVES_TEXT + "\n" + lives;
+  }
+
+  #endregion
+
+  #region Public Behaviour
+
+  public void Initialize() {
+    score = 0;
+    scoreTextNumber = 0;
+    combo = 1;
+    lives = Config.PLAYER_INITIAL_LIVES;
+    livesLabel.text = LIVES_TEXT + "\n" + lives;
   }
 
   #endregion

@@ -14,6 +14,12 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
   public GameObject Player { get { return player; } }
   private GameObject player;
 
+  public bool Hit { get { return hit; } }
+  private bool hit = false;
+
+  public float RoutineTime { get { return routineTime; } }
+  private float routineTime;
+
   private IEnumerator enemyRoutine;
 
   #endregion
@@ -37,7 +43,8 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
     ChangeState<IdleState>();
   }
 
-  public void Play() {
+  public void Play(float routineTime) {
+    this.routineTime = routineTime;
     enemyRoutine = EnemyRoutine();
     StartCoroutine(enemyRoutine);
   }
@@ -51,8 +58,9 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
   #region Private Behaviour
 
   private IEnumerator EnemyRoutine() {
+    hit = false;
     ChangeState<ShootingState>();  
-    yield return new WaitForSeconds(2); // Depends on ShootingRoutine() in the ShootingState
+    yield return new WaitForSeconds(routineTime); // Depends on ShootingRoutine() in the ShootingState
     ChangeState<IdleState>();
   }
 

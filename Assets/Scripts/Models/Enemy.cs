@@ -27,6 +27,10 @@ namespace Models {
       this.enemyScore = enemyScore;
     }
 
+    public void RandomType() {
+      this.enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length);
+    }
+
     #endregion
 	
   }

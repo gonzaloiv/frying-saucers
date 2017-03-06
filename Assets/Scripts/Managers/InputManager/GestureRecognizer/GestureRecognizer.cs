@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using PDollarGestureRecognizer;
+using System.Linq;
 
 public class GestureRecognizer : MonoBehaviour {
 
@@ -12,12 +13,15 @@ public class GestureRecognizer : MonoBehaviour {
   private GestureSpawner gestureSpawner;
   private List<Gesture> trainingSet = new List<Gesture>();
 
+  public int CurrentPointAmount { get { return points.Count; } } 
+  private List<Point> points = new List<Point>();
+
   private List<LineRenderer> gestureLines = new List<LineRenderer>();
   private LineRenderer currentGestureLine;
-  private List<Point> points = new List<Point>();
 
   private int strokeId = 0;
   private int vertexCount = 0;
+  private Vector2 currentPointPosition = Vector2.zero;
 
   #endregion
 
@@ -33,34 +37,38 @@ public class GestureRecognizer : MonoBehaviour {
 
   #region Public Behaviour
 
-  public void NewLine(Transform p) {
-    currentGestureLine = gestureSpawner.SpawnGestureLineRenderer(transform);
-    gestureLines.Add(currentGestureLine);
+  public void NewLine(Transform position) {
+    if (gestureLines.Count < 2) { // Problems with time based recognition
+      currentGestureLine = gestureSpawner.SpawnGestureLineRenderer(position);
+      gestureLines.Add(currentGestureLine);
 
-    ++strokeId;
-    vertexCount = 0;
+      ++strokeId;
+      vertexCount = 0;
+    }
   }
 
   public void NewPoint(Vector2 position) {
-    ++vertexCount;
-    points.Add(new Point(position.x, -position.y, strokeId));
-    Vector2 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 1));
-    currentGestureLine.numPositions = vertexCount;
-    currentGestureLine.SetPosition(vertexCount - 1, worldPosition);
+
+    if(currentPointPosition != position) {
+
+      ++vertexCount;
+
+      currentPointPosition = position;
+      points.Add(new Point(position.x, -position.y, strokeId));
+
+      Vector2 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 1));
+      currentGestureLine.numPositions = vertexCount;
+      currentGestureLine.SetPosition(vertexCount - 1, worldPosition);
+
+    }
+
   }
 
-  public Result RecognizeGesture() {    
-    Result result = PointCloudRecognizer.Classify(new Gesture(points.ToArray()), trainingSet.ToArray());
-    ResetGestureLines();
-    
-    return result;
+  public Result RecognizeGesture() {
+    return PointCloudRecognizer.Classify(new Gesture(points.ToArray()), trainingSet.ToArray());
   }
 
-  #endregion
-
-  #region Private Behaviour
-
-  private void ResetGestureLines() {
+  public void ResetGestureLines() {
     strokeId = 0;
     points.Clear();
 

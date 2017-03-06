@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IEnemyBehaviour {
 
   void Initialize(GameObject player);
-  void Play();
+  void Play(float routineTime);
   void Stop();
 
 }

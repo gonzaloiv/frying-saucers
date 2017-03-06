@@ -73,7 +73,8 @@ public class HandController : MonoBehaviour {
   }
 
   public void RemoveHand() {
-    currentHand.SetActive(false); 
+    if(currentHand != null)
+      currentHand.SetActive(false); 
   }
 
   #endregion

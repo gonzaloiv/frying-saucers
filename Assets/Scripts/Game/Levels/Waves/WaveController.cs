@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Models;
+using System.Linq;
 
 public class WaveController : MonoBehaviour {
 
@@ -10,10 +11,9 @@ public class WaveController : MonoBehaviour {
   [SerializeField] private GameObject enemyPrefab;
   private EnemySpawner enemySpawner;
 
-  private Wave currentWave;
-  private Wave previousWave;
-
-  private List<GameObject> currentWaveObjects;
+  private Wave wave;
+  private GameObject player;
+  private List<GameObject> currentLevelObjects;
 
   #endregion
 
@@ -27,19 +27,29 @@ public class WaveController : MonoBehaviour {
 
   #region Public Behaviour
 
-  public List<GameObject> Wave(GameObject player) {
-    previousWave = currentWave;
-    currentWave = new Wave(3);
+  public void Wave(GameObject player, List<GameObject> currentLevelObjects) {
+    this.wave = new Wave(3);
+    this.player = player;
+    this.currentLevelObjects = currentLevelObjects;
 
-    return Wave(currentWave, player);
+    for(int i = 0; i < Config.ENEMY_WAVE_AMOUNT; i++)
+      AddEnemy(i);
   }
 
-  public List<GameObject> Wave(Wave wave, GameObject player) {
-    currentWaveObjects = new List<GameObject>();
-    foreach (Enemy enemy in wave.Enemies)
-      currentWaveObjects.Add(enemySpawner.SpawnEnemy(enemy, player)); 
+  public void FillWave() {
+    for(int i = 0; i < currentLevelObjects.Count; i++) {
+      if(!currentLevelObjects[i].activeInHierarchy)
+        AddEnemy(i);
+    }
+  }
 
-    return currentWaveObjects;
+  #endregion
+
+  #region Private Behaviour
+
+  private void AddEnemy(int index) {
+    wave.Enemies[index].RandomType();
+    currentLevelObjects.Add(enemySpawner.SpawnEnemy(wave.Enemies[index], player));
   }
 
   #endregion

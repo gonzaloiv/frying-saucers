@@ -9,15 +9,15 @@ namespace EnemyBehaviourStates {
     #region Public Behaviour
 
     public override void Enter() {
-      animator.Play("Idle");
       transform.rotation = Quaternion.identity;
     }
 
     public override void Play() {
-      transform.position = Vector2.Lerp(transform.position, enemyController.Enemy.Position, Config.ENEMY_MAX_SPEED * Time.timeScale);
+      if(!hit)
+        transform.position = Vector2.Lerp(transform.position, enemyController.Enemy.Position, Config.ENEMY_MAX_SPEED * Time.timeScale);
     }
 
-    #endregion 
+    #endregion
 
   }
 

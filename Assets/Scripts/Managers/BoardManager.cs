@@ -24,11 +24,11 @@ public class BoardManager {
 
   #region Public Behaviour
 
-  public BoardManager(Camera camera, Vector2 screenSize) {
+  public BoardManager(Camera camera) {
     this.camera = camera;
-    BoardManager.screenSize = screenSize;
+    BoardManager.screenSize = new Vector2(Screen.width, Screen.height);
     BoardManager.boardSize = camera.ScreenToWorldPoint(screenSize);
-    EnemyGrid(new Vector2(BoardManager.boardSize.x * 4, BoardManager.boardSize.y * 4));
+    EnemyGrid(new Vector2(BoardManager.boardSize.x * 2, BoardManager.boardSize.y * 2));
   }
 
   public static Vector2 GetEnemyGridPosition(int index, int wavePosition) {
@@ -44,7 +44,10 @@ public class BoardManager {
   }
 
   public static Vector2 GetRandomEnemyShotPosition() {
-    return new Vector2(Random.Range(-BOARD_SIZE.x, BOARD_SIZE.x), 1);
+    Vector2 position = new Vector2(Random.Range(-BOARD_SIZE.x / 2, BOARD_SIZE.x / 2), 1);
+    while(Physics2D.OverlapCircle(position, 1))
+      position = new Vector2(Random.Range(-BOARD_SIZE.x / 2, BOARD_SIZE.x / 2), 1);
+    return position;
   }
 
   #endregion

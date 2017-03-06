@@ -9,23 +9,21 @@ namespace LevelStates {
 
     #region Fields
 
-    private IEnumerator waveRoutine;
-
     private GameObject currentEnemy;
     private GameObject previousEnemy;
+
+    private bool playing = false;
+    private IEnumerator waveRoutine;
 
     #endregion
 
     #region State Behaviour
 
-    public override void Enter() {
-      waveRoutine = WaveRoutine();
-      StartCoroutine(waveRoutine);
-    }
-
-    public override void Exit() {
-      base.Exit();
-      StopCoroutine(waveRoutine);
+    public override void Play() {
+      if (!playing) {
+        waveRoutine = WaveRoutine();
+        StartCoroutine(waveRoutine);
+      }
     }
 
     #endregion
@@ -33,14 +31,15 @@ namespace LevelStates {
     #region Private Behaviour
 
     private IEnumerator WaveRoutine() {
-      while (currentLevelObjects.Count > 0) {
-        yield return new WaitForSeconds(2.1f);
-        SetCurrentEnemy();
-        if(currentEnemy == previousEnemy)        
-          yield return new WaitForSeconds(0.5f);
-        currentEnemy.GetComponent<IEnemyBehaviour>().Play();
-        previousEnemy = currentEnemy;
-      }
+      playing = true;
+      float routineTime = Random.Range(2f, 2.8f);
+      yield return new WaitForSeconds(routineTime * 1.2f);
+      SetCurrentEnemy();
+      if(currentEnemy == previousEnemy)        
+        yield return new WaitForSeconds(Random.Range(0.4f, 0.6f));
+      currentEnemy.GetComponent<IEnemyBehaviour>().Play(routineTime);
+      previousEnemy = currentEnemy;
+      playing = false;
     }
 
     private void SetCurrentEnemy() {
@@ -49,7 +48,7 @@ namespace LevelStates {
         while (currentEnemy == previousEnemy)
           currentEnemy = currentLevelObjects[Random.Range(0, currentLevelObjects.Count())];
       else
-        currentEnemy = currentLevelObjects[0];     
+        currentEnemy = currentLevelObjects[0];    
     }
 
     #endregion

@@ -4,7 +4,7 @@ using Models;
 using System.Linq;
 using System;
 
-public class Wave {
+public struct Wave {
 
   #region Fields
 
@@ -18,7 +18,7 @@ public class Wave {
 
   #region Public Behaviour
 
-  public Wave(int wavePosition) {
+  public Wave(int wavePosition) : this() {
     this.wavePosition = wavePosition;
     this.enemies = WaveEnemies();
   }

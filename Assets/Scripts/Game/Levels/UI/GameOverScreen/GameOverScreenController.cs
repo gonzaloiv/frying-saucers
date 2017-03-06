@@ -23,18 +23,18 @@ public class GameOverScreenController : MonoBehaviour {
   }
 
   void OnEnable() {
-    EventManager.StartListening<ReturnInput>(OnReturnInput);
+    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
   }
 
   void OnDisable() {
-    EventManager.StopListening<ReturnInput>(OnReturnInput);
+    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
   }
 
   #endregion
 
   #region Event Behaviour
 
-  void OnReturnInput(ReturnInput returnInput) {
+  void OnGameOverEvent(GameOverEvent gameOverEvent) {
     gameOverScreen.SetActive(true);
   }
 

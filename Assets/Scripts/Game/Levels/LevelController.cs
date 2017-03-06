@@ -31,6 +31,10 @@ public class LevelController : StateMachine {
   public GameObject Player { get { return player; } set { player = value; } } 
   private GameObject player;
 
+  private IEnumerator newLevelRoutine;
+  private IEnumerator restartRoutine;
+  private bool gameOver = false;
+
   #endregion
 
   #region Mono Behaviour
@@ -40,21 +44,46 @@ public class LevelController : StateMachine {
     playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
     backgroundController = Instantiate(backgroundPrefab, transform).GetComponent<BackgroundController>();
     hudController = Instantiate(hudPrefab, transform).GetComponent<HUDController>();
+    player = PlayerSpawner.SpawnPlayer(currentLevelObjects);
   }
 
   void Update() {
-    currentLevelObjects.RemoveAll(x => !x.activeInHierarchy);
-    if (currentLevelObjects.Count() == 0 && CurrentState is PlayState)
-      StartCoroutine(LevelRoutine());
+    if (CurrentState != null)
+      CurrentState.Play();
+  }
+
+  void OnEnable() {
+    EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
+  }
+
+  void OnDisable() {
+    EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
+  }
+
+  #endregion
+
+  #region Event Behaviour
+
+  void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
+    if (!gameOver) {
+      restartRoutine = RestartRoutine();
+      StartCoroutine(restartRoutine);
+    }
   }
 
   #endregion
 
   #region Public Behaviour
 
-  public void Level() {
-    player = playerSpawner.SpawnPlayer(currentLevelObjects);
-    StartCoroutine(NewLevelRoutine());
+  public void Play() {
+    gameOver = false;
+    newLevelRoutine = NewLevelRoutine();
+    StartCoroutine(newLevelRoutine);
+  }
+
+  public void Stop() {
+    gameOver = true;
+    ChangeState<StopState>();
   }
 
   #endregion
@@ -62,14 +91,16 @@ public class LevelController : StateMachine {
   #region Private Behaviour
 
   private IEnumerator NewLevelRoutine() {
-    yield return new WaitForSeconds(0.6f);
+    yield return new WaitForSeconds(0.4f);
     ChangeState<NewLevelState>();
-    StartCoroutine(LevelRoutine());
+    yield return new WaitForSeconds(0.2f);
+    ChangeState<PlayState>();
   }
 
-  private IEnumerator LevelRoutine() {
-    ChangeState<NewWaveState>();
-    yield return new WaitForSeconds(0.5f);
+  private IEnumerator RestartRoutine() {
+    yield return new WaitForSeconds(0.4f);
+    ChangeState<RestartState>();
+    yield return new WaitForSeconds(0.2f);
     ChangeState<PlayState>();
   }
 

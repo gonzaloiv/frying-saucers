@@ -51,9 +51,10 @@ namespace EnemyBehaviourStates {
         EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
 
       } else { // Hit
-        EventManager.TriggerEvent(new RightGestureInput(gestureInput)); 
+        hit = true;
         RemoveListeners();
         enemyController.DisableRoutine();
+        EventManager.TriggerEvent(new RightGestureInput(gestureInput)); 
       }
 
     }
@@ -63,15 +64,14 @@ namespace EnemyBehaviourStates {
     #region Private Behaviour
 
     private IEnumerator ShootingRoutine() {
-      yield return new WaitForSeconds(0.2f);
       animator.Play("Shooting");
-      yield return new WaitForSeconds(1f);
+      yield return new WaitForSeconds(routineTime / 4 * 3);
       transform.rotation = QuaternionToPlayer();
       GetComponent<SpriteRenderer>().flipY = true;
       laser.Play();
       EventManager.TriggerEvent(new EnemyShotEvent(transform.position));
-      yield return new WaitForSeconds(0.8f);
       GetComponent<SpriteRenderer>().flipY = false;
+      yield return new WaitForSeconds(routineTime / 4);
     }
 
     private Quaternion QuaternionToPlayer() {
