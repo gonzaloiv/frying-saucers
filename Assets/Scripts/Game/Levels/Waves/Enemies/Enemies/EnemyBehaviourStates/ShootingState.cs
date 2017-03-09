@@ -17,9 +17,9 @@ namespace EnemyBehaviourStates {
     public override void Enter() {
       base.Enter();
       shootingPosition = BoardManager.GetRandomEnemyShotPosition();
-      EventManager.TriggerEvent(new EnemyAttackEvent(enemyController.Enemy.EnemyType, shootingPosition));
+      EventManager.TriggerEvent(new EnemyAttackEvent(enemyController.Enemy.EnemyType, shootingPosition, routineTime));
       if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Disable"))
-       StartCoroutine(ShootingRoutine());
+        StartCoroutine(ShootingRoutine());
     }
 
     public override void Exit() {
@@ -54,7 +54,7 @@ namespace EnemyBehaviourStates {
         hit = true;
         RemoveListeners();
         enemyController.DisableRoutine();
-        EventManager.TriggerEvent(new RightGestureInput(gestureInput)); 
+        EventManager.TriggerEvent(new RightGestureInput(gestureInput));
       }
 
     }

@@ -12,12 +12,16 @@ public class InputManager : MonoBehaviour {
   [SerializeField] private GameObject handPrefab;
   private HandController handController;
 
-  private Rect drawArea;
+  [SerializeField] private GameObject resultPrefab;
+  private ResultController resultController;
+
   private RuntimePlatform platform;
   private Vector3 virtualKeyPosition = Vector2.zero;
 
+  private IEnumerator gestureRoutine;
   private bool listening = false; // TODO: corregir esto con extensiones para las Coroutines
   private bool mouseUp = true;
+  private float sectionTime;
 
   #endregion
 
@@ -26,13 +30,18 @@ public class InputManager : MonoBehaviour {
   void Awake() {
     gestureRecognizer = Instantiate(gestureRecognizerPrefab, transform).GetComponent<GestureRecognizer>();
     handController = Instantiate(handPrefab, transform).GetComponent<HandController>();
+    resultController = Instantiate(resultPrefab, transform).GetComponent<ResultController>();
     platform = Application.platform;
-    drawArea = new Rect(0, 0, Screen.width, Screen.height);
-  } 
+  }
+
+  void OnEnable() {
+    EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
+  }
 
   void OnDisable() {
     gestureRecognizer.ResetGestureLines();
     handController.RemoveHand();
+    EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
   }
 
   void Update() {
@@ -43,7 +52,7 @@ public class InputManager : MonoBehaviour {
       EventManager.TriggerEvent(new EscapeInput());
 
     // MOUSE & TOUCH
-    
+
     if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
       if (Input.touchCount > 0)
         virtualKeyPosition = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y);
@@ -52,33 +61,40 @@ public class InputManager : MonoBehaviour {
         virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
     }
 
-    if (drawArea.Contains(virtualKeyPosition)) {
-
-      if (Input.GetMouseButtonDown(0)) {
-        gestureRecognizer.NewLine(transform);
-        mouseUp = false;
-        if (!listening)
-          StartCoroutine(GestureRoutine());
-      }
-
-      if (Input.GetMouseButton(0)) {
-        handController.SetHand(0, Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
-        gestureRecognizer.NewPoint(virtualKeyPosition);
-      }
-
+    if (Input.GetMouseButtonDown(0)) {
+      if(!listening)
+        StartCoroutine(GestureRoutine(sectionTime));
+      gestureRecognizer.NewLine(transform);
+      mouseUp = false;
     }
 
-    if (Input.GetMouseButtonUp(0))
-      mouseUp = true;
+    if (Input.GetMouseButton(0)) {
+      handController.SetHand(0, Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+      gestureRecognizer.NewPoint(virtualKeyPosition);
+    }
 
+    if (Input.GetMouseButtonUp(0)) {
+      mouseUp = true;
+      resultController.SetCursorPosition(Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+    }
+
+  }
+
+  #endregion
+
+  #region Event Behaviour
+
+  void OnEnemyAttackEvent(EnemyAttackEvent enemyAttackEvent) {
+    sectionTime = enemyAttackEvent.SectionTime;
   }
 
   #endregion
 
   #region Private Behaviour
 
-  private IEnumerator GestureRoutine() {
+  private IEnumerator GestureRoutine(float sectionTime) { 
     listening = true;
+    float initialTime = Time.time;
 
     while (!mouseUp)
       yield return null;
@@ -88,14 +104,29 @@ public class InputManager : MonoBehaviour {
     while (!mouseUp)
       yield return null;
 
-    if (mouseUp && gestureRecognizer.CurrentPointAmount > 5) { // The library doesn't support one click inputs 
+    GestureTime gestureTime = SetGestureTime(initialTime, sectionTime);
+
+    if (mouseUp && gestureRecognizer.CurrentPointAmount > 5) { // The library doesn't support one click inputs
       Result result = gestureRecognizer.RecognizeGesture();
-      EventManager.TriggerEvent(new GestureInput(result.GestureClass.ToString(), result.Score));
+      EventManager.TriggerEvent(new GestureInput(result.GestureClass.ToString(), result.Score, gestureTime));
     }
 
     gestureRecognizer.ResetGestureLines();
 
     listening = false;
+  }
+
+  private GestureTime SetGestureTime(float initialTime, float sectionTime) {
+    float finalTime = Time.time - initialTime;
+    if (finalTime < sectionTime) {
+      return GestureTime.TooFast;
+    } else if (finalTime > 5 * sectionTime) {
+      return GestureTime.TooSlow; 
+    } else if (finalTime > 2 * sectionTime && finalTime < 5 * sectionTime) {
+      return GestureTime.Perfect; 
+    } else {
+      return GestureTime.Ok;
+    }
   }
 
   #endregion

@@ -11,16 +11,14 @@ namespace LevelStates {
 
     public override void Enter() {
 
-      if(currentLevelObjects.Count() != 0) {
-         currentLevelObjects.ForEach(x =>  x.SetActive(false));
-        currentLevelObjects.RemoveAll(x => !x.activeInHierarchy);
-      }
+
+      waveController.Reset();
 
       backgroundController.NewLevel();
       hudController.gameObject.SetActive(true);
       hudController.Initialize();
 
-      waveController.Wave(player, currentLevelObjects);
+      waveController.Wave(player);
 
       player.SetActive(true);
 

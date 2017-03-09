@@ -30,8 +30,6 @@ public class PlayerController : MonoBehaviour {
 
   void OnEnable() {
     anim.Play("Spawn");
-    jet.SetActive(true);
-    shot = false;
   }
 
   void OnDisable() {
@@ -53,6 +51,8 @@ public class PlayerController : MonoBehaviour {
 
   public void Initialize() {
     playerWeapon.enabled = true;
+    jet.SetActive(true);
+    shot = false;
   }
 
   public void Disable() {

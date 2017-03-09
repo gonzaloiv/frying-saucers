@@ -9,7 +9,7 @@ A point-and-click space adventure in Unity.
 
 ## Usage
 
-Just open Game scene in the Unity editor and play.
+Just open Game scene in the Unity editor, fix the dependencies (¯\_(ツ)_/¯) and play.
 
 ## To do
 

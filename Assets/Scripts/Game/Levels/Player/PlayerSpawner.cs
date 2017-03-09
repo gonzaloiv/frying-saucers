@@ -13,7 +13,7 @@ public class PlayerSpawner : MonoBehaviour {
 
   #region Public Behaviour
 
-  public GameObject SpawnPlayer(List<GameObject> levelObjects) {
+  public GameObject SpawnPlayer() {
     ship = Instantiate(shipPrefab, transform);
     ship.transform.position = Config.PLAYER_INITIAL_POSITION;
 

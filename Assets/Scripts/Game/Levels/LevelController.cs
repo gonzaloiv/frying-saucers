@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Models;
-using System.Linq;
 using LevelStates;
 
 public class LevelController : StateMachine {
@@ -25,9 +25,6 @@ public class LevelController : StateMachine {
   public HUDController HUDController { get { return hudController; } }
   private HUDController hudController;
 
-  public List<GameObject> CurrentLevelObjects { get { return currentLevelObjects; } set { currentLevelObjects = value; } } 
-  private List<GameObject> currentLevelObjects = new List<GameObject>();
-
   public GameObject Player { get { return player; } set { player = value; } } 
   private GameObject player;
 
@@ -44,7 +41,7 @@ public class LevelController : StateMachine {
     playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
     backgroundController = Instantiate(backgroundPrefab, transform).GetComponent<BackgroundController>();
     hudController = Instantiate(hudPrefab, transform).GetComponent<HUDController>();
-    player = PlayerSpawner.SpawnPlayer(currentLevelObjects);
+    player = PlayerSpawner.SpawnPlayer();
   }
 
   void Update() {
@@ -76,6 +73,7 @@ public class LevelController : StateMachine {
   #region Public Behaviour
 
   public void Play() {
+    new Level();
     gameOver = false;
     newLevelRoutine = NewLevelRoutine();
     StartCoroutine(newLevelRoutine);
@@ -93,14 +91,14 @@ public class LevelController : StateMachine {
   private IEnumerator NewLevelRoutine() {
     yield return new WaitForSeconds(0.4f);
     ChangeState<NewLevelState>();
-    yield return new WaitForSeconds(0.2f);
+    yield return new WaitForSeconds(1f);
     ChangeState<PlayState>();
   }
 
   private IEnumerator RestartRoutine() {
     yield return new WaitForSeconds(0.4f);
     ChangeState<RestartState>();
-    yield return new WaitForSeconds(0.2f);
+    yield return new WaitForSeconds(1f);
     ChangeState<PlayState>();
   }
 

@@ -8,7 +8,7 @@ public class Config {
   public const float GRAVITY = 6f;
   public const int TIME_SCALE = 1;
   public const float GESTURE_TIME = 1f;
-  public const float GESTURE_STROKE_TIME = 0.3f;
+  public const float GESTURE_STROKE_TIME = 0.5f;
   public const float GESTURE_MIN_SCORE = 0.85f;
 
   #endregion
@@ -23,6 +23,9 @@ public class Config {
   public const int ENEMY_WAVE_AMOUNT = 4;
   public const float ENEMY_MAX_SPEED = 0.1f;
   public const int ENEMY_SCORE = 10;
+
+  public static float[] SHOOTING_ROUTINE_TIME = new float[] { 2f, 2.8f };
+  public const int SHOOTING_ROUTINE_PARTS = 6; 
 
   #endregion
 
@@ -64,4 +67,11 @@ public enum GestureType {
   Square,
   Triangle,
   Victory
+}
+
+public enum GestureTime {
+  Perfect,
+  Ok,
+  TooFast,
+  TooSlow
 }

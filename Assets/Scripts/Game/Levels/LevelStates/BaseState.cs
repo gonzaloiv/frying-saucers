@@ -12,8 +12,6 @@ namespace LevelStates {
     protected PlayerSpawner playerSpawner;
     protected BackgroundController backgroundController;
     protected HUDController hudController;
-
-    protected List<GameObject> currentLevelObjects;
     protected GameObject player;
 
     private LevelController levelController;
@@ -23,16 +21,12 @@ namespace LevelStates {
     #region Mono Behaviour
 
     void Awake() {
-
       levelController = GetComponent<LevelController>();
       waveController = levelController.WaveController;
       playerSpawner = levelController.PlayerSpawner;
       backgroundController = levelController.BackgroundController;
       hudController = levelController.HUDController;
-
-      currentLevelObjects = levelController.CurrentLevelObjects;
       player = levelController.Player;
-
     }
 
     #endregion

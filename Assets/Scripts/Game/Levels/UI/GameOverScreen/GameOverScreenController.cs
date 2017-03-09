@@ -19,7 +19,7 @@ public class GameOverScreenController : MonoBehaviour {
     gameOverScreen.SetActive(false);
     canvas = gameOverScreen.GetComponent<Canvas>();
     canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-    canvas.sortingLayerName = "Top";
+    canvas.sortingLayerName = "UI";
   }
 
   void OnEnable() {

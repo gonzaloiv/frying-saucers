@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Models;
 
 public class HUDController : MonoBehaviour {
 
@@ -9,7 +10,6 @@ public class HUDController : MonoBehaviour {
 
   private const string SCORE_TEXT = "SCORE";
   private static string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
-  private const string COMBO_TEXT = "x";
   private const string LIVES_TEXT = "LIVES";
 
   [SerializeField] private GameObject gameOverScreenPrefab;
@@ -17,16 +17,15 @@ public class HUDController : MonoBehaviour {
 
   private Canvas canvas;
   private Text scoreLabel;
-  private Text comboLabel;
-  private Animator comboLabelAnimator;
+
   private Text emojiLabel;
+
+  public static int Lives { get { return lives; } }
+  private static int lives;
 
   private int score;
   private int scoreTextNumber;
-  private int combo;
   private Text livesLabel;
-  private int lives;
-
 
   #endregion
 
@@ -38,28 +37,27 @@ public class HUDController : MonoBehaviour {
     canvas.sortingLayerName = "UI";
     scoreLabel = GetComponentsInChildren<Text>()[0];
     emojiLabel = GetComponentsInChildren<Text>()[1];
-    comboLabel = GetComponentsInChildren<Text>()[2];
-    livesLabel = GetComponentsInChildren<Text>()[3];
-    comboLabelAnimator = GetComponentInChildren<Animator>();
+    livesLabel = GetComponentsInChildren<Text>()[2];
   }
 
   void Update() {
     if (scoreTextNumber < score)
       scoreTextNumber++;
     scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
-    comboLabel.text = COMBO_TEXT + combo;
   }
 
   void OnEnable() {
     EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
     EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
+    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
   }
 
   void OnDisable() {
     EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StopListening<WrongGestureInput>(OnWrongGestureInput);
     EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
+    EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
   }
 
   #endregion
@@ -67,30 +65,30 @@ public class HUDController : MonoBehaviour {
   #region Event Behaviour
 
   void OnRightGestureInput(RightGestureInput rightGestureInput) {
-
-    if (combo >= 5)
+    if (Level.Combo >= 5)
       StartCoroutine(EmojiRoutine(EMOJIS[3], 3));
     else
       StartCoroutine(EmojiRoutine(EMOJIS[2], 1));
-
-    score += Config.ENEMY_SCORE * combo;
-
-    combo++;
-    comboLabelAnimator.Play("Spawn");
-
+    Level.Combo++;
+    score += Config.ENEMY_SCORE * Level.Combo;
   }
 
   void OnWrongGestureInput(WrongGestureInput wrongGestureInput) {
-    combo = 1;
+    Level.Combo = 1;
     StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
   }
 
   void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
     lives--;
     if(lives < 1) 
-      EventManager.TriggerEvent(new GameOverEvent());
-    else
-      livesLabel.text = LIVES_TEXT + "\n" + lives;
+      EventManager.TriggerEvent(new GameOverEvent(score));
+    livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+    livesLabel.text = LIVES_TEXT + "\n" + lives;
+  }
+
+  void OnGameOverEvent(GameOverEvent gameOverEvent) {
+    StopAllCoroutines();
+    StartCoroutine(EmojiRoutine(EMOJIS[1], 4));
   }
 
   #endregion
@@ -98,11 +96,10 @@ public class HUDController : MonoBehaviour {
   #region Public Behaviour
 
   public void Initialize() {
-    score = 0;
-    scoreTextNumber = 0;
-    combo = 1;
-    lives = Config.PLAYER_INITIAL_LIVES;
+    scoreTextNumber = Level.Score;
+    lives = Level.Lives;
     livesLabel.text = LIVES_TEXT + "\n" + lives;
+    livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
   }
 
   #endregion

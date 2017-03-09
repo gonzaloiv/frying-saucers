@@ -11,7 +11,7 @@ namespace LevelStates {
 
     public override void Enter() {  
       StopAllCoroutines();
-      currentLevelObjects.ForEach(x => x.SetActive(false));
+      waveController.Reset();
     }
 
     #endregion

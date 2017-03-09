@@ -19,7 +19,7 @@ public class PauseScreenController : MonoBehaviour {
     pauseScreen.SetActive(false);
     canvas = pauseScreen.GetComponent<Canvas>();
     canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-    canvas.sortingLayerName = "Top";
+    canvas.sortingLayerName = "UI";
   }
 
   void OnEnable() {

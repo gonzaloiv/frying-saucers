@@ -10,7 +10,6 @@ public class GameController : MonoBehaviour {
   [SerializeField] private GameObject levelPrefab;
   private LevelController levelController;
 
-  private InputManager inputManager;
   private BoardManager boardManager;
 
   #endregion
@@ -19,7 +18,6 @@ public class GameController : MonoBehaviour {
 
   void Awake() {
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
-    inputManager = GameObject.FindObjectOfType<InputManager>();
     boardManager = new BoardManager(GameObject.FindObjectOfType<Camera>());
     Screen.orientation = ScreenOrientation.Portrait;
   }
@@ -43,12 +41,10 @@ public class GameController : MonoBehaviour {
   #region Event Behaviour
 
   void OnGameOverEvent(GameOverEvent gameOverEvent) {
-    inputManager.enabled = false;
     levelController.Stop();
   }
 
   void OnNewGameEvent(NewGameEvent newGameEvent) {
-    inputManager.enabled = true;
     levelController.Play();
   }
 

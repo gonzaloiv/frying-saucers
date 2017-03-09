@@ -11,9 +11,15 @@ public class WaveController : MonoBehaviour {
   [SerializeField] private GameObject enemyPrefab;
   private EnemySpawner enemySpawner;
 
+  [SerializeField] private GameObject enemyTypeLabelPrefab;
+  private EnemyTypeLabelSpawner enemyTypeLabelSpawner;
+
+  public GameObject[] CurrentLevelObjects { get { return currentLevelObjects; } }
+  private GameObject[] currentLevelObjects = new GameObject[Config.ENEMY_WAVE_AMOUNT];
+
   private Wave wave;
   private GameObject player;
-  private List<GameObject> currentLevelObjects;
+  bool enemyHit = false;
 
   #endregion
 
@@ -21,35 +27,72 @@ public class WaveController : MonoBehaviour {
 
   void Awake() {
     enemySpawner = Instantiate(enemyPrefab, transform).GetComponent<EnemySpawner>();
+    enemyTypeLabelSpawner = Instantiate(enemyTypeLabelPrefab, transform).GetComponent<EnemyTypeLabelSpawner>();
+  }
+
+  void Update() {
+    if(enemyHit)
+      FillWave();
+  }
+
+  void OnEnable() {
+    EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
+  }
+
+  void OnDisable() {
+    EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
+  }
+
+  #endregion
+
+  #region Event Behaviour
+
+  void OnEnemyHitEvent(EnemyHitEvent enemyHitEvent) {
+    enemyHit = true;
   }
 
   #endregion
 
   #region Public Behaviour
 
-  public void Wave(GameObject player, List<GameObject> currentLevelObjects) {
+  public void Wave(GameObject player) {
     this.wave = new Wave(3);
     this.player = player;
     this.currentLevelObjects = currentLevelObjects;
-
-    for(int i = 0; i < Config.ENEMY_WAVE_AMOUNT; i++)
-      AddEnemy(i);
+    enemyTypeLabelSpawner.Reset();
+    for (int i = 0; i < Config.ENEMY_WAVE_AMOUNT; i++) {
+      currentLevelObjects[i] = enemySpawner.SpawnEnemy(wave.Enemies[i], player);
+      enemyTypeLabelSpawner.SetGesture(i, wave.Enemies[i]);
+    }
+    enemyTypeLabelSpawner.ShowGestures(2);
   }
 
-  public void FillWave() {
-    for(int i = 0; i < currentLevelObjects.Count; i++) {
-      if(!currentLevelObjects[i].activeInHierarchy)
-        AddEnemy(i);
-    }
+  public void Reset() {
+    for(int i = 0; i < currentLevelObjects.Length; i++)
+      if(currentLevelObjects[i] != null)
+        currentLevelObjects[i].SetActive(false);
+    currentLevelObjects = new GameObject[Config.ENEMY_WAVE_AMOUNT];
   }
 
   #endregion
 
   #region Private Behaviour
 
+  private void FillWave() {
+    for (int i = 0; i < currentLevelObjects.Count(); i++) {
+      if (!currentLevelObjects[i].activeInHierarchy) {
+        AddEnemy(i);
+        enemyHit = false;
+      }
+    }
+  }
+
   private void AddEnemy(int index) {
-    wave.Enemies[index].RandomType();
-    currentLevelObjects.Add(enemySpawner.SpawnEnemy(wave.Enemies[index], player));
+    Enemy enemy = wave.Enemies[index];
+    enemy.RandomType();
+    currentLevelObjects[index] = enemySpawner.SpawnEnemy(enemy, player);
+    enemyTypeLabelSpawner.SetGesture(index, enemy);
+    enemyTypeLabelSpawner.ShowGestures(1);
   }
 
   #endregion
