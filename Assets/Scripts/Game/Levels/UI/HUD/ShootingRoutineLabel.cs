@@ -7,7 +7,7 @@ public class ShootingRoutineLabel : MonoBehaviour {
 
   #region Fields
 
-  private static string[] signs = new string[] { "?", "3", "2", "1", "0" , "x" };
+  private static string[] signs = new string[] { "•", "3", "2", "1", "0" , "x" };
   private Text label;
 
   #endregion

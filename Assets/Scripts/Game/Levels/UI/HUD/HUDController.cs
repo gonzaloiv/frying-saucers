@@ -23,7 +23,6 @@ public class HUDController : MonoBehaviour {
   public static int Lives { get { return lives; } }
   private static int lives;
 
-  private int score;
   private int scoreTextNumber;
   private Text livesLabel;
 
@@ -41,7 +40,7 @@ public class HUDController : MonoBehaviour {
   }
 
   void Update() {
-    if (scoreTextNumber < score)
+    if (scoreTextNumber < Level.Score)
       scoreTextNumber++;
     scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
   }
@@ -70,7 +69,7 @@ public class HUDController : MonoBehaviour {
     else
       StartCoroutine(EmojiRoutine(EMOJIS[2], 1));
     Level.Combo++;
-    score += Config.ENEMY_SCORE * Level.Combo;
+    Level.Score += Config.ENEMY_SCORE * Level.Combo;
   }
 
   void OnWrongGestureInput(WrongGestureInput wrongGestureInput) {
@@ -81,7 +80,7 @@ public class HUDController : MonoBehaviour {
   void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
     lives--;
     if(lives < 1) 
-      EventManager.TriggerEvent(new GameOverEvent(score));
+      EventManager.TriggerEvent(new GameOverEvent(Level.Score));
     livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
     livesLabel.text = LIVES_TEXT + "\n" + lives;
   }
@@ -97,6 +96,7 @@ public class HUDController : MonoBehaviour {
 
   public void Initialize() {
     scoreTextNumber = Level.Score;
+    scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
     lives = Level.Lives;
     livesLabel.text = LIVES_TEXT + "\n" + lives;
     livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");

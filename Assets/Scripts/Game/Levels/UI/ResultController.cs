@@ -75,11 +75,11 @@ public class ResultController : MonoBehaviour {
   private IEnumerator ResultRoutine(GestureTime gestureTime) {
 
     resultLabel.text = RESULT_TEXT[(int) gestureTime];
-    resultLabel.transform.position = cursorPosition + new Vector2(-1, 1);
+    resultLabel.transform.position = cursorPosition + new Vector2(-1.2f, 1);
     resultLabel.enabled = true;
     resultLabelAnimator.Play("Spawn");
 
-    comboLabel.transform.position = cursorPosition + new Vector2(1, 1);
+    comboLabel.transform.position = cursorPosition + new Vector2(1.2f, 1);
     comboLabel.enabled = true;
     comboLabelAnimator.Play("Spawn");
 
