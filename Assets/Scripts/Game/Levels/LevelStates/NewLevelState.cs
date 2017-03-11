@@ -11,7 +11,6 @@ namespace LevelStates {
 
     public override void Enter() {
 
-
       waveController.Reset();
 
       backgroundController.NewLevel();

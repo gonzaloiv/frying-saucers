@@ -20,7 +20,7 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
   public float RoutineTime { get { return routineTime; } }
   private float routineTime;
 
-  private IEnumerator enemyRoutine;
+  private Coroutine enemyRoutine;
 
   #endregion
 
@@ -34,23 +34,25 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
     CurrentState.Play();
   }
 
+  void OnEnable() {
+    ChangeState<IdleState>();
+  }
+
   #endregion
 
   #region IEnemyBehaviour
 
   public void Initialize(GameObject player) {
     this.player = player;
-    ChangeState<IdleState>();
   }
 
   public void Play(float routineTime) {
     this.routineTime = routineTime;
-    enemyRoutine = EnemyRoutine();
-    StartCoroutine(enemyRoutine);
+    enemyRoutine = StartCoroutine(EnemyRoutine());
   }
 
   public void Stop() {
-    StartCoroutine(enemyRoutine);
+    StopAllCoroutines();
   }
 
   #endregion

@@ -73,5 +73,6 @@ public enum GestureTime {
   Perfect,
   Ok,
   TooFast,
-  TooSlow
+  TooSlow,
+  Gross
 }

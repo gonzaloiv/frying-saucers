@@ -38,7 +38,6 @@ public class EnemyController : MonoBehaviour, IEnemyController {
 
   public void DisableRoutine() {
     StopAllCoroutines();
-    Debug.Log("DISABLING");
     animator.Play("Disable");
     explosion.Play();
     EventManager.TriggerEvent(new EnemyHitEvent());
@@ -52,20 +51,12 @@ public class EnemyController : MonoBehaviour, IEnemyController {
     gameObject.SetActive(false);
   }
 
-  public void StopBehaviour() {
-    StopAllCoroutines();
-  }
-
   public void PlayHalo() {
     halo.Play();
   }
 
   public void StopHalo() {
     halo.Stop();
-  }
-  public void PlayDisable() {
-    Debug.Log("PLAYING DISABLING");
-
   }
 
   #endregion

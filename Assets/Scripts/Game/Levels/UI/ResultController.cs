@@ -8,7 +8,7 @@ public class ResultController : MonoBehaviour {
 
   #region Fields
 
-  private static string[] RESULT_TEXT = new string[] { "Perfect!", "Ok", "Too\nfast", "Too\nslow" };
+  private static string[] RESULT_TEXT = new string[] { "Perfect!", "Not bad", "Too fast", "Too slow", "Gross" };
   private const string COMBO_TEXT = "x";
 
   private Canvas canvas;
@@ -46,10 +46,12 @@ public class ResultController : MonoBehaviour {
 
   void OnEnable() {
     EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
+    EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
   }
 
   void OnDisable() {
-    EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
+    EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
+    EventManager.StopListening<WrongGestureInput>(OnWrongGestureInput);
   }
 
   #endregion
@@ -57,7 +59,11 @@ public class ResultController : MonoBehaviour {
   #region Event Behaviour
 
   void OnRightGestureInput(RightGestureInput rightGestureInput) {
-    StartCoroutine(ResultRoutine(rightGestureInput.GestureInput.Time));
+    StartCoroutine(ResultRoutine(rightGestureInput.GestureInput.Time, true));
+  }
+
+  void OnWrongGestureInput(WrongGestureInput wrongGestureInput) {
+    StartCoroutine(ResultRoutine(GestureTime.Gross, false));
   }
 
   #endregion
@@ -72,16 +78,18 @@ public class ResultController : MonoBehaviour {
 
   #region Private Behaviour
 
-  private IEnumerator ResultRoutine(GestureTime gestureTime) {
+  private IEnumerator ResultRoutine(GestureTime gestureTime, bool combo) {
 
     resultLabel.text = RESULT_TEXT[(int) gestureTime];
-    resultLabel.transform.position = cursorPosition + new Vector2(-1.2f, 1);
+    resultLabel.transform.position = cursorPosition + new Vector2(1, 0.6f);
     resultLabel.enabled = true;
     resultLabelAnimator.Play("Spawn");
 
-    comboLabel.transform.position = cursorPosition + new Vector2(1.2f, 1);
-    comboLabel.enabled = true;
-    comboLabelAnimator.Play("Spawn");
+    if (combo) {
+      comboLabel.transform.position = cursorPosition + new Vector2(1, 0.2f);
+      comboLabel.enabled = true;
+      comboLabelAnimator.Play("Spawn");
+    }
 
     yield return new WaitForSeconds(1);
 

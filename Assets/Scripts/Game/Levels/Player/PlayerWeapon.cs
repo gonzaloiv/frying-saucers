@@ -44,6 +44,7 @@ public class PlayerWeapon : MonoBehaviour {
 
   void OnRightGestureInput(RightGestureInput rightGestureInput) {
     laser.Play();
+    EventManager.TriggerEvent(new PlayerShotEvent());
   }
 
   void OnEnemyAttackEvent(EnemyAttackEvent enemyAttackEvent) {

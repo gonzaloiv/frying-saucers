@@ -80,10 +80,8 @@ public class DataManager : MonoBehaviour {
         
       saveFile.Close();
 
-      for (int i = 0; i < leaderboard.Scores.Length; i++) {
-        Debug.Log(leaderboard.Scores[i]);
-        Debug.Log(leaderboard.Dates[i]);
-      }
+      for (int i = 0; i < leaderboard.Scores.Length; i++)
+        Debug.Log("Score: " + leaderboard.Scores[i] + " " + leaderboard.Dates[i]);
     } catch (FileNotFoundException exception) {
       Debug.Log("First play: Data not recorded, yet");
     }

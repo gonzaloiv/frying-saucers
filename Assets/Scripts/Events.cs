@@ -87,6 +87,7 @@ public class EnemyAttackEvent : UnityEvent {
     this.position = position;
     this.routineTime = routineTime;
     this.sectionTime = routineTime / Config.SHOOTING_ROUTINE_PARTS;
+    Debug.Log("EnemyAttackEvent " + EnemyType.ToString());
   }
 
 }
@@ -108,6 +109,8 @@ public class EnemyHitEvent : UnityEvent {
   }
 }
 
+public class PlayerShotEvent : UnityEvent {}
+
 public class PlayerHitEvent : UnityEvent {
   public PlayerHitEvent() {
     Debug.Log("PlayerHitEvent");
@@ -121,12 +124,6 @@ public class PlayerHitEvent : UnityEvent {
 public class NewGameEvent : UnityEvent {
   public NewGameEvent() {
     Debug.Log("NewGameEvent");
-  }
-}
-
-public class NewLevelEvent : UnityEvent {
-  public NewLevelEvent() {
-    Debug.Log("NewLevelEvent");
   }
 }
 

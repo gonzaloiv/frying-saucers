@@ -25,6 +25,7 @@ namespace LevelStates {
 
     public override void Play() {
       if (!playing) {
+        StopCoroutine(waveRoutine);
         waveRoutine = WaveRoutine();
         StartCoroutine(waveRoutine);
       }

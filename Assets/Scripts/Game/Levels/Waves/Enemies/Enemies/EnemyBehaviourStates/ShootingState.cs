@@ -8,6 +8,7 @@ namespace EnemyBehaviourStates {
     
     #region Fields
 
+    IEnumerator shootingRoutine;
     Vector2 shootingPosition;
 
     #endregion
@@ -17,9 +18,8 @@ namespace EnemyBehaviourStates {
     public override void Enter() {
       base.Enter();
       shootingPosition = BoardManager.GetRandomEnemyShotPosition();
-      EventManager.TriggerEvent(new EnemyAttackEvent(enemyController.Enemy.EnemyType, shootingPosition, routineTime));
-      if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Disable"))
-        StartCoroutine(ShootingRoutine());
+      shootingRoutine = ShootingRoutine();
+      StartCoroutine(shootingRoutine);
     }
 
     public override void Exit() {
@@ -44,17 +44,17 @@ namespace EnemyBehaviourStates {
 
     void OnGestureInput(GestureInput gestureInput) {
 
-      if (gestureInput.Score < Config.GESTURE_MIN_SCORE)       // Low score
+      if (gestureInput.Score < Config.GESTURE_MIN_SCORE) {       // Low score
         EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
-
-      if ((int) gestureInput.Type != (int) enemyController.Enemy.EnemyType) { // Wrong gesture
-        EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
-
-      } else { // Hit
-        hit = true;
-        RemoveListeners();
-        enemyController.DisableRoutine();
-        EventManager.TriggerEvent(new RightGestureInput(gestureInput));
+      } else {
+        if ((int) gestureInput.Type != (int) enemyController.Enemy.EnemyType) { // Wrong gesture
+          EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
+        } else { // Hit
+          hit = true;
+          RemoveListeners();
+          enemyController.DisableRoutine();
+          EventManager.TriggerEvent(new RightGestureInput(gestureInput));
+        }
       }
 
     }
@@ -64,6 +64,7 @@ namespace EnemyBehaviourStates {
     #region Private Behaviour
 
     private IEnumerator ShootingRoutine() {
+      EventManager.TriggerEvent(new EnemyAttackEvent(enemyController.Enemy.EnemyType, shootingPosition, routineTime));
       animator.Play("Shooting");
       yield return new WaitForSeconds(routineTime / 4 * 3);
       transform.rotation = QuaternionToPlayer();

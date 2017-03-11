@@ -97,6 +97,7 @@ public class HUDController : MonoBehaviour {
   public void Initialize() {
     scoreTextNumber = Level.Score;
     scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
+    scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
     lives = Level.Lives;
     livesLabel.text = LIVES_TEXT + "\n" + lives;
     livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");

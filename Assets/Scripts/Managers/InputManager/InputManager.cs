@@ -6,14 +6,13 @@ public class InputManager : MonoBehaviour {
 
   #region Fields
 
-  [SerializeField] private GameObject gestureRecognizerPrefab;
-  private GestureRecognizer gestureRecognizer;
-
   [SerializeField] private GameObject handPrefab;
   private HandController handController;
 
   [SerializeField] private GameObject resultPrefab;
   private ResultController resultController;
+
+  private GestureRecognizer gestureRecognizer;
 
   private RuntimePlatform platform;
   private Vector3 virtualKeyPosition = Vector2.zero;
@@ -28,7 +27,7 @@ public class InputManager : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    gestureRecognizer = Instantiate(gestureRecognizerPrefab, transform).GetComponent<GestureRecognizer>();
+    gestureRecognizer = GetComponentInChildren<GestureRecognizer>();
     handController = Instantiate(handPrefab, transform).GetComponent<HandController>();
     resultController = Instantiate(resultPrefab, transform).GetComponent<ResultController>();
     platform = Application.platform;

@@ -7,6 +7,5 @@ public interface IEnemyController {
 
   void Initialize(Enemy enemy);
   void Disable();
-  void StopBehaviour();
 	
 }
