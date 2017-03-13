@@ -37,10 +37,14 @@ public class WaveController : MonoBehaviour {
 
   void OnEnable() {
     EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
+    EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
+    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
   }
 
   void OnDisable() {
     EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
+    EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
+    EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
   }
 
   #endregion
@@ -50,6 +54,15 @@ public class WaveController : MonoBehaviour {
   void OnEnemyHitEvent(EnemyHitEvent enemyHitEvent) {
     enemyHit = true;
   }
+
+  void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
+    enemyTypeLabelSpawner.ShowGestures(2);
+  }
+
+  void OnGameOverEvent(GameOverEvent gameOverEvent) {
+    enemyTypeLabelSpawner.HideGestures();
+  }
+
 
   #endregion
 

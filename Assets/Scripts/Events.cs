@@ -139,4 +139,10 @@ public class GameOverEvent : UnityEvent {
 
 }
 
+public class LeaderboardEvent : UnityEvent {
+  public LeaderboardEvent() {
+    Debug.Log("LeaderboardEvent");
+  }
+}
+
 #endregion

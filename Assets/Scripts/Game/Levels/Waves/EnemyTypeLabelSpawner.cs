@@ -13,8 +13,11 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
   private GameObjectArrayPool gesturePool;
 
   private Enemy[] currentEnemies = new Enemy[Config.ENEMY_WAVE_AMOUNT];
+  private GameObject[] gestures;
+
   private IEnumerator showGesturesRoutine;
   private IEnumerator showGestureRoutine;
+  private IEnumerator hideGesturesRoutine;
 
   #endregion
 
@@ -32,6 +35,12 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     currentEnemies[index] = enemy;
   }
 
+  public void Reset() {
+    if(showGesturesRoutine != null)
+      StopCoroutine(showGesturesRoutine);
+    currentEnemies = new Enemy[Config.ENEMY_WAVE_AMOUNT];
+  }
+
   public void ShowGestures(float time) {
     showGesturesRoutine = ShowGesturesRoutine(time);
     StartCoroutine(showGesturesRoutine);
@@ -42,10 +51,9 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     StartCoroutine(showGestureRoutine);
   }
 
-  public void Reset() {
-    if(showGesturesRoutine != null)
-      StopCoroutine(showGesturesRoutine);
-    currentEnemies = new Enemy[Config.ENEMY_WAVE_AMOUNT];
+  public void HideGestures() {
+    hideGesturesRoutine = HideGesturesRoutine();      
+    StartCoroutine(hideGesturesRoutine);
   }
 
   #endregion
@@ -53,7 +61,7 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
   #region Private Behaviour
 
   private IEnumerator ShowGesturesRoutine(float time) {
-    GameObject[] gestures = new GameObject[Config.ENEMY_WAVE_AMOUNT];
+    gestures = new GameObject[Config.ENEMY_WAVE_AMOUNT];
     for (int i = 0; i < currentEnemies.Length; i++) {
       gestures[i] = gesturePool.PopObject((int) currentEnemies[i].EnemyType);
       gestures[i].transform.position = currentEnemies[i].Position + new Vector2(0, -0.7f);
@@ -71,6 +79,12 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     gesture.SetActive(true);
     yield return new WaitForSeconds(time);
     gesture.SetActive(false);
+  }
+
+  private IEnumerator HideGesturesRoutine() {
+    yield return new WaitForSeconds(.5f);
+    for (int i = 0; i < gestures.Length; i++)
+      gestures[i].SetActive(false);
   }
 
   #endregion

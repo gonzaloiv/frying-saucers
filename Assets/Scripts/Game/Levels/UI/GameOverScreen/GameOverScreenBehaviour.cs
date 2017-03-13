@@ -18,18 +18,7 @@ public class GameOverScreenBehaviour : MonoBehaviour, IPointerClickHandler {
   void Awake() {
     anim = GetComponent<Animator>();
     inputManager = GameObject.FindObjectOfType<InputManager>();
-  }
 
-  void OnEnable() {
-    inputManager.enabled = false;
-    active = true;
-    anim.Play("FadeIn");
-  }
-
-  void OnDisable() {
-    inputManager.enabled = true;
-    active = false;
-    EventManager.TriggerEvent(new NewGameEvent());
   }
 
   #endregion
@@ -45,9 +34,20 @@ public class GameOverScreenBehaviour : MonoBehaviour, IPointerClickHandler {
 
   #region Public Behaviour
 
+  public void Play() {
+    gameObject.SetActive(true);
+    inputManager.enabled = false;
+    active = true;
+    anim.Play("FadeIn");
+  }
+
   public void Disable() {
     gameObject.SetActive(false);       
+    inputManager.enabled = true;
+    active = false;
+    EventManager.TriggerEvent(new LeaderboardEvent());
   }
+
 
   #endregion
 	

@@ -10,6 +10,8 @@ public class ShootingRoutineLabel : MonoBehaviour {
   private static string[] signs = new string[] { "•••", "3", "2", "1", "0" , "x" };
   private Text label;
 
+  private IEnumerator shootingRoutine;
+
   #endregion
 
   #region Mono Behaviour
@@ -21,10 +23,12 @@ public class ShootingRoutineLabel : MonoBehaviour {
 
   void OnEnable() {
     EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
+    EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
   }
 
   void OnDisable() {
     EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
+    EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
   }
 
   #endregion
@@ -32,7 +36,14 @@ public class ShootingRoutineLabel : MonoBehaviour {
   #region Event Behaviour
 
   void OnEnemyAttackEvent(EnemyAttackEvent enemyAttackEvent) {
-    StartCoroutine(ShootingRoutine(enemyAttackEvent.SectionTime));
+    shootingRoutine = ShootingRoutine(enemyAttackEvent.SectionTime);
+    StartCoroutine(shootingRoutine);
+  }
+
+  void OnEnemyHitEvent(EnemyHitEvent enemyHitEvent) {
+    if(shootingRoutine != null)
+      StopCoroutine(shootingRoutine);
+    label.text = signs[0];
   }
 
   #endregion

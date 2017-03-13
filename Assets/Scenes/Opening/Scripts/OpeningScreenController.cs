@@ -44,7 +44,7 @@ public class OpeningScreenController : MonoBehaviour {
       anim.Play("FadeOut");
       Debug.Log("Loading...");
 
-      if(sceneLoading.progress == 0.9f)
+      if (sceneLoading.progress == 0.9f)
         sceneLoading.allowSceneActivation = true;
 
       yield return null;

@@ -33,7 +33,7 @@ public class HandController : MonoBehaviour {
   }
 
   void OnDisable() {
-    EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
+    EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StopListening<WrongGestureInput>(OnWrongGestureInput);
   }
 

@@ -9,20 +9,15 @@ public class HUDController : MonoBehaviour {
   #region Fields
 
   private const string SCORE_TEXT = "SCORE";
-  private static string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
   private const string LIVES_TEXT = "LIVES";
+  private static string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
 
   [SerializeField] private GameObject gameOverScreenPrefab;
   private GameObject gameOverScreen;
 
   private Canvas canvas;
   private Text scoreLabel;
-
   private Text emojiLabel;
-
-  public static int Lives { get { return lives; } }
-  private static int lives;
-
   private int scoreTextNumber;
   private Text livesLabel;
 
@@ -64,12 +59,15 @@ public class HUDController : MonoBehaviour {
   #region Event Behaviour
 
   void OnRightGestureInput(RightGestureInput rightGestureInput) {
+
     if (Level.Combo >= 5)
       StartCoroutine(EmojiRoutine(EMOJIS[3], 3));
     else
       StartCoroutine(EmojiRoutine(EMOJIS[2], 1));
+
     Level.Combo++;
-    Level.Score += Config.ENEMY_SCORE * Level.Combo;
+    Level.Score += (int) Mathf.Ceil(Config.ENEMY_SCORE * Level.Combo * GestureMultiplier(rightGestureInput.GestureInput.Time));
+
   }
 
   void OnWrongGestureInput(WrongGestureInput wrongGestureInput) {
@@ -78,11 +76,11 @@ public class HUDController : MonoBehaviour {
   }
 
   void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
-    lives--;
-    if(lives < 1) 
+    Level.Lives--;
+    if (Level.Lives < 1)
       EventManager.TriggerEvent(new GameOverEvent(Level.Score));
     livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-    livesLabel.text = LIVES_TEXT + "\n" + lives;
+    livesLabel.text = LIVES_TEXT + "\n" + Level.Lives;
   }
 
   void OnGameOverEvent(GameOverEvent gameOverEvent) {
@@ -98,8 +96,7 @@ public class HUDController : MonoBehaviour {
     scoreTextNumber = Level.Score;
     scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
     scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-    lives = Level.Lives;
-    livesLabel.text = LIVES_TEXT + "\n" + lives;
+    livesLabel.text = LIVES_TEXT + "\n" + Level.Lives;
     livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
   }
 
@@ -111,6 +108,19 @@ public class HUDController : MonoBehaviour {
     emojiLabel.text = emoji;
     yield return new WaitForSeconds(time);
     emojiLabel.text = EMOJIS[0];
+  }
+
+  private float GestureMultiplier(GestureTime gestureTime) {
+    switch (gestureTime) {
+      case GestureTime.Perfect:
+        return 2;
+      case GestureTime.TooFast:
+        return .5f;
+      case GestureTime.TooSlow:
+        return .5f;
+      default:
+        return 1;
+    }
   }
 
   #endregion

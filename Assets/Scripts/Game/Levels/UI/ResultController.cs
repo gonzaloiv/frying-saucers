@@ -28,7 +28,7 @@ public class ResultController : MonoBehaviour {
 
     canvas = GetComponent<Canvas>();
     canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); // Sets world camera after instantiation
-    canvas.sortingLayerName = "UI";
+    canvas.sortingLayerName = "Top";
 
     resultLabel = GetComponentsInChildren<Text>()[0];
     resultLabelAnimator = resultLabel.gameObject.GetComponentInChildren<Animator>();

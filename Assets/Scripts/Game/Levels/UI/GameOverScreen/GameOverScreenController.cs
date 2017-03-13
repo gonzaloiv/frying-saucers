@@ -27,7 +27,7 @@ public class GameOverScreenController : MonoBehaviour {
   }
 
   void OnDisable() {
-    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+    EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
   }
 
   #endregion
@@ -35,7 +35,7 @@ public class GameOverScreenController : MonoBehaviour {
   #region Event Behaviour
 
   void OnGameOverEvent(GameOverEvent gameOverEvent) {
-    gameOverScreen.SetActive(true);
+    gameOverScreen.GetComponent<GameOverScreenBehaviour>().Play();
   }
 
   #endregion

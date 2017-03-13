@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour {
   }
 
   void Start() {
-    levelController.Play();
+    EventManager.TriggerEvent(new NewGameEvent());
   }
 
   void OnEnable() {

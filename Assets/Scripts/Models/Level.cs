@@ -17,7 +17,7 @@ namespace Models {
 
     public Level() {
       score = 0;
-      combo = 1;
+      combo = 0;
       lives = Config.PLAYER_INITIAL_LIVES;
     }
 
