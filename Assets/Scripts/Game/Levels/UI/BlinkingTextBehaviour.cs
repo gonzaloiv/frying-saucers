@@ -8,6 +8,7 @@ public class BlinkingTextBehaviour : MonoBehaviour {
   #region Private Behaviour
 
   private Text pauseScreenLabel;
+  private IEnumerator blinkingRoutine;
 
   #endregion
 
@@ -15,14 +16,27 @@ public class BlinkingTextBehaviour : MonoBehaviour {
 
   void Awake() {
     pauseScreenLabel = GetComponent<Text>();
+    blinkingRoutine = BlinkingRoutine();
   }
 
   void OnEnable() {
-    StartCoroutine(BlinkingRoutine());
+    Play();
   }
 
   void OnDisable() {
-    StopAllCoroutines();
+    Stop();
+  }
+
+  #endregion
+
+  #region Public Behaviour
+
+  public void Play() {
+    StartCoroutine(blinkingRoutine);
+  }
+
+  public void Stop() {
+    StopCoroutine(blinkingRoutine);
   }
 
   #endregion

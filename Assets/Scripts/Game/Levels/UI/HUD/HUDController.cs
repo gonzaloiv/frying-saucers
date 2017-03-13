@@ -35,7 +35,7 @@ public class HUDController : MonoBehaviour {
   }
 
   void Update() {
-    if (scoreTextNumber < Level.Score)
+    if (scoreTextNumber < Player.Score)
       scoreTextNumber++;
     scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
   }
@@ -60,27 +60,27 @@ public class HUDController : MonoBehaviour {
 
   void OnRightGestureInput(RightGestureInput rightGestureInput) {
 
-    if (Level.Combo >= 5)
+    if (Player.Combo >= 5)
       StartCoroutine(EmojiRoutine(EMOJIS[3], 3));
     else
       StartCoroutine(EmojiRoutine(EMOJIS[2], 1));
 
-    Level.Combo++;
-    Level.Score += (int) Mathf.Ceil(Config.ENEMY_SCORE * Level.Combo * GestureMultiplier(rightGestureInput.GestureInput.Time));
+    Player.Combo++;
+    Player.Score += (int) Mathf.Ceil(Config.ENEMY_SCORE * Player.Combo * GestureMultiplier(rightGestureInput.GestureInput.Time));
 
   }
 
   void OnWrongGestureInput(WrongGestureInput wrongGestureInput) {
-    Level.Combo = 1;
+    Player.Combo = 1;
     StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
   }
 
   void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
-    Level.Lives--;
-    if (Level.Lives < 1)
-      EventManager.TriggerEvent(new GameOverEvent(Level.Score));
+    Player.Lives--;
+    if (Player.Lives < 1)
+      EventManager.TriggerEvent(new GameOverEvent(Player.Score));
     livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-    livesLabel.text = LIVES_TEXT + "\n" + Level.Lives;
+    livesLabel.text = LIVES_TEXT + "\n" + Player.Lives;
   }
 
   void OnGameOverEvent(GameOverEvent gameOverEvent) {
@@ -93,10 +93,10 @@ public class HUDController : MonoBehaviour {
   #region Public Behaviour
 
   public void Initialize() {
-    scoreTextNumber = Level.Score;
+    scoreTextNumber = Player.Score;
     scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
     scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-    livesLabel.text = LIVES_TEXT + "\n" + Level.Lives;
+    livesLabel.text = LIVES_TEXT + "\n" + Player.Lives;
     livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
   }
 

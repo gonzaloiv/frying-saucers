@@ -17,7 +17,7 @@ namespace EnemyBehaviourStates {
 
     public override void Enter() {
       base.Enter();
-      shootingPosition = BoardManager.GetRandomEnemyShotPosition();
+      shootingPosition = Board.GetRandomEnemyShotPosition();
       shootingRoutine = ShootingRoutine();
       StartCoroutine(shootingRoutine);
     }

@@ -10,7 +10,6 @@ namespace LevelStates {
 
     protected WaveController waveController;
     protected PlayerSpawner playerSpawner;
-    protected BackgroundController backgroundController;
     protected HUDController hudController;
     protected GameObject player;
 
@@ -24,7 +23,6 @@ namespace LevelStates {
       levelController = GetComponent<LevelController>();
       waveController = levelController.WaveController;
       playerSpawner = levelController.PlayerSpawner;
-      backgroundController = levelController.BackgroundController;
       hudController = levelController.HUDController;
       player = levelController.Player;
     }

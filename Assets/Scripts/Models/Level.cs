@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Models {
 
-  public class Level {
+  public class Player {
 
     public static int Lives { get { return lives; } set { lives = value; }}
     private static int lives;
@@ -15,13 +15,12 @@ namespace Models {
     public static int Combo { get { return combo; } set { combo = value; }}
     private static int combo;
 
-    public Level() {
+    public Player() {
       score = 0;
       combo = 0;
       lives = Config.PLAYER_INITIAL_LIVES;
     }
 
-        	
   }
 
 }

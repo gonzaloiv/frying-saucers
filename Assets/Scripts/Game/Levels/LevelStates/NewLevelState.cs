@@ -13,11 +13,10 @@ namespace LevelStates {
 
       waveController.Reset();
 
-      backgroundController.NewLevel();
       hudController.gameObject.SetActive(true);
       hudController.Initialize();
 
-      waveController.Wave(player);
+      waveController.NewWave(player, Config.ENEMY_WAVE_AMOUNT);
 
       player.SetActive(true);
 

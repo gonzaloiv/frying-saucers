@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System;
 
 public class LeaderboardBehaviour : MonoBehaviour, IPointerClickHandler {
 
@@ -38,7 +39,7 @@ public class LeaderboardBehaviour : MonoBehaviour, IPointerClickHandler {
   #region IPointerClickHandler
 
   public void OnPointerClick(PointerEventData eventData) {    
-    if(active)
+    if (active)
       anim.Play("FadeOut");
   }
 
@@ -55,10 +56,10 @@ public class LeaderboardBehaviour : MonoBehaviour, IPointerClickHandler {
   }
 
   public void Disable() {
-    gameObject.SetActive(false);  
+    gameObject.SetActive(false);
     inputManager.enabled = true;
     active = false;
-    EventManager.TriggerEvent(new NewGameEvent());     
+    EventManager.TriggerEvent(new NewGameEvent());
   }
 
   #endregion
@@ -66,10 +67,28 @@ public class LeaderboardBehaviour : MonoBehaviour, IPointerClickHandler {
   #region Private Behaviour
 
   private void SetScores() {
-    for(int i = 0; i < scores.Length; i++) {
-      scores[i].text = DataManager.Leaderboard.Scores[i].ToString();
-      dates[i].text = DataManager.Leaderboard.Dates[i].ToString("yyyy/MM/dd");
+
+    for (int i = 0; i < scores.Length; i++) {
+      if (DataManager.Leaderboard.Scores[i] != 0) {
+
+        scores[i].text = DataManager.Leaderboard.Scores[i].ToString("00000");
+        scores[i].enabled = true;
+
+        dates[i].text = DataManager.Leaderboard.Dates[i].ToString("yyyy/MM/dd");
+        dates[i].enabled = true;
+
+        if ((DateTime.Now - DataManager.Leaderboard.Dates[i]).TotalSeconds <= 5) {
+          scores[i].GetComponent<BlinkingTextBehaviour>().enabled = true;
+        } else {
+          scores[i].GetComponent<BlinkingTextBehaviour>().enabled = false;
+        }
+
+      } else {
+        scores[i].enabled = false;
+        dates[i].enabled = false;
+      }
     }
+
   }
 
   #endregion

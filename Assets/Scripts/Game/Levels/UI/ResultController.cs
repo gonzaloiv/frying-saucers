@@ -41,7 +41,7 @@ public class ResultController : MonoBehaviour {
   }
 
   void Update() {
-    comboLabel.text = COMBO_TEXT + Level.Combo;
+    comboLabel.text = COMBO_TEXT + Player.Combo;
   }
 
   void OnEnable() {

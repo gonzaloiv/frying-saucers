@@ -82,9 +82,10 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
   }
 
   private IEnumerator HideGesturesRoutine() {
-    yield return new WaitForSeconds(.5f);
-    for (int i = 0; i < gestures.Length; i++)
+    for (int i = 0; i < gestures.Length; i++) {
       gestures[i].SetActive(false);
+      yield return new WaitForSeconds(.15f);
+    }
   }
 
   #endregion

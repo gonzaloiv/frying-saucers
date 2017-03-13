@@ -20,9 +20,10 @@ public class Config {
 
   public const int ENEMY_GRID_ROW_SIZE = 4;
   public const int ENEMY_GRID_COL_SIZE = 4;
-  public const int ENEMY_WAVE_AMOUNT = 4;
+  public const int ENEMY_WAVE_AMOUNT = 5;
   public const float ENEMY_MAX_SPEED = 0.1f;
   public const int ENEMY_SCORE = 10;
+  public const float ENEMY_INITIAL_Y_POSITION = 3.5f;
 
   public static float[] SHOOTING_ROUTINE_TIME = new float[] { 2f, 2.8f };
   public const int SHOOTING_ROUTINE_PARTS = 6; 

@@ -11,20 +11,15 @@ public struct Wave {
   public List<Enemy> Enemies { get { return enemies; } }
   private List<Enemy> enemies;
 
-  public int WavePosition { get { return wavePosition; } set { wavePosition = value; } }
-  private int wavePosition;
-
   #endregion
 
   #region Public Behaviour
 
-  public Wave(int wavePosition) : this() {
-    this.wavePosition = wavePosition;
-    this.enemies = WaveEnemies();
+  public Wave(int enemyAmount) : this() {
+    this.enemies = WaveEnemies(enemyAmount);
   }
 
-  public Wave(int wavePosition, List<Enemy> enemies) {
-    this.wavePosition = wavePosition;
+  public Wave(List<Enemy> enemies) {
     this.enemies = enemies;
   }
 
@@ -32,18 +27,20 @@ public struct Wave {
 
   #region Private Behaviour
 
-  private List<Enemy> WaveEnemies() {
+  private List<Enemy> WaveEnemies(int enemyAmount) {
+
     List<Enemy> enemies = new List<Enemy>();
+    Vector2[] grid = Board.EnemyGrid(enemyAmount);
 
-    for (int i = 0; i < Config.ENEMY_WAVE_AMOUNT; i++) {
+    for (int i = 0; i < grid.Length; i++) {
       EnemyType enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length);
-      Vector2 enemyPosition = BoardManager.GetEnemyGridPosition(i, wavePosition);
+      Vector2 enemyPosition = grid[i];
       EnemyScore enemyScore = (EnemyScore) Enum.Parse(typeof(EnemyScore), enemyType.ToString());
-
       enemies.Add(new Enemy(enemyType, enemyPosition, enemyScore)); 
     }
 
     return enemies;
+
   }
 
   #endregion

@@ -18,8 +18,7 @@ public class LevelController : StateMachine {
   private PlayerSpawner playerSpawner;
 
   [SerializeField] private GameObject backgroundPrefab;
-  public BackgroundController BackgroundController { get { return backgroundController; } }
-  private BackgroundController backgroundController;
+  private GameObject background;
 
   [SerializeField] private GameObject hudPrefab;
   public HUDController HUDController { get { return hudController; } }
@@ -39,7 +38,7 @@ public class LevelController : StateMachine {
   void Awake() {
     waveController = Instantiate(wavePrefab, transform).GetComponent<WaveController>();
     playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
-    backgroundController = Instantiate(backgroundPrefab, transform).GetComponent<BackgroundController>();
+    background = Instantiate(backgroundPrefab, transform);
     hudController = Instantiate(hudPrefab, transform).GetComponent<HUDController>();
     player = PlayerSpawner.SpawnPlayer();
   }
@@ -73,7 +72,7 @@ public class LevelController : StateMachine {
   #region Public Behaviour
 
   public void Play() {
-    new Level();
+    new Player();
     gameOver = false;
     newLevelRoutine = NewLevelRoutine();
     StartCoroutine(newLevelRoutine);

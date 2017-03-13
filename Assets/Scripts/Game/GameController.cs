@@ -10,16 +10,14 @@ public class GameController : MonoBehaviour {
   [SerializeField] private GameObject levelPrefab;
   private LevelController levelController;
 
-  private BoardManager boardManager;
-
   #endregion
 
   #region Mono Behaviour
 
   void Awake() {
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
-    boardManager = new BoardManager(GameObject.FindObjectOfType<Camera>());
     Screen.orientation = ScreenOrientation.Portrait;
+    new Board();
   }
 
   void Start() {

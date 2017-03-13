@@ -9,6 +9,7 @@ public class WaveController : MonoBehaviour {
   #region Fields
 
   [SerializeField] private GameObject enemyPrefab;
+  public EnemySpawner EnemySpawner { get { return enemySpawner; } }
   private EnemySpawner enemySpawner;
 
   [SerializeField] private GameObject enemyTypeLabelPrefab;
@@ -17,9 +18,10 @@ public class WaveController : MonoBehaviour {
   public GameObject[] CurrentLevelObjects { get { return currentLevelObjects; } }
   private GameObject[] currentLevelObjects = new GameObject[Config.ENEMY_WAVE_AMOUNT];
 
+  public Wave Wave { get { return wave; } }
   private Wave wave;
+
   private GameObject player;
-  bool enemyHit = false;
 
   #endregion
 
@@ -30,19 +32,12 @@ public class WaveController : MonoBehaviour {
     enemyTypeLabelSpawner = Instantiate(enemyTypeLabelPrefab, transform).GetComponent<EnemyTypeLabelSpawner>();
   }
 
-  void Update() {
-    if(enemyHit)
-      FillWave();
-  }
-
   void OnEnable() {
-    EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
     EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
     EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
   }
 
   void OnDisable() {
-    EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
     EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
     EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
   }
@@ -50,10 +45,6 @@ public class WaveController : MonoBehaviour {
   #endregion
 
   #region Event Behaviour
-
-  void OnEnemyHitEvent(EnemyHitEvent enemyHitEvent) {
-    enemyHit = true;
-  }
 
   void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
     enemyTypeLabelSpawner.ShowGestures(2);
@@ -63,15 +54,13 @@ public class WaveController : MonoBehaviour {
     enemyTypeLabelSpawner.HideGestures();
   }
 
-
   #endregion
 
   #region Public Behaviour
 
-  public void Wave(GameObject player) {
-    this.wave = new Wave(3);
+  public void NewWave(GameObject player, int enemyAmount) {
+    this.wave = new Wave(Config.ENEMY_WAVE_AMOUNT);
     this.player = player;
-    this.currentLevelObjects = currentLevelObjects;
     enemyTypeLabelSpawner.Reset();
     for (int i = 0; i < Config.ENEMY_WAVE_AMOUNT; i++) {
       currentLevelObjects[i] = enemySpawner.SpawnEnemy(wave.Enemies[i], player);
@@ -87,20 +76,7 @@ public class WaveController : MonoBehaviour {
     currentLevelObjects = new GameObject[Config.ENEMY_WAVE_AMOUNT];
   }
 
-  #endregion
-
-  #region Private Behaviour
-
-  private void FillWave() {
-    for (int i = 0; i < currentLevelObjects.Count(); i++) {
-      if (!currentLevelObjects[i].activeInHierarchy) {
-        AddEnemy(i);
-        enemyHit = false;
-      }
-    }
-  }
-
-  private void AddEnemy(int index) {
+  public void AddEnemy(int index) {
     Enemy enemy = wave.Enemies[index];
     enemy.RandomType();
     currentLevelObjects[index] = enemySpawner.SpawnEnemy(enemy, player);

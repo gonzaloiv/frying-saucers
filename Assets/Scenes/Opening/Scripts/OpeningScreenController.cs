@@ -36,7 +36,7 @@ public class OpeningScreenController : MonoBehaviour {
 
   public IEnumerator LoadMainSceneRoutine() {
 
-    sceneLoading = SceneManager.LoadSceneAsync(1);
+    sceneLoading = SceneManager.LoadSceneAsync(2);
     sceneLoading.allowSceneActivation = false;
 
     while (!sceneLoading.isDone) {
