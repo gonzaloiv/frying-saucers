@@ -41,10 +41,18 @@ public class HUDController : MonoBehaviour {
   }
 
   void OnEnable() {
+
     EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
     EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
     EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+
+    scoreTextNumber = Player.Score;
+    scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
+    scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+    livesLabel.text = LIVES_TEXT + "\n" + Player.Lives;
+    livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+
   }
 
   void OnDisable() {
@@ -86,18 +94,6 @@ public class HUDController : MonoBehaviour {
   void OnGameOverEvent(GameOverEvent gameOverEvent) {
     StopAllCoroutines();
     StartCoroutine(EmojiRoutine(EMOJIS[1], 4));
-  }
-
-  #endregion
-
-  #region Public Behaviour
-
-  public void Initialize() {
-    scoreTextNumber = Player.Score;
-    scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
-    scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-    livesLabel.text = LIVES_TEXT + "\n" + Player.Lives;
-    livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
   }
 
   #endregion

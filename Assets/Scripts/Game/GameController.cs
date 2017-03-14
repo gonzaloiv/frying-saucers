@@ -10,14 +10,24 @@ public class GameController : MonoBehaviour {
   [SerializeField] private GameObject levelPrefab;
   private LevelController levelController;
 
+  private IGameData gameData;
+  private Level[] levels;
+  private int currentLevel = 0;
+
   #endregion
 
   #region Mono Behaviour
 
   void Awake() {
+
+    new Board();
     levelController = Instantiate(levelPrefab, transform).GetComponent<LevelController>();
     Screen.orientation = ScreenOrientation.Portrait;
-    new Board();
+
+    gameData = GetComponent<IGameData>();  
+    gameData.Initialize();
+    levels = gameData.Levels;
+
   }
 
   void Start() {
@@ -43,7 +53,7 @@ public class GameController : MonoBehaviour {
   }
 
   void OnNewGameEvent(NewGameEvent newGameEvent) {
-    levelController.Play();
+    levelController.Play(levels[currentLevel]);
   }
 
   #endregion

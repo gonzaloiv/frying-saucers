@@ -12,7 +12,7 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
   [SerializeField] private GameObject[] gesturePrefabs;
   private GameObjectArrayPool gesturePool;
 
-  private Enemy[] currentEnemies = new Enemy[Config.ENEMY_WAVE_AMOUNT];
+  private Enemy[] currentEnemies;
   private GameObject[] gestures;
 
   private IEnumerator showGesturesRoutine;
@@ -31,14 +31,14 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
 
   #region Public Behaviour
 
-  public void SetGesture(int index, Enemy enemy) {
-    currentEnemies[index] = enemy;
-  }
-
-  public void Reset() {
+  public void Initizalize(int waveEnemyAmount) {
     if(showGesturesRoutine != null)
       StopCoroutine(showGesturesRoutine);
-    currentEnemies = new Enemy[Config.ENEMY_WAVE_AMOUNT];
+    currentEnemies = new Enemy[waveEnemyAmount];
+  }
+
+  public void SetGesture(int index, Enemy enemy) {
+    currentEnemies[index] = enemy;
   }
 
   public void ShowGestures(float time) {
@@ -61,7 +61,7 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
   #region Private Behaviour
 
   private IEnumerator ShowGesturesRoutine(float time) {
-    gestures = new GameObject[Config.ENEMY_WAVE_AMOUNT];
+    gestures = new GameObject[currentEnemies.Length];
     for (int i = 0; i < currentEnemies.Length; i++) {
       gestures[i] = gesturePool.PopObject((int) currentEnemies[i].EnemyType);
       gestures[i].transform.position = currentEnemies[i].Position + new Vector2(0, -0.7f);

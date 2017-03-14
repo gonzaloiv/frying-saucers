@@ -9,24 +9,18 @@ public class LevelController : StateMachine {
 
   #region Fields
 
-  [SerializeField] private GameObject wavePrefab;
+  private LevelSpawner levelSpawner;
+
   public WaveController WaveController { get { return waveController; } }
   private WaveController waveController;
-
-  [SerializeField] private GameObject playerPrefab;
-  public PlayerSpawner PlayerSpawner { get { return playerSpawner; } }
-  private PlayerSpawner playerSpawner;
-
-  [SerializeField] private GameObject backgroundPrefab;
-  private GameObject background;
-
-  [SerializeField] private GameObject hudPrefab;
-  public HUDController HUDController { get { return hudController; } }
-  private HUDController hudController;
 
   public GameObject Player { get { return player; } set { player = value; } } 
   private GameObject player;
 
+  public Wave CurrentWave { get { return level.Waves[currentWave]; } }
+  private int currentWave = 0;
+
+  private Level level;
   private IEnumerator newLevelRoutine;
   private IEnumerator restartRoutine;
   private bool gameOver = false;
@@ -36,11 +30,9 @@ public class LevelController : StateMachine {
   #region Mono Behaviour
 
   void Awake() {
-    waveController = Instantiate(wavePrefab, transform).GetComponent<WaveController>();
-    playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
-    background = Instantiate(backgroundPrefab, transform);
-    hudController = Instantiate(hudPrefab, transform).GetComponent<HUDController>();
-    player = PlayerSpawner.SpawnPlayer();
+    levelSpawner = GetComponent<LevelSpawner>();
+    player = levelSpawner.Player();
+    waveController = levelSpawner.WaveController();
   }
 
   void Update() {
@@ -71,7 +63,8 @@ public class LevelController : StateMachine {
 
   #region Public Behaviour
 
-  public void Play() {
+  public void Play(Level level) {
+    this.level = level;
     new Player();
     gameOver = false;
     newLevelRoutine = NewLevelRoutine();

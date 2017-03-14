@@ -58,7 +58,7 @@ namespace LevelStates {
     private IEnumerator WaveRoutine() {
       playing = true;
       yield return new WaitForSeconds(1);
-      float routineTime = Random.Range(Config.SHOOTING_ROUTINE_TIME[0], Config.SHOOTING_ROUTINE_TIME[1]);
+      float routineTime = Random.Range(currentWave.RoutineTime[0], currentWave.RoutineTime[1]);
       SetCurrentEnemy();
       currentEnemy.GetComponent<IEnemyBehaviour>().Play(routineTime);
       previousEnemy = currentEnemy;

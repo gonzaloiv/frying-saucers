@@ -17,16 +17,17 @@ public class Board {
   }
 
   public static Vector2 GetRandomOutOfBoardPosition() {
-    if(new bool[] {true, false}[Random.Range(0, 2)])
-      return new Vector2(new float[]{-boardSize.x, boardSize.x}[Random.Range(0, 1)], Random.Range(0, boardSize.y * 2));  
-    else
+    if (new bool[] { true, false }[Random.Range(0, 2)]) {
+      return new Vector2(new float[]{ -boardSize.x, boardSize.x }[Random.Range(0, 1)], Random.Range(0, boardSize.y * 2));  
+    } else {
       return new Vector2(Random.Range(-boardSize.x, boardSize.x), boardSize.y);
+    }
   }
 
-  public static Vector2 GetRandomEnemyShotPosition() {
-    Vector2 position = new Vector2(Random.Range(-boardSize.x / 2, boardSize.x / 2), 1);
+  public static Vector2 EmptyEnemyShotPosition() {
+    Vector2 position = EnemyShotPosition();
     while(Physics2D.OverlapCircle(position, 1))
-      position = new Vector2(Random.Range(-boardSize.x / 2, boardSize.x / 2), 1);
+      position = EnemyShotPosition();
     return position;
   }
  
@@ -44,4 +45,11 @@ public class Board {
 
   #endregion
 
+  #region Private Behaviour
+
+  private static Vector2 EnemyShotPosition() {
+    return new Vector2(Random.Range(-boardSize.x / 2, boardSize.x / 2), 1);
+  }
+
+  #endregion
 }

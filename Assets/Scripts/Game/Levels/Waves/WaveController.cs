@@ -16,7 +16,7 @@ public class WaveController : MonoBehaviour {
   private EnemyTypeLabelSpawner enemyTypeLabelSpawner;
 
   public GameObject[] CurrentLevelObjects { get { return currentLevelObjects; } }
-  private GameObject[] currentLevelObjects = new GameObject[Config.ENEMY_WAVE_AMOUNT];
+  private GameObject[] currentLevelObjects;
 
   public Wave Wave { get { return wave; } }
   private Wave wave;
@@ -58,22 +58,28 @@ public class WaveController : MonoBehaviour {
 
   #region Public Behaviour
 
-  public void NewWave(GameObject player, int enemyAmount) {
-    this.wave = new Wave(Config.ENEMY_WAVE_AMOUNT);
+  public void NewWave(GameObject player, Wave wave) {
+
+    this.wave = wave;
     this.player = player;
-    enemyTypeLabelSpawner.Reset();
-    for (int i = 0; i < Config.ENEMY_WAVE_AMOUNT; i++) {
+    enemyTypeLabelSpawner.Initizalize(wave.EnemyAmount);
+    currentLevelObjects = new GameObject[wave.EnemyAmount];
+
+    for (int i = 0; i < wave.Enemies.Count(); i++) {
       currentLevelObjects[i] = enemySpawner.SpawnEnemy(wave.Enemies[i], player);
       enemyTypeLabelSpawner.SetGesture(i, wave.Enemies[i]);
     }
+
     enemyTypeLabelSpawner.ShowGestures(2);
+
   }
 
   public void Reset() {
-    for(int i = 0; i < currentLevelObjects.Length; i++)
-      if(currentLevelObjects[i] != null)
-        currentLevelObjects[i].SetActive(false);
-    currentLevelObjects = new GameObject[Config.ENEMY_WAVE_AMOUNT];
+    if (currentLevelObjects != null) {
+      for (int i = 0; i < currentLevelObjects.Length; i++)
+        if (currentLevelObjects[i] != null)
+          currentLevelObjects[i].SetActive(false);
+    }
   }
 
   public void AddEnemy(int index) {

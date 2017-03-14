@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Models;
 
 namespace LevelStates {
 
@@ -9,9 +10,8 @@ namespace LevelStates {
     #region Fields
 
     protected WaveController waveController;
-    protected PlayerSpawner playerSpawner;
-    protected HUDController hudController;
     protected GameObject player;
+    protected Wave currentWave;
 
     private LevelController levelController;
 
@@ -22,9 +22,8 @@ namespace LevelStates {
     void Awake() {
       levelController = GetComponent<LevelController>();
       waveController = levelController.WaveController;
-      playerSpawner = levelController.PlayerSpawner;
-      hudController = levelController.HUDController;
       player = levelController.Player;
+      currentWave = levelController.CurrentWave;
     }
 
     #endregion

@@ -10,16 +10,9 @@ namespace LevelStates {
     #region State Behaviour
 
     public override void Enter() {
-
       waveController.Reset();
-
-      hudController.gameObject.SetActive(true);
-      hudController.Initialize();
-
-      waveController.NewWave(player, Config.ENEMY_WAVE_AMOUNT);
-
+      waveController.NewWave(player, currentWave);
       player.SetActive(true);
-
     }
 
     #endregion
