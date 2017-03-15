@@ -22,6 +22,7 @@ public class WaveController : MonoBehaviour {
   private Wave wave;
 
   private GameObject player;
+  private IEnumerator newWaveRoutine;
 
   #endregion
 
@@ -34,11 +35,13 @@ public class WaveController : MonoBehaviour {
 
   void OnEnable() {
     EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
+    EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
     EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
   }
 
   void OnDisable() {
     EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
+    EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
     EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
   }
 
@@ -48,6 +51,11 @@ public class WaveController : MonoBehaviour {
 
   void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
     enemyTypeLabelSpawner.ShowGestures(2);
+  }
+
+  void OnEnemyHitEvent(EnemyHitEvent enemyHitEvent) {
+    newWaveRoutine = NewWaveRoutine();
+    StartCoroutine(newWaveRoutine);
   }
 
   void OnGameOverEvent(GameOverEvent gameOverEvent) {
@@ -91,5 +99,16 @@ public class WaveController : MonoBehaviour {
   }
 
   #endregion
+
+  #region Private Behaviour
+
+  private IEnumerator NewWaveRoutine() {
+    yield return new WaitForSeconds(1);
+    if(currentLevelObjects.ToList().Where(x => x.activeInHierarchy).Count() == 0)
+      EventManager.TriggerEvent(new WaveEndEvent());
+  }
+
+  #endregion
+
 
 }

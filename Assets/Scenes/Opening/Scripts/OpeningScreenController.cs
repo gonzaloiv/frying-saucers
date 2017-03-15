@@ -8,8 +8,12 @@ public class OpeningScreenController : MonoBehaviour {
 
   #region Fields
 
+  [SerializeField] private int sceneToLoad;
+
   private Animator anim;
   private Button startSceneButton;
+  private AudioSource[] loungeMusic;
+
   AsyncOperation sceneLoading;
 
   #endregion
@@ -19,24 +23,30 @@ public class OpeningScreenController : MonoBehaviour {
   void Awake() {
     anim = GetComponent<Animator>();
     startSceneButton = GetComponentInChildren<Button>();
-    startSceneButton.onClick.AddListener(() => LoadMainScene());
+    startSceneButton.onClick.AddListener(() => LoadScene());
+    loungeMusic = GetComponents<AudioSource>();
+  }
+
+  void Start() {
+    for(int i = 0; i < loungeMusic.Length; i++)
+      loungeMusic[i].Play();
   }
 
   #endregion
 
   #region Public Behaviour
 
-  public void LoadMainScene() {
-    StartCoroutine(LoadMainSceneRoutine());
+  public void LoadScene() {
+    StartCoroutine(LoadSceneRoutine());
   }
 
   #endregion
 
   #region Private Behaviour
 
-  public IEnumerator LoadMainSceneRoutine() {
+  public IEnumerator LoadSceneRoutine() {
 
-    sceneLoading = SceneManager.LoadSceneAsync(2);
+    sceneLoading = SceneManager.LoadSceneAsync(sceneToLoad);
     sceneLoading.allowSceneActivation = false;
 
     while (!sceneLoading.isDone) {
@@ -50,6 +60,7 @@ public class OpeningScreenController : MonoBehaviour {
       yield return null;
 
     }
+
   }
 
   #endregion

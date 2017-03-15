@@ -11,12 +11,10 @@ public class LevelSpawner : MonoBehaviour {
 
   [SerializeField] private GameObject wavePrefab;
   [SerializeField] private GameObject playerPrefab;
+  [SerializeField] private GameObject hudPrefab;
 
   [SerializeField] private GameObject backgroundPrefab;
   private GameObject background;
-
-  [SerializeField] private GameObject hudPrefab;
-  private GameObject hud;
 
   #endregion
 
@@ -24,22 +22,23 @@ public class LevelSpawner : MonoBehaviour {
 
   void Awake() {
     background = Instantiate(backgroundPrefab, transform);
-    hud = Instantiate(hudPrefab, transform);
   }
 
   void OnEnable() {
     background.SetActive(true);
-    hud.SetActive(true);
   }
 
   void OnDisable() {
     background.SetActive(false);
-    hud.SetActive(false);
   }
 
   #endregion
 
   #region Public Behaviour
+
+  public HUDController HUDController() {
+    return Instantiate(hudPrefab, transform).GetComponent<HUDController>();
+  }
 
   public WaveController WaveController() {
     return Instantiate(wavePrefab, transform).GetComponent<WaveController>();
@@ -49,8 +48,6 @@ public class LevelSpawner : MonoBehaviour {
     PlayerSpawner playerSpawner = Instantiate(playerPrefab, transform).GetComponent<PlayerSpawner>();
     return playerSpawner.SpawnPlayer();
   }
-
-
 
   #endregion
 	

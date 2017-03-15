@@ -15,10 +15,10 @@ namespace Models {
     public static int Combo { get { return combo; } set { combo = value; }}
     private static int combo;
 
-    public Player() {
-      score = 0;
-      combo = 0;
-      lives = Config.PLAYER_INITIAL_LIVES;
+    public Player(int lives) {
+      Player.score = 0;
+      Player.combo = 0;
+      Player.lives = lives;
     }
 
   }

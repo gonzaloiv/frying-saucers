@@ -5,7 +5,9 @@ using Models;
 
 public interface IGameData {
 
+  Player Player { get; } 
   Level[] Levels { get; } 
-  void Initialize();
+  void InitializePlayer();
+  void InitializeLevels();
 
 }

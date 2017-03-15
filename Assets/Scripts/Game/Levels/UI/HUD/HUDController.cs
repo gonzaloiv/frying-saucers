@@ -41,18 +41,10 @@ public class HUDController : MonoBehaviour {
   }
 
   void OnEnable() {
-
     EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
     EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
     EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
     EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
-
-    scoreTextNumber = Player.Score;
-    scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
-    scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-    livesLabel.text = LIVES_TEXT + "\n" + Player.Lives;
-    livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-
   }
 
   void OnDisable() {
@@ -88,7 +80,7 @@ public class HUDController : MonoBehaviour {
     if (Player.Lives < 1)
       EventManager.TriggerEvent(new GameOverEvent(Player.Score));
     livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-    livesLabel.text = LIVES_TEXT + "\n" + Player.Lives;
+    SetLives();
   }
 
   void OnGameOverEvent(GameOverEvent gameOverEvent) {
@@ -99,6 +91,18 @@ public class HUDController : MonoBehaviour {
   #endregion
 
   #region Private Behaviour
+
+  public void Initialize() {
+    scoreTextNumber = Player.Score;
+    scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
+    scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+    SetLives();
+    livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+  }
+
+  #endregion
+
+  #region Public Behaviour
 
   private IEnumerator EmojiRoutine(string emoji, float time) {
     emojiLabel.text = emoji;
@@ -117,6 +121,17 @@ public class HUDController : MonoBehaviour {
       default:
         return 1;
     }
+  }
+
+  #endregion
+
+  #region Private Behaviour
+
+  private void SetLives() {
+    if (Player.Lives > 100) // Tutorial settings
+      livesLabel.text = LIVES_TEXT + "\n∞";
+    else
+      livesLabel.text = LIVES_TEXT + "\n" + Player.Lives;
   }
 
   #endregion

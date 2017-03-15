@@ -6,7 +6,10 @@ using System;
 public class GameData : MonoBehaviour, IGameData {
 
   #region Fields
-  
+
+  public Player Player { get { return player; } }
+  private Player player;
+
   public Level[] Levels { get { return levels; } }
   private Level[] levels;
   
@@ -14,12 +17,16 @@ public class GameData : MonoBehaviour, IGameData {
 
   #region Public Behaviour
 
-  public void Initialize() {
+  public void InitializePlayer() {
+    this.player = new Player(1);
+  }
+
+  public void InitializeLevels() {
     levels = new Level[] {
-    new Level(new List<Wave> { 
-      new Wave(GameData.RandomWaveEnemies(4), new float[] { 2, 2.8f } )
-    }) 
-  };
+      new Level(new List<Wave> { 
+        new Wave(GameData.RandomWaveEnemies(4), new float[] { 2, 2.8f } )
+      }) 
+    };
   }
 
   #endregion
@@ -35,7 +42,7 @@ public class GameData : MonoBehaviour, IGameData {
       EnemyType enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length);
       Vector2 enemyPosition = grid[i];
       EnemyScore enemyScore = (EnemyScore) Enum.Parse(typeof(EnemyScore), enemyType.ToString());
-      enemies.Add(new Enemy(enemyType, enemyPosition, enemyScore)); 
+      enemies.Add(new Enemy(enemyType, enemyPosition, enemyScore));
     }
 
     return enemies;

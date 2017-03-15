@@ -127,6 +127,18 @@ public class NewGameEvent : UnityEvent {
   }
 }
 
+public class WaveEndEvent : UnityEvent {
+  public WaveEndEvent() {
+    Debug.Log("WaveEndEvent");
+  }
+}
+
+public class LevelEndEvent : UnityEvent {
+  public LevelEndEvent() {
+    Debug.Log("LevelEndEvent");
+  }
+}
+
 public class GameOverEvent : UnityEvent {
 
   public int Score { get { return score; } } 

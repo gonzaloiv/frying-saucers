@@ -19,12 +19,13 @@ namespace LevelStates {
     #region State Behaviour
 
     public override void Enter() {
+      previousEnemy = null;
       waveRoutine = WaveRoutine();
       StartCoroutine(waveRoutine);
     }
 
     public override void Play() {
-      if (!playing) {
+      if (!playing && waveController.CurrentLevelObjects.Where(x => x.activeSelf).Count() > 0) {
         StopCoroutine(waveRoutine);
         waveRoutine = WaveRoutine();
         StartCoroutine(waveRoutine);
@@ -56,14 +57,18 @@ namespace LevelStates {
     #region Private Behaviour
 
     private IEnumerator WaveRoutine() {
-      playing = true;
-      yield return new WaitForSeconds(1);
+
       float routineTime = Random.Range(currentWave.RoutineTime[0], currentWave.RoutineTime[1]);
+      playing = true;
+
+      yield return new WaitForSeconds(1);
       SetCurrentEnemy();
       currentEnemy.GetComponent<IEnemyBehaviour>().Play(routineTime);
       previousEnemy = currentEnemy;
+
       yield return new WaitForSeconds(routineTime);
       playing = false;
+
     }
 
     private void SetCurrentEnemy() {

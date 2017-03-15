@@ -18,7 +18,6 @@ public class GameOverScreenBehaviour : MonoBehaviour, IPointerClickHandler {
   void Awake() {
     anim = GetComponent<Animator>();
     inputManager = GameObject.FindObjectOfType<InputManager>();
-
   }
 
   #endregion
@@ -42,12 +41,11 @@ public class GameOverScreenBehaviour : MonoBehaviour, IPointerClickHandler {
   }
 
   public void Disable() {
-    gameObject.SetActive(false);       
+    gameObject.SetActive(false);
     inputManager.enabled = true;
     active = false;
     EventManager.TriggerEvent(new LeaderboardEvent());
   }
-
 
   #endregion
 	

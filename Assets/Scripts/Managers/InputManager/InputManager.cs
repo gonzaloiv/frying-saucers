@@ -45,36 +45,40 @@ public class InputManager : MonoBehaviour {
 
   void Update() {
 
-    // KEYBOARD
+    if (Time.timeScale != 0) { 
 
-    if (Input.GetKeyDown(KeyCode.Escape))
-      EventManager.TriggerEvent(new EscapeInput());
+      // KEYBOARD
 
-    // MOUSE & TOUCH
+      if (Input.GetKeyDown(KeyCode.Escape))
+        EventManager.TriggerEvent(new EscapeInput());
 
-    if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
-      if (Input.touchCount > 0)
-        virtualKeyPosition = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y);
-    } else {
-      if (Input.GetMouseButton(0))
-        virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
-    }
+      // MOUSE & TOUCH
 
-    if (Input.GetMouseButtonDown(0)) {
-      if(!listening)
-        StartCoroutine(GestureRoutine(sectionTime));
-      gestureRecognizer.NewLine(transform);
-      mouseUp = false;
-    }
+      if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
+        if (Input.touchCount > 0)
+          virtualKeyPosition = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y);
+      } else {
+        if (Input.GetMouseButton(0))
+          virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
+      }
 
-    if (Input.GetMouseButton(0)) {
-      handController.SetHand(0, Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
-      gestureRecognizer.NewPoint(virtualKeyPosition);
-    }
+      if (Input.GetMouseButtonDown(0)) {
+        if (!listening)
+          StartCoroutine(GestureRoutine(sectionTime));
+        gestureRecognizer.NewLine(transform);
+        mouseUp = false;
+      }
 
-    if (Input.GetMouseButtonUp(0)) {
-      mouseUp = true;
-      resultController.SetCursorPosition(Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+      if (Input.GetMouseButton(0)) {
+        handController.SetHand(0, Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+        gestureRecognizer.NewPoint(virtualKeyPosition);
+      }
+
+      if (Input.GetMouseButtonUp(0)) {
+        mouseUp = true;
+        resultController.SetCursorPosition(Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+      }
+
     }
 
   }

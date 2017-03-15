@@ -48,7 +48,7 @@ public class Board {
   #region Private Behaviour
 
   private static Vector2 EnemyShotPosition() {
-    return new Vector2(Random.Range(-boardSize.x / 2, boardSize.x / 2), 1);
+    return new Vector2(Random.Range(-boardSize.x / 3, boardSize.x / 3), 1);
   }
 
   #endregion

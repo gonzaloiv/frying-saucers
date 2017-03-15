@@ -5,10 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class TitleController : MonoBehaviour {
 
+  #region Fields
+
+  [SerializeField] private int sceneToLoad;
+
+  #endregion
+
   #region Public Behaviour
 
   public void LoadMainScene() {
-    SceneManager.LoadSceneAsync(1);
+    SceneManager.LoadSceneAsync(sceneToLoad);
   }
 
   #endregion

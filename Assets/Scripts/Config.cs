@@ -16,7 +16,6 @@ public class Config {
   #region Level 
 
   public static Vector2 PLAYER_INITIAL_POSITION = new Vector2(0, -1f);
-  public const int PLAYER_INITIAL_LIVES = 1;
   public const float ENEMY_MAX_SPEED = 0.1f;
   public const int ENEMY_SCORE = 10;
   public const float ENEMY_INITIAL_Y_POSITION = 3.5f;

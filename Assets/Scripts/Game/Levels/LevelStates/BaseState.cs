@@ -10,6 +10,7 @@ namespace LevelStates {
     #region Fields
 
     protected WaveController waveController;
+    protected HUDController hudController;
     protected GameObject player;
     protected Wave currentWave;
 
@@ -22,6 +23,7 @@ namespace LevelStates {
     void Awake() {
       levelController = GetComponent<LevelController>();
       waveController = levelController.WaveController;
+      hudController = levelController.HUDController;
       player = levelController.Player;
       currentWave = levelController.CurrentWave;
     }

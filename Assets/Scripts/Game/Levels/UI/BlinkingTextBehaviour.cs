@@ -54,7 +54,7 @@ public class BlinkingTextBehaviour : MonoBehaviour {
       timeToWait = Time.realtimeSinceStartup + 0.3f;
       while (Time.realtimeSinceStartup < timeToWait)
         yield return 0;
-    } 
+    }
   }
 
   #endregion
