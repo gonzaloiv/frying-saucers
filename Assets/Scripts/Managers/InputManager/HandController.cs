@@ -83,7 +83,7 @@ public class HandController : MonoBehaviour {
 
   private IEnumerator GestureRoutine(int index) {
     SetHand(index, currentPosition);
-    yield return new WaitForSeconds(1);
+    yield return TimeManager.WaitForRealTime(index);
     RemoveHand();
   }
 

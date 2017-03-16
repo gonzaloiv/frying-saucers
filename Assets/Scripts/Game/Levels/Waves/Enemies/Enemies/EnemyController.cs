@@ -39,6 +39,7 @@ public class EnemyController : MonoBehaviour, IEnemyController {
   public void DisableRoutine() {
     StopAllCoroutines();
     animator.Play("Disable");
+    explosion.transform.position = transform.position;
     explosion.Play();
     EventManager.TriggerEvent(new EnemyHitEvent());
   }

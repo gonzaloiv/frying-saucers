@@ -8,12 +8,15 @@ public class OpeningScreenController : MonoBehaviour {
 
   #region Fields
 
-  [SerializeField] private int sceneToLoad;
+  [SerializeField] private int modeOne;
+  private Button modeOneButton;
+
+  [SerializeField] private int credits;
+  private Button creditsButton;
 
   private Animator anim;
-  private Button startSceneButton;
   private AudioSource[] loungeMusic;
-
+  private UFOGridController ufoGridController; 
   AsyncOperation sceneLoading;
 
   #endregion
@@ -21,37 +24,46 @@ public class OpeningScreenController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
+
     anim = GetComponent<Animator>();
-    startSceneButton = GetComponentInChildren<Button>();
-    startSceneButton.onClick.AddListener(() => LoadScene());
     loungeMusic = GetComponents<AudioSource>();
+    ufoGridController = GetComponentInChildren<UFOGridController>();
+
+    modeOneButton = GetComponentsInChildren<Button>()[0];
+    modeOneButton.onClick.AddListener(() => LoadScene(modeOne));
+
+    creditsButton = GetComponentsInChildren<Button>()[1];
+    creditsButton.onClick.AddListener(() => LoadScene(credits));
+
   }
 
   void Start() {
     for(int i = 0; i < loungeMusic.Length; i++)
       loungeMusic[i].Play();
+    ufoGridController.Play();
   }
 
   #endregion
 
   #region Public Behaviour
 
-  public void LoadScene() {
-    StartCoroutine(LoadSceneRoutine());
+  public void LoadScene(int scene) {
+    StartCoroutine(LoadSceneRoutine(scene));
   }
 
   #endregion
 
   #region Private Behaviour
 
-  public IEnumerator LoadSceneRoutine() {
+  public IEnumerator LoadSceneRoutine(int scene) {
 
-    sceneLoading = SceneManager.LoadSceneAsync(sceneToLoad);
+    sceneLoading = SceneManager.LoadSceneAsync(scene);
     sceneLoading.allowSceneActivation = false;
 
     while (!sceneLoading.isDone) {
 
       anim.Play("FadeOut");
+      ufoGridController.Stop();
       Debug.Log("Loading...");
 
       if (sceneLoading.progress == 0.9f)

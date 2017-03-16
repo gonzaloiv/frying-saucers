@@ -8,55 +8,64 @@ public class InfoController : MonoBehaviour {
 
   [SerializeField] private GameObject[] infoScreenPrefabs;
   private IInfoScreenController[] infoScreens;
-  private InputManager inputManager;
-
   private int currentInfoScreen = 0;
+
+  [SerializeField] private GameObject[] errorScreenPrefabs;
+  private IInfoScreenController[] errorScreens;
+  private int currentErrorScreen = 0;
+
+  private InputManager inputManager;
+  private Animator anim;
 
   #endregion
 
   #region Mono Behaviour
 
   void Awake() {
+
+    anim = GetComponent<Animator>();
+
     infoScreens = new IInfoScreenController[infoScreenPrefabs.Length];
-    for (int i = 0; i < infoScreenPrefabs.Length; i++)
-      infoScreens[i] = Instantiate(infoScreenPrefabs[i], transform).GetComponent<IInfoScreenController>();
+    for (int i = 0; i < infoScreenPrefabs.Length; i++) {
+      GameObject infoScreen = Instantiate(infoScreenPrefabs[i], transform);
+      infoScreen.SetActive(false);
+      infoScreens[i] = infoScreen.GetComponent<IInfoScreenController>();
+      infoScreens[i].Initialize(this);
+    }
+
+    errorScreens = new IInfoScreenController[errorScreenPrefabs.Length];
+    for (int i = 0; i < errorScreenPrefabs.Length; i++) {
+      GameObject errorScreen = Instantiate(errorScreenPrefabs[i], transform);
+      errorScreen.SetActive(false);
+      errorScreens[i] = errorScreen.GetComponent<IInfoScreenController>();
+      errorScreens[i].Initialize(this);
+    }
+
   }
 
   void OnEnable () {
 
-    // Input
-    EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
-    EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
-
     // Game Mechanics
     EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
-    EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
     EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
-    EventManager.StartListening<PlayerShotEvent>(OnPlayerShotEvent);
     EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
 
     // Game
     EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
-    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+    EventManager.StartListening<LevelEndEvent>(OnLevelEndEvent);
 
   }
 
   void OnDisable () {
 
-    // Input
-    EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
-    EventManager.StopListening<WrongGestureInput>(OnWrongGestureInput);
-
     // Game Mechanics
     EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
-    EventManager.StopListening<EnemyShotEvent>(OnEnemyShotEvent);
     EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
-    EventManager.StopListening<PlayerShotEvent>(OnPlayerShotEvent);
     EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
 
     // Game
     EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
-    EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
+    EventManager.StopListening<LevelEndEvent>(OnLevelEndEvent);
 
   }
 
@@ -64,39 +73,51 @@ public class InfoController : MonoBehaviour {
 
   #region Event Behaviour
 
-  // Input
-  void OnRightGestureInput(RightGestureInput rightGestureInput) {}
-
-  void OnWrongGestureInput(WrongGestureInput wrongGestureInput) {}
-
   // Game Mechanics
-  void OnEnemyAttackEvent(EnemyAttackEvent enemyAttackEvent) {}
-
-  void OnEnemyShotEvent(EnemyShotEvent enemyShotEvent) {}
-
-  void OnEnemyHitEvent(EnemyHitEvent EnemyHitEvent) {
-    NextScreen();
+  void OnEnemyAttackEvent(EnemyAttackEvent enemyAttackEvent) {
+    NextInfoScreen();
+    currentErrorScreen = 0;
   }
 
-  void OnPlayerShotEvent(PlayerShotEvent playerShotEvent) {}
+  void OnEnemyHitEvent(EnemyHitEvent EnemyHitEvent) {
+    NextInfoScreen();
+  }
 
-  void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {}
+  void OnPlayerHitEvent(PlayerHitEvent playerHitEvent) {
+    NextErrorScreen();
+    currentInfoScreen--;
+  }
 
   // Game
   void OnNewGameEvent(NewGameEvent newGameEvent) {
-    NextScreen();
+    NextInfoScreen();
   }
 
-  void OnGameOverEvent(GameOverEvent gameOverEvent) {}
+  void OnLevelEndEvent(LevelEndEvent levelEndEvent) {
+    DataManager.SetIsTutorialPlayed();
+  }
 
   #endregion
 
-  #region Private Behaviour
+  #region Public Behaviour
 
-  private void NextScreen() {
-//    infoScreens[currentInfoScreen].Play();
-    infoScreens[0].Play();
+  public void NextInfoScreen() {
+    if (currentInfoScreen < infoScreens.Length) {
+      if(currentInfoScreen > 0)
+        infoScreens[currentInfoScreen - 1].Stop();
+      infoScreens[currentInfoScreen].Play();
+    } else {
+      anim.Play("FadeOut");
+    }
     currentInfoScreen++;
+  }
+
+  public void NextErrorScreen() {
+    if (currentErrorScreen < errorScreens.Length) {
+        infoScreens[currentInfoScreen].Stop();
+      errorScreens[currentErrorScreen].Play();
+    }
+    currentErrorScreen++;
   }
 
   #endregion

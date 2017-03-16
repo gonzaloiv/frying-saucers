@@ -41,6 +41,18 @@ public class TimeManager : MonoBehaviour {
     Time.timeScale = Time.timeScale * percentage;
   }
 
+  // Credits: http://rontavstudio.com/use-coroutines-independent-timescale-unity-3d/
+  // All the UI components work besides TimeScale
+  public static IEnumerator WaitForRealTime(float delay) {
+    while (true) {
+      float pauseEndTime = Time.realtimeSinceStartup + delay;
+      while (Time.realtimeSinceStartup < pauseEndTime) {
+        yield return 0;
+      }
+      break;
+    }
+  }
+
   #endregion
 
 }

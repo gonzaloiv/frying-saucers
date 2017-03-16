@@ -37,7 +37,7 @@ public class TutorialData : MonoBehaviour, IGameData {
 
   private static Enemy EnemyByType(EnemyType enemyType) {
     Vector2[] grid = Board.EnemyGrid(1);
-    Vector2 enemyPosition = grid[0];
+    Vector2 enemyPosition = grid[0] - new Vector2(0, 1f); // TODO: doing this properly.., the wave should have an y position
     EnemyScore enemyScore = (EnemyScore) Enum.Parse(typeof(EnemyScore), enemyType.ToString());
     return new Enemy(enemyType, enemyPosition, enemyScore);
   }

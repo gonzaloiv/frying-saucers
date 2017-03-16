@@ -15,6 +15,7 @@ public class HUDController : MonoBehaviour {
   [SerializeField] private GameObject gameOverScreenPrefab;
   private GameObject gameOverScreen;
 
+  private Animator anim;
   private Canvas canvas;
   private Text scoreLabel;
   private Text emojiLabel;
@@ -26,6 +27,7 @@ public class HUDController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
+    anim = GetComponent<Animator>();
     canvas = GetComponent<Canvas>();
     canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); // Sets world camera after instantiation
     canvas.sortingLayerName = "UI";
@@ -45,6 +47,7 @@ public class HUDController : MonoBehaviour {
     EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
     EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
     EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+//    anim.Play("FadeIn");
   }
 
   void OnDisable() {

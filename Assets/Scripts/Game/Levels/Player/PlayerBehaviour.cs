@@ -60,7 +60,6 @@ public class PlayerBehaviour : MonoBehaviour {
     nextPosition.x = enemyPosition.x;
     rightGesture = true;
   }
-  
 
   #endregion
 

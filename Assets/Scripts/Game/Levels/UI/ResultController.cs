@@ -91,7 +91,7 @@ public class ResultController : MonoBehaviour {
       comboLabelAnimator.Play("Spawn");
     }
 
-    yield return new WaitForSeconds(1);
+    yield return TimeManager.WaitForRealTime(1f);
 
     comboLabel.enabled = false;
     resultLabel.enabled = false;

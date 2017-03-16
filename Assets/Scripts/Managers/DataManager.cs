@@ -50,6 +50,20 @@ public class DataManager : MonoBehaviour {
 
   #endregion
 
+  #region Public Behaviour
+
+  public static void SetIsTutorialPlayed() {
+    leaderboard.IsTutorialPlayer = true;
+  }
+
+  public static bool GetIsTutorialPlayed() {
+    return leaderboard.IsTutorialPlayer;
+  }
+
+  #endregion
+
+  #region Private Behaviour
+
   private void SetNewScore(int newScore) {
     for (int i = 0; i < leaderboard.Scores.Length; i++) {
       if (newScore > leaderboard.Scores[i]) {
@@ -87,5 +101,7 @@ public class DataManager : MonoBehaviour {
       Debug.Log("First play: Data not recorded, yet");
     }
   }
+
+  #endregion
 
 }
