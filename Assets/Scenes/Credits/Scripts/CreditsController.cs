@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.EventSystems;
 
-public class CreditsController : MonoBehaviour {
+public class CreditsController : MonoBehaviour, IPointerClickHandler {
 
   #region Fields
 
@@ -38,10 +39,18 @@ public class CreditsController : MonoBehaviour {
 
   #endregion
 
+  #region IPointerClickHandler Behaviour
+
+  public void OnPointerClick(PointerEventData e) {
+    SceneManager.LoadScene(2);
+  }
+
+  #endregion
+
   #region Private Behaviour
 
   private IEnumerator ScrollingTextRoutine() {
-    yield return new WaitForSeconds(0.6f);
+    yield return new WaitForSeconds(0.9f);
     while(gameObject.activeSelf) {
       objects.ForEach(x => x.transform.position = new Vector2(x.transform.position.x, x.transform.position.y + 0.01f));
       yield return null;

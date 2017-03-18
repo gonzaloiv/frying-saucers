@@ -8,7 +8,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
   #region Fields
 
-  public const float MAX_SPEED = 0.1f;
+  public const float MAX_SPEED = 10f;
   public static Vector2[] PLAYER_POSITIONS;
  
   private Collider2D collider;
@@ -26,7 +26,7 @@ public class PlayerBehaviour : MonoBehaviour {
   }
 
   void Update() {
-    transform.position = Vector2.Lerp(transform.position, nextPosition, MAX_SPEED * Time.timeScale);
+    transform.position = Vector2.Lerp(transform.position, nextPosition, MAX_SPEED * Time.deltaTime);
   }
 
   void OnEnable() {

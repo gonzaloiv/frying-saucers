@@ -13,7 +13,7 @@ public class DataManager : MonoBehaviour {
   public static Leaderboard Leaderboard { get { return leaderboard; } }
   private static Leaderboard leaderboard;
 
-  private string dataPath;
+  private static string dataPath;
 
   #endregion
 
@@ -21,6 +21,7 @@ public class DataManager : MonoBehaviour {
 
   void Awake() {
     dataPath = Application.persistentDataPath;
+    Debug.Log("Data: " + Application.persistentDataPath);
     leaderboard = new Leaderboard();
     LoadData();
   }
@@ -54,6 +55,7 @@ public class DataManager : MonoBehaviour {
 
   public static void SetIsTutorialPlayed() {
     leaderboard.IsTutorialPlayer = true;
+    SaveData();
   }
 
   public static bool GetIsTutorialPlayed() {
@@ -64,7 +66,7 @@ public class DataManager : MonoBehaviour {
 
   #region Private Behaviour
 
-  private void SetNewScore(int newScore) {
+  private static void SetNewScore(int newScore) {
     for (int i = 0; i < leaderboard.Scores.Length; i++) {
       if (newScore > leaderboard.Scores[i]) {
         for (int j = leaderboard.Scores.Length; j < i; i--)
@@ -76,10 +78,10 @@ public class DataManager : MonoBehaviour {
     } 
   }
 
-  private void SaveData() {
+  private static void SaveData() {
 
     BinaryFormatter formatter = new BinaryFormatter();
-    FileStream saveFile = File.Create(dataPath + "/scores.binary");
+    FileStream saveFile = File.Create(dataPath + "/leaderboard.binary");
 
     formatter.Serialize(saveFile, leaderboard);
 
@@ -87,11 +89,11 @@ public class DataManager : MonoBehaviour {
 
   }
 
-  private void LoadData() {
+  private static void LoadData() {
     try {
 
       BinaryFormatter formatter = new BinaryFormatter();
-      FileStream saveFile = File.Open(dataPath + "/scores.binary", FileMode.Open);
+      FileStream saveFile = File.Open(dataPath + "/leaderboard.binary", FileMode.Open);
 
       leaderboard = (Leaderboard) formatter.Deserialize(saveFile);
         

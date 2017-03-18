@@ -15,6 +15,7 @@ public class TitleController : MonoBehaviour {
   #region Public Behaviour
 
   public void LoadNextScene() {
+    Debug.Log("Tutorial: " + DataManager.GetIsTutorialPlayed());
     if(DataManager.GetIsTutorialPlayed())
       SceneManager.LoadScene(openingScene);
     else

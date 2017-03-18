@@ -11,6 +11,9 @@ public class OpeningScreenController : MonoBehaviour {
   [SerializeField] private int modeOne;
   private Button modeOneButton;
 
+  [SerializeField] private int tutorial;
+  private Button tutorialButton;
+
   [SerializeField] private int credits;
   private Button creditsButton;
 
@@ -32,7 +35,10 @@ public class OpeningScreenController : MonoBehaviour {
     modeOneButton = GetComponentsInChildren<Button>()[0];
     modeOneButton.onClick.AddListener(() => LoadScene(modeOne));
 
-    creditsButton = GetComponentsInChildren<Button>()[1];
+    tutorialButton = GetComponentsInChildren<Button>()[1];
+    tutorialButton.onClick.AddListener(() => LoadScene(tutorial));
+
+    creditsButton = GetComponentsInChildren<Button>()[2];
     creditsButton.onClick.AddListener(() => LoadScene(credits));
 
   }

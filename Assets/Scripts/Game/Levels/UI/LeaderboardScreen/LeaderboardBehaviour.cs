@@ -9,6 +9,8 @@ public class LeaderboardBehaviour : MonoBehaviour, IPointerClickHandler {
 
   #region Fields
 
+  private const string NO_DATA = "No data";
+
   private InputManager inputManager;
   private Animator anim;
   private bool active = false;
@@ -84,7 +86,8 @@ public class LeaderboardBehaviour : MonoBehaviour, IPointerClickHandler {
         }
 
       } else {
-        scores[i].enabled = false;
+        scores[i].text  = NO_DATA;
+        scores[i].enabled = true;
         dates[i].enabled = false;
       }
     }

@@ -27,7 +27,7 @@ namespace EnemyBehaviourStates {
     }
 
     public override void Play() {
-      transform.position = Vector2.Lerp(transform.position, shootingPosition, Config.ENEMY_MAX_SPEED * Time.timeScale);
+      transform.position = Vector2.Lerp(transform.position, shootingPosition, Config.ENEMY_MAX_SPEED * Time.deltaTime);
     }
 
     protected override void AddListeners() {

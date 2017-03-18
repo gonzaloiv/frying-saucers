@@ -7,6 +7,8 @@ public class GameData : MonoBehaviour, IGameData {
 
   #region Fields
 
+  private const int INITIAL_PLAYER_LIVES = 3;
+
   public Player Player { get { return player; } }
   private Player player;
 
@@ -18,7 +20,7 @@ public class GameData : MonoBehaviour, IGameData {
   #region Public Behaviour
 
   public void InitializePlayer() {
-    this.player = new Player(1);
+    this.player = new Player(INITIAL_PLAYER_LIVES);
   }
 
   public void InitializeLevels() {

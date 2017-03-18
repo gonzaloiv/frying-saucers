@@ -80,6 +80,8 @@ public class GameController : MonoBehaviour {
 
   public IEnumerator LoadSceneRoutine() {
 
+    yield return new WaitForSeconds(1);
+
     sceneLoading = SceneManager.LoadSceneAsync(2); // TODO: corregir esto, con un SerializedField?
     sceneLoading.allowSceneActivation = false;
 
