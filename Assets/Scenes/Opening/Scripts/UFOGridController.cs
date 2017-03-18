@@ -7,6 +7,7 @@ public class UFOGridController : MonoBehaviour {
 
   #region Fields
 
+  [SerializeField] private float disablingSpeed = 0.3f;
   [SerializeField] private List<GameObject> ufos;
   private Animator anim;
 
@@ -36,7 +37,7 @@ public class UFOGridController : MonoBehaviour {
 
   private IEnumerator DisablingRoutine() {
     while(gameObject.activeSelf) {
-      yield return new WaitForSeconds(.3f);
+      yield return new WaitForSeconds(disablingSpeed);
       List<GameObject> activeUFOs = ufos.Where(x => x.activeSelf).ToList();
       if(activeUFOs.Count() > 0)
         activeUFOs[Random.Range(0, activeUFOs.Count())].GetComponent<EnemyController>().DisableRoutine();
