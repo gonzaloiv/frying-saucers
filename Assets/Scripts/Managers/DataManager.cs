@@ -100,6 +100,7 @@ public class DataManager : MonoBehaviour {
       saveFile.Close();
 
     } catch (FileNotFoundException exception) {
+      Debug.Log(exception.Message);
       Debug.Log("First play: Data not recorded, yet");
     }
   }

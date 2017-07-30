@@ -11,7 +11,7 @@ public class PlayerBehaviour : MonoBehaviour {
   public const float MAX_SPEED = 10f;
   public static Vector2[] PLAYER_POSITIONS;
  
-  private Collider2D collider;
+  private Collider2D col;
 
   private Vector2 nextPosition;
   private Vector2 enemyPosition;
@@ -22,7 +22,7 @@ public class PlayerBehaviour : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    collider = GetComponent<Collider2D>();
+    col = GetComponent<Collider2D>();
   }
 
   void Update() {
@@ -67,9 +67,9 @@ public class PlayerBehaviour : MonoBehaviour {
 
   private IEnumerator EvasionRoutine() {
     nextPosition.x = nextPosition.x + new float[]{-2.5f, 2.5f}[Random.Range(0, 2)];
-    collider.enabled = false;
+    col.enabled = false;
     yield return new WaitForSeconds(1);
-    collider.enabled = true;
+    col.enabled = true;
     nextPosition.x = 0;
     rightGesture = false;
   }

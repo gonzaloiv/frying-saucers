@@ -57,7 +57,7 @@ public class GestureRecognizer : MonoBehaviour {
       points.Add(new Point(position.x, -position.y, strokeId));
 
       Vector2 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 1));
-      currentGestureLine.numPositions = vertexCount;
+      currentGestureLine.positionCount = vertexCount;
       currentGestureLine.SetPosition(vertexCount - 1, worldPosition);
 
     }
@@ -73,7 +73,7 @@ public class GestureRecognizer : MonoBehaviour {
     points.Clear();
 
     foreach (LineRenderer lineRenderer in gestureLines) {
-      lineRenderer.numPositions = 0;
+      lineRenderer.positionCount = 0;
       lineRenderer.gameObject.SetActive(false);
     }
 

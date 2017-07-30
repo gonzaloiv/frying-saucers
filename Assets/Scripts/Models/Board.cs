@@ -13,7 +13,7 @@ public class Board {
   #region Public Behaviour
 
   public Board() {
-    Board.boardSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)) * 2;
+    Board.boardSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)) * 2.5f;
   }
 
   public static Vector2 GetRandomOutOfBoardPosition() {

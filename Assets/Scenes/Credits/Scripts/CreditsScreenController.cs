@@ -8,7 +8,6 @@ public class CreditsScreenController : MonoBehaviour {
 
   #region Fields
 
-  private Animator anim;
   private AudioSource loungeMusic;
 
   #endregion
@@ -16,7 +15,6 @@ public class CreditsScreenController : MonoBehaviour {
   #region Mono Behaviour
 
   void Awake() {
-    anim = GetComponent<Animator>();
     loungeMusic = GetComponent<AudioSource>();
   }
 

@@ -7,7 +7,6 @@ public class OpeningCameraController : MonoBehaviour {
   #region Fields
 
   private float SHAKING_TIME = 0.3f;
-  private float DECREASE_FACTOR = 1f;
   private float SHAKE_AMOUNT = 0.5f;
 
   private float shake;
