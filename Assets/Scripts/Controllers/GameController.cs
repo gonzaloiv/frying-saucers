@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameController : MonoBehaviour {
+public class GameController : StateMachine {
 
     #region Mono Behaviour
 
@@ -13,9 +13,6 @@ public class GameController : MonoBehaviour {
     private LevelController levelController;
     private int currentLevel = 0;
 
-    private AsyncOperation sceneLoading;
-    private IEnumerator loadSceneRoutine;
-
     #endregion
 
     #region Mono Behaviour
@@ -23,7 +20,6 @@ public class GameController : MonoBehaviour {
     void Awake () {
         new Board();
         levelController = GetComponentInChildren<LevelController>();
-        Screen.orientation = ScreenOrientation.Portrait;
     }
 
     void Start () {
@@ -56,8 +52,8 @@ public class GameController : MonoBehaviour {
             levelController.Play(gameData.Levels[currentLevel]);
         } else {
             currentLevel = 0;
-            loadSceneRoutine = LoadSceneRoutine();
-            StartCoroutine(loadSceneRoutine);
+            int nextSceneIndex = levelEndEvent.LevelType == LevelType.TutorialLevel ? (int) GameScene.MainMenuScene : (int) GameScene.GameScene;
+            StartCoroutine(LoadSceneRoutine(nextSceneIndex));
         }
     }
 
@@ -65,20 +61,16 @@ public class GameController : MonoBehaviour {
 
     #region Private Behaviour
 
-    public IEnumerator LoadSceneRoutine () {
-
+    public IEnumerator LoadSceneRoutine (int sceneIndex) {
         yield return new WaitForSeconds(1);
-
-        sceneLoading = SceneManager.LoadSceneAsync((int) GameScene.MainMenuScene); // TODO: corregir esto, con un SerializedField?
+        AsyncOperation sceneLoading = SceneManager.LoadSceneAsync(sceneIndex);
         sceneLoading.allowSceneActivation = false;
-
         while (!sceneLoading.isDone) {
             Debug.Log("Loading...");
             if (sceneLoading.progress == 0.9f)
                 sceneLoading.allowSceneActivation = true;
             yield return null;
         }
-
     }
 
     #endregion

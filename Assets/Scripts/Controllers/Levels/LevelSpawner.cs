@@ -12,23 +12,23 @@ public class LevelSpawner : MonoBehaviour {
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject hudPrefab;
 
-    [SerializeField] private GameObject backgroundPrefab;
-    private GameObject background;
+    [SerializeField] private GameObject backgroundParticlesPrefab;
+    private GameObject backgroundParticles;
 
     #endregion
 
     #region Mono Behaviour
 
     void Awake () {
-        background = Instantiate(backgroundPrefab, transform);
+        backgroundParticles = Instantiate(backgroundParticlesPrefab, transform);
     }
 
     void OnEnable () {
-        background.SetActive(true);
+        backgroundParticles.SetActive(true);
     }
 
     void OnDisable () {
-        background.SetActive(false);
+        backgroundParticles.SetActive(false);
     }
 
     #endregion

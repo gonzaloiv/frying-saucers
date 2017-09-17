@@ -5,6 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class TitleController : MonoBehaviour {
 
+    #region Mono Behaviour
+
+    void Awake() {
+        Screen.orientation = ScreenOrientation.Portrait;
+    }
+
+    #endregion
+
     #region Public Behaviour
 
     public void LoadNextScene () {

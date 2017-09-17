@@ -4,7 +4,12 @@ using UnityEngine;
 using System;
 
 public class LevelEndEvent : EventArgs {
-    public LevelEndEvent () {
-        Debug.Log("LevelEndEvent");
+
+    public LevelType LevelType { get { return levelType; } }
+    private LevelType levelType;
+
+    public LevelEndEvent (LevelType levelType) {
+        this.levelType = levelType;
     }
+
 }

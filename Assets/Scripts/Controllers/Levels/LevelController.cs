@@ -73,7 +73,7 @@ public class LevelController : StateMachine {
             newWaveRoutine = NewWaveRoutine();
             StartCoroutine(newWaveRoutine);
         } else {
-            EventManager.TriggerEvent(new LevelEndEvent());
+            EventManager.TriggerEvent(new LevelEndEvent(currentLevelData.LevelType));
         }
     }
 
