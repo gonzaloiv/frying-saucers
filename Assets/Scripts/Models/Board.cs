@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Models;
 using UnityEngine;
 
 public class Board {
@@ -32,15 +31,11 @@ public class Board {
   }
  
   public static Vector2[] EnemyGrid(int enemyAmount) {
-
     Vector2[] grid = new Vector2[enemyAmount];
     float positionXSize = boardSize.x / (grid.Length + 2);
-
     for (int x = 0; x < enemyAmount; x++)
       grid[x] = new Vector2(-boardSize.x / 2 + ((positionXSize) * (x + 1)) + positionXSize / 2, Config.ENEMY_INITIAL_Y_POSITION);
-
     return grid;
-
   }
 
   #endregion

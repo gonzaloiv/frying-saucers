@@ -50,7 +50,7 @@ public class InputManager : MonoBehaviour {
       // KEYBOARD
 
       if (Input.GetKeyDown(KeyCode.Escape))
-        EventManager.TriggerEvent(new EscapeInput());
+        EventManager.TriggerEvent(new EscapeInputEvent());
 
       // MOUSE & TOUCH
 
