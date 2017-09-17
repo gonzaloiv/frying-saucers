@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour {
 
-  #region Fields
+    #region Fields
 
-  [SerializeField] private GameObject shipPrefab;
-  private GameObject ship;
+    [SerializeField] private GameObject shipPrefab;
+    private GameObject ship;
 
-  #endregion
+    #endregion
 
-  #region Public Behaviour
+    #region Public Behaviour
 
-  public GameObject SpawnPlayer() {
-    ship = Instantiate(shipPrefab, transform);
-    ship.transform.position = Config.PLAYER_INITIAL_POSITION;
-    return ship;
-  }
+    public GameObject SpawnPlayer () {
+        ship = Instantiate(shipPrefab, transform);
+        ship.transform.position = Config.PLAYER_INITIAL_POSITION;
+        return ship;
+    }
 
-  #endregion
+    #endregion
 
 }

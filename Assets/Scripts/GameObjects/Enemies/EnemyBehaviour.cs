@@ -5,67 +5,67 @@ using EnemyBehaviourStates;
 
 public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
 
-  #region Fields
+    #region Fields
 
-  [SerializeField] private GameObject laserPrefab;
-  public ParticleSystem Laser { get { return laser; } }
-  private ParticleSystem laser;
+    [SerializeField] private GameObject laserPrefab;
+    public ParticleSystem Laser { get { return laser; } }
+    private ParticleSystem laser;
 
-  public GameObject Player { get { return player; } }
-  private GameObject player;
+    public GameObject Player { get { return player; } }
+    private GameObject player;
 
-  public bool Hit { get { return hit; } }
-  private bool hit = false;
+    public bool Hit { get { return hit; } }
+    private bool hit = false;
 
-  public float RoutineTime { get { return routineTime; } }
-  private float routineTime;
+    public float RoutineTime { get { return routineTime; } }
+    private float routineTime;
 
-  private Coroutine enemyRoutine;
+    private Coroutine enemyRoutine;
 
-  #endregion
+    #endregion
 
-  #region Mono Behaviour
+    #region Mono Behaviour
 
-  void Awake() {
-    laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
-  }
+    void Awake () {
+        laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
+    }
 
-  void Update() {
-    CurrentState.Play();
-  }
+    void Update () {
+        CurrentState.Play();
+    }
 
-  void OnEnable() {
-    ChangeState<IdleState>();
-  }
+    void OnEnable () {
+        ChangeState<IdleState>();
+    }
 
-  #endregion
+    #endregion
 
-  #region IEnemyBehaviour
+    #region IEnemyBehaviour
 
-  public void Initialize(GameObject player) {
-    this.player = player;
-  }
+    public void Initialize (GameObject player) {
+        this.player = player;
+    }
 
-  public void Play(float routineTime) {
-    this.routineTime = routineTime;
-    enemyRoutine = StartCoroutine(EnemyRoutine());
-  }
+    public void Play (float routineTime) {
+        this.routineTime = routineTime;
+        enemyRoutine = StartCoroutine(EnemyRoutine());
+    }
 
-  public void Stop() {
-    StopAllCoroutines();
-  }
+    public void Stop () {
+        StopAllCoroutines();
+    }
 
-  #endregion
+    #endregion
 
-  #region Private Behaviour
+    #region Private Behaviour
 
-  private IEnumerator EnemyRoutine() {
-    hit = false;
-    ChangeState<ShootingState>();  
-    yield return new WaitForSeconds(routineTime); // Depends on ShootingRoutine() in the ShootingState
-    ChangeState<IdleState>();
-  }
+    private IEnumerator EnemyRoutine () {
+        hit = false;
+        ChangeState<ShootingState>();  
+        yield return new WaitForSeconds(routineTime); // Depends on ShootingRoutine() in the ShootingState
+        ChangeState<IdleState>();
+    }
 
-  #endregion
+    #endregion
 	
 }

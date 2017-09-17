@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[Serializable]
-public class Leaderboard {
+[Serializable] public class Leaderboard {
 
     public bool HasBeenTutorialPlayed { get { return hasBeenTutorialPlayed; } set { hasBeenTutorialPlayed = value; } }
     private bool hasBeenTutorialPlayed = false;
