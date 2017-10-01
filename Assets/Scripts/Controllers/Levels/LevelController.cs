@@ -2,120 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using LevelStates;
 
 public class LevelController : StateMachine {
 
     #region Fields
 
-    private LevelSpawner levelSpawner;
+    [SerializeField] private WaveController waveController;
+    [SerializeField] private GameObject player;
+    [SerializeField] private LevelScreenController levelScreenController;
 
     public WaveController WaveController { get { return waveController; } }
-    private WaveController waveController;
-
-    public GameObject Player { get { return player; } set { player = value; } }
-    private GameObject player;
-
-    public HUDController HUDController { get { return hudController; } set { hudController = value; } }
-    private HUDController hudController;
-
+    public GameObject Player { get { return player; } }
+    public LevelScreenController LevelScreenController { get { return levelScreenController; } }
     public WaveData CurrentWaveData { get { return currentLevelData.WavesData[currentWaveIndex]; } }
-    private int currentWaveIndex = 0;
 
     private LevelData currentLevelData;
-
-    private IEnumerator newLevelRoutine;
-    private IEnumerator restartRoutine;
-    private IEnumerator newWaveRoutine;
-    private bool gameOver = false;
-
-    #endregion
-
-    #region Mono Behaviour
-
-    void Awake () {
-        levelSpawner = GetComponent<LevelSpawner>();
-        player = levelSpawner.Player();
-        waveController = GetComponentInChildren<WaveController>();
-        waveController.Init(player);
-        hudController = levelSpawner.HUDController();
-    }
-
-    void Update () {
-        if (CurrentState != null)
-            CurrentState.Play();
-    }
-
-    void OnEnable () {
-        EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StartListening<WaveEndEvent>(OnWaveEndEvent);
-    }
-
-    void OnDisable () {
-        EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StopListening<WaveEndEvent>(OnWaveEndEvent);
-    }
-
-    #endregion
-
-    #region Event Behaviour
-
-    void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
-        if (!gameOver) {
-            restartRoutine = RestartRoutine();
-            StartCoroutine(restartRoutine);
-        }
-    }
-
-    void OnWaveEndEvent (WaveEndEvent waveEndEvent) {
-        currentWaveIndex++;
-        if (currentWaveIndex < currentLevelData.WavesData.Count()) {
-            newWaveRoutine = NewWaveRoutine();
-            StartCoroutine(newWaveRoutine);
-        } else {
-            EventManager.TriggerEvent(new LevelEndEvent(currentLevelData.LevelType));
-        }
-    }
+    private int currentWaveIndex = 0;
 
     #endregion
 
     #region Public Behaviour
 
-    public void Play (LevelData levelData) {
+    public void InitLevel (LevelData levelData) {
+        currentWaveIndex = 0;
         currentLevelData = levelData;
-        gameOver = false;
-        newLevelRoutine = NewLevelRoutine();
-        StartCoroutine(newLevelRoutine);
+        ToNewLevelState();
     }
 
-    public void Stop () {
-        gameOver = true;
-        ChangeState<StopState>();
+    public void ToNewLevelState () {
+        ChangeState<LevelStates.NewLevelState>();
     }
 
-    #endregion
-
-    #region Private Behaviour
-
-    private IEnumerator NewLevelRoutine () {
-        yield return new WaitForSeconds(0.4f);
-        ChangeState<NewLevelState>();
-        yield return new WaitForSeconds(1f);
-        ChangeState<PlayState>();
+    public void ToNewWaveState () {
+        if (currentWaveIndex < currentLevelData.WavesData.Count()) {
+            currentWaveIndex++;
+            ChangeState<LevelStates.NewWaveState>();
+        } else {
+            EventManager.TriggerEvent(new LevelEndEvent(currentLevelData.LevelType));
+            ChangeState<LevelStates.StopState>();
+        }
     }
 
-    private IEnumerator RestartRoutine () {
-        yield return new WaitForSeconds(0.4f);
-        ChangeState<RestartState>();
-        yield return new WaitForSeconds(1f);
-        ChangeState<PlayState>();
+    public void ToPlayState () {
+        ChangeState<LevelStates.PlayState>();
     }
 
-    private IEnumerator NewWaveRoutine () {
-        yield return new WaitForSeconds(0.4f);
-        ChangeState<NewWaveState>();
-        yield return new WaitForSeconds(1f);
-        ChangeState<PlayState>();
+    public void ToRestartState () {
+        ChangeState<LevelStates.RestartState>();
+    }
+
+    public void ToStopState () {
+        ChangeState<LevelStates.StopState>();
     }
 
     #endregion

@@ -5,17 +5,17 @@ using System.Linq;
 
 namespace LevelStates {
 
-  public class NewWaveState : BaseState {
+    public class NewWaveState : BaseState {
 
-    #region State Behaviour
+        #region State Behaviour
 
-    public override void Enter() {
-      waveController.Reset();
-      waveController.NewWave(currentWaveData);
+        public override void Enter () {
+            waveController.Reset();
+            waveController.NewWave(GetCurrentWaveData());
+        }
+
+        #endregion
+
     }
-
-    #endregion
-
-  }
 
 }

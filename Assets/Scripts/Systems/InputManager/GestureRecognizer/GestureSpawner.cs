@@ -4,37 +4,37 @@ using UnityEngine;
 
 public class GestureSpawner : MonoBehaviour {
 
-  #region Fields
+    #region Fields
 
-  [SerializeField] private GameObject gesturePrefab;
-  private GameObjectPool gesturePool;
+    [SerializeField] private GameObject gesturePrefab;
+    private GameObjectPool gesturePool;
 
-  #endregion
+    #endregion
 
-  #region Mono Behaviour
+    #region Mono Behaviour
 
-  void Awake() {
-    gesturePool = new GameObjectPool("GesturePool", gesturePrefab, 2, transform);
-  }
+    void Awake () {
+        gesturePool = new GameObjectPool("GesturePool", gesturePrefab, 2, transform);
+    }
 
-  #endregion
+    #endregion
 
-  #region Public Behaviour
+    #region Public Behaviour
 
-  public LineRenderer SpawnGestureLineRenderer(Transform parent) {
+    public LineRenderer SpawnGestureLineRenderer (Transform parent) {
 
-    GameObject gesture = gesturePool.PopObject();
-    gesture.transform.position = parent.position;
-    gesture.transform.rotation = parent.rotation;
-    gesture.SetActive(true);
+        GameObject gesture = gesturePool.PopObject();
+        gesture.transform.position = parent.position;
+        gesture.transform.rotation = parent.rotation;
+        gesture.SetActive(true);
 
-    LineRenderer gestureLineRenderer = gesture.GetComponent<LineRenderer>();
-    gestureLineRenderer.sortingLayerName = SortingLayer.UI.ToString(); // TODO: que esto se defina al crear el objeto en la pool
+        LineRenderer gestureLineRenderer = gesture.GetComponent<LineRenderer>();
+        gestureLineRenderer.sortingLayerName = SortingLayer.UI.ToString(); // TODO: que esto se defina al crear el objeto en la pool
 
-    return gestureLineRenderer;
+        return gestureLineRenderer;
 
-  }
+    }
 
-  #endregion
+    #endregion
 	
 }

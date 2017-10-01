@@ -9,6 +9,7 @@ namespace LevelStates {
 
         #region Fields
 
+        private WaveData currentWaveData;
         private GameObject currentEnemy;
         private GameObject previousEnemy;
         private IEnumerator waveRoutine;
@@ -20,6 +21,7 @@ namespace LevelStates {
 
         public override void Enter () {
             previousEnemy = null;
+            currentWaveData = GetCurrentWaveData();
             waveRoutine = WaveRoutine();
             StartCoroutine(waveRoutine);
         }
@@ -57,18 +59,14 @@ namespace LevelStates {
         #region Private Behaviour
 
         private IEnumerator WaveRoutine () {
-
             float routineTime = Random.Range(currentWaveData.RoutineTime[0], currentWaveData.RoutineTime[1]);
             playing = true;
-
             yield return new WaitForSeconds(1);
             currentEnemy = waveController.CurrentWaveEnemyObjects[Random.Range(0, waveController.CurrentWaveEnemyObjects.Count)];
             currentEnemy.GetComponent<IEnemyBehaviour>().Play(routineTime);
             previousEnemy = currentEnemy;
-
             yield return new WaitForSeconds(routineTime);
             playing = false;
-
         }
 
         private void SetCurrentEnemy () {

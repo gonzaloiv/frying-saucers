@@ -5,17 +5,18 @@ using System.Linq;
 
 namespace LevelStates {
 
-  public class StopState : BaseState {
+    public class StopState : BaseState {
 
-    #region State Behaviour
+        #region State Behaviour
 
-    public override void Enter() {  
-      StopAllCoroutines();
-      waveController.Reset();
+        public override void Enter () {  
+            StopAllCoroutines();
+            player.SetActive(false);
+            waveController.Reset();
+        }
+
+        #endregion
+
     }
-
-    #endregion
-
-  }
 
 }

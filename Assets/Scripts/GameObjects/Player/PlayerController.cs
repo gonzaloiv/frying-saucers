@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour {
     private ParticleSystem explosion;
 
     private Animator anim;
-    private PlayerWeapon playerWeapon;
+    private PlayerWeaponController playerWeapon;
 
     private bool shot;
 
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour {
         anim = GetComponent<Animator>();
         jet = Instantiate(jetPrefab, transform);
         explosion = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
-        playerWeapon = GetComponent<PlayerWeapon>();
+        playerWeapon = GetComponent<PlayerWeaponController>();
     }
 
     void OnEnable () {

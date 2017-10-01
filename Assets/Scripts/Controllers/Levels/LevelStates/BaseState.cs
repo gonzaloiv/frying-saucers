@@ -8,12 +8,10 @@ namespace LevelStates {
 
         #region Fields
 
+        protected LevelController levelController;
         protected WaveController waveController;
-        protected HUDController hudController;
+        protected LevelScreenController levelScreenController;
         protected GameObject player;
-        protected WaveData currentWaveData;
-
-        private LevelController levelController;
 
         #endregion
 
@@ -22,9 +20,16 @@ namespace LevelStates {
         void Awake () {
             levelController = GetComponent<LevelController>();
             waveController = levelController.WaveController;
-            hudController = levelController.HUDController;
+            levelScreenController = levelController.LevelScreenController;
             player = levelController.Player;
-            currentWaveData = levelController.CurrentWaveData;
+        }
+
+        #endregion
+
+        #region Public Behaviour
+
+        protected WaveData GetCurrentWaveData () {
+            return levelController.CurrentWaveData;
         }
 
         #endregion

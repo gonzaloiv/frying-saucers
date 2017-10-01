@@ -1,44 +1,49 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MusicManager : MonoBehaviour {
 
-  #region Fields
- 
-  [SerializeField] private AudioSource newGame;
-  [SerializeField] private AudioSource gameOver;
+    #region Fields
 
-  #endregion
+    [SerializeField] private List<AudioSource> audioSources;
 
-  #region Mono Behaviour
+    #endregion
 
-  void OnEnable () {
-    EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
-    EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
-  }
+    #region Mono Behaviour
 
-  void OnDisable () {
-    EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
-    EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
-  }
+    void OnEnable () {
+        EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
+        EventManager.StartListening<NewLevelEvent>(OnNewLevelEvent);
+        EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+    }
 
-  #endregion
+    void OnDisable () {
+        EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
+        EventManager.StopListening<NewLevelEvent>(OnNewLevelEvent);
+        EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
+    }
 
-  #region Event Behaviour
+    #endregion
 
-  void OnNewGameEvent(NewGameEvent newGameEvent) {
-    if(gameOver.isPlaying)
-      gameOver.Stop();
-    newGame.Play();
-  }
+    #region Event Behaviour
 
-  void OnGameOverEvent(GameOverEvent gameOverEvent) {
-    if(newGame.isPlaying)
-      newGame.Stop();
-    gameOver.Play();
-  }
+    void OnNewGameEvent (NewGameEvent newGameEvent) {
+        audioSources.ForEach(audioSource => audioSource.Stop());
+        audioSources[0].Play();
+    }
 
-  #endregion
+    void OnNewLevelEvent (NewLevelEvent newLevelEvent) {
+        audioSources.ForEach(audioSource => audioSource.Stop());
+        audioSources[1].Play();
+    }
+
+    void OnGameOverEvent (GameOverEvent gameOverEvent) {
+        audioSources.ForEach(audioSource => audioSource.Stop());
+        audioSources[2].Play();
+    }
+
+    #endregion
 
 }

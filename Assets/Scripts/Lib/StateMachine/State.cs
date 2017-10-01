@@ -4,34 +4,34 @@ using UnityEngine;
 
 public abstract class State : MonoBehaviour {
 
-  #region Mono Behaviour
-  
-  void OnDestroy() {
-    RemoveListeners();
-  }
-  
-  #endregion
+    #region Mono Behaviour
 
-  #region Public Behaviour
+    void OnDestroy () {
+        RemoveListeners();
+    }
 
-  public virtual void Enter() {
-    AddListeners();
-  }
+    #endregion
 
-  public virtual void Exit() {
-    RemoveListeners();
-  }
+    #region Public Behaviour
 
-  public virtual void Play() {}
+    public virtual void Enter () {
+        AddListeners();
+    }
 
-  #endregion
+    public virtual void Exit () {
+        RemoveListeners();
+    }
 
-  #region Protected Behaviour
+    public virtual void Play () {}
 
-  protected virtual void AddListeners() {}
+    #endregion
 
-  protected virtual void RemoveListeners() {}
+    #region Protected Behaviour
 
-  #endregion
+    protected virtual void AddListeners () {}
+
+    protected virtual void RemoveListeners () {}
+
+    #endregion
 
 }
