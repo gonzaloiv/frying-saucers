@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IEnemyController {
 
-  void Initialize(Enemy enemy);
-  void Disable();
+    void Init (Enemy enemy);
+    void Disable ();
 	
 }

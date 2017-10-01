@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IEnemyBehaviour {
 
-  void Initialize(GameObject player);
-  void Play(float routineTime);
-  void Stop();
+    void Init (GameObject player);
+    void Play (float routineTime);
+    void Stop ();
 
 }

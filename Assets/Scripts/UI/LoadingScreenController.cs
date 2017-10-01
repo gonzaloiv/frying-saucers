@@ -11,16 +11,14 @@ public class LoadingScreenController : MonoBehaviour {
 
     private const float INIT_TIME = 1f;
     [SerializeField] private Image loadingScreenTitle;
-    bool dataReady = false;
 
     #endregion
 
     #region Public Behaviour
 
     void Awake () {
-        DataManager.DataLoadedEvent += OnDataLoadedEvent;
         Screen.orientation = ScreenOrientation.Portrait;
-        StartCoroutine(DataInitRoutine());
+        StartCoroutine(LoadingRoutine());
         loadingScreenTitle.color = new Color(loadingScreenTitle.color.r, loadingScreenTitle.color.g, loadingScreenTitle.color.b, 0.0f);
     }
 
@@ -28,36 +26,13 @@ public class LoadingScreenController : MonoBehaviour {
         loadingScreenTitle.DOFade(1, INIT_TIME / 4).SetEase(Ease.InFlash);
     }
 
-    void OnDestroy () {
-        DataManager.DataLoadedEvent += OnDataLoadedEvent;
-    }
-
-    #endregion
-
-    #region Public Behaviour
-
-    public void OnDataLoadedEvent () {
-        dataReady = true;
-    }
-
     #endregion
 
     #region Private Behaviour
 
-    private IEnumerator DataInitRoutine () {
-        DataManager.Init();
-        float initialTime = Time.time;
-        while (Time.time < initialTime + INIT_TIME)
-            yield return null;
-        if (dataReady) {
-            bool hasBeenTutorialPlayed = DataManager.HasBeenTutorialPlayed;
-            Debug.Log("Has been tutorial played: " + hasBeenTutorialPlayed);
-            int nextSceneIndex = hasBeenTutorialPlayed == true ? (int) GameScene.MainMenuScene : (int) GameScene.TutorialScene;
-            SceneManager.LoadScene(nextSceneIndex);
-        } else {
-            DataManager.Init();
-            SceneManager.LoadScene((int) GameScene.TutorialScene);
-        }
+    private IEnumerator LoadingRoutine () {
+        yield return new WaitForSeconds(INIT_TIME);
+        SceneManager.LoadScene((int) GameScene.GameScene);
     }
 
     #endregion

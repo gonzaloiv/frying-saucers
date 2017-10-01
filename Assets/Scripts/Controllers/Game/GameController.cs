@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameController : StateMachine {
 
@@ -17,6 +18,7 @@ public class GameController : StateMachine {
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject leaderboardScreen;
     [SerializeField] private GameObject pauseScreen;
+    [SerializeField] private GameObject creditsScreen;
 
     public LevelController LevelController { get { return levelController; } }
     public GameObject InputManager { get { return inputManager; } }
@@ -25,6 +27,7 @@ public class GameController : StateMachine {
     public GameObject GameOverScreen { get { return gameOverScreen; } }
     public GameObject LeaderboardScreen { get { return leaderboardScreen; } }
     public GameObject PauseScreen { get { return pauseScreen; } }
+    public GameObject CreditsScreen { get { return creditsScreen; } }
     public LevelData CurrentLevelData { get { return gameData.Levels[currentLevelIndex]; } }
 
     private int currentLevelIndex = 0;
@@ -38,6 +41,7 @@ public class GameController : StateMachine {
         new Player(gameData.PlayerInitialLives);
         levelController.gameObject.SetActive(false);
         inputManager.SetActive(false);
+        mainMenuScreen.SetActive(false);
         levelScreen.SetActive(false);
         mainMenuScreen.SetActive(false);
         leaderboardScreen.SetActive(false);
@@ -63,24 +67,28 @@ public class GameController : StateMachine {
 
     #region Public Behaviour
 
-    public void ToMainMenuState() {
+    public void ToMainMenuState () {
         ChangeState<GameStates.MainMenuState>();
     }
 
-    public void ToLevelState() {
+    public void ToLevelState () {
         ChangeState<GameStates.LevelState>();
     }
 
-    public void ToGameOverState() {
+    public void ToGameOverState () {
         ChangeState<GameStates.GameOverState>();
     }
 
-    public void ToLeaderboardState() {
+    public void ToLeaderboardState () {
         ChangeState<GameStates.LeaderboardState>();
     }
 
-    public void ToPauseState() {
+    public void ToPauseState () {
         ChangeState<GameStates.PauseState>();
+    }
+
+    public void ToCreditsState () {
+        ChangeState<GameStates.CreditsState>();
     }
 
     public void OnGameOverEvent (GameOverEvent gameOverEvent) {

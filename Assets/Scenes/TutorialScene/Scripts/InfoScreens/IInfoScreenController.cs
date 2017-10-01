@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IInfoScreenController {
 
-  void Initialize(InfoController infoController);
-  void Play();
-  void Stop();
+    void Initialize (InfoController infoController);
+    void Play ();
+    void Stop ();
 	
 }

@@ -12,7 +12,6 @@ namespace GameStates {
             base.Enter();
             levelController.gameObject.SetActive(true);
             levelController.InitLevel(GetCurrentLevelData());
-            levelController.ToNewLevelState(); // Depends on levelController.gameObject state
             inputManager.SetActive(true);
         }
 

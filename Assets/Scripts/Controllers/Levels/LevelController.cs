@@ -8,7 +8,7 @@ public class LevelController : StateMachine {
     #region Fields
 
     [SerializeField] private WaveController waveController;
-    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject playerPrefab;
     [SerializeField] private LevelScreenController levelScreenController;
 
     public WaveController WaveController { get { return waveController; } }
@@ -16,8 +16,18 @@ public class LevelController : StateMachine {
     public LevelScreenController LevelScreenController { get { return levelScreenController; } }
     public WaveData CurrentWaveData { get { return currentLevelData.WavesData[currentWaveIndex]; } }
 
+    private GameObject player;
     private LevelData currentLevelData;
     private int currentWaveIndex = 0;
+
+    #endregion
+
+    #region Mono Behaviour
+
+    void Awake() {
+        player = Instantiate(playerPrefab, transform);
+        player.SetActive(false);
+    }
 
     #endregion
 

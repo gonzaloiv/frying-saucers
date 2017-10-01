@@ -8,11 +8,8 @@ public class MainMenuScreenController : MonoBehaviour {
 
     #region Fields
 
-    private Button modeOneButton;
-    private Button tutorialButton;
-    private Button creditsButton;
+    [SerializeField] private Button tutorialButton;
 
-    private Animator anim;
     private UFOGridController ufoGridController;
     private AsyncOperation sceneLoading;
 
@@ -21,16 +18,8 @@ public class MainMenuScreenController : MonoBehaviour {
     #region Mono Behaviour
 
     void Awake () {
-
-        anim = GetComponent<Animator>();
         ufoGridController = GetComponentInChildren<UFOGridController>();
-
-        tutorialButton = GetComponentsInChildren<Button>()[1];
         tutorialButton.onClick.AddListener(() => LoadScene((int) GameScene.TutorialScene));
-
-        creditsButton = GetComponentsInChildren<Button>()[2];
-        creditsButton.onClick.AddListener(() => LoadScene((int) GameScene.CreditsScene));
-
     }
 
     #endregion
@@ -46,22 +35,15 @@ public class MainMenuScreenController : MonoBehaviour {
     #region Private Behaviour
 
     public IEnumerator LoadSceneRoutine (int scene) {
-
         sceneLoading = SceneManager.LoadSceneAsync(scene);
         sceneLoading.allowSceneActivation = false;
-
         while (!sceneLoading.isDone) {
-
             ufoGridController.Stop();
             Debug.Log("Loading...");
-
             if (sceneLoading.progress == 0.9f)
                 sceneLoading.allowSceneActivation = true;
-
             yield return null;
-
         }
-
     }
 
     #endregion

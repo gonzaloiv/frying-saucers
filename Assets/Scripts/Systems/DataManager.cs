@@ -17,13 +17,6 @@ public class DataManager {
 
     #endregion
 
-    #region Events
-
-    public delegate void DataLoadedEventHandler ();
-    public static event DataLoadedEventHandler DataLoadedEvent;
-
-    #endregion
-
     #region Public Behaviour
 
     public static void Init () {
@@ -45,7 +38,7 @@ public class DataManager {
         } 
     }
 
-    public static void SetIsTutorialPlayed () {
+    public static void SetHasBeenTutorialPlayed () {
         leaderboard.HasBeenTutorialPlayed = true;
         SaveData();
     }
@@ -56,7 +49,7 @@ public class DataManager {
         formatter.Serialize(saveFile, leaderboard);
         saveFile.Close();
     }
-    
+
     #endregion
 
     #region Private Behaviour
@@ -71,7 +64,7 @@ public class DataManager {
             Debug.Log(exception.Message);
             Debug.Log("First play: Data not recorded, yet");
         }
-        DataLoadedEvent.Invoke();
+        EventManager.TriggerEvent(new DataLoadedEvent(leaderboard));
     }
 
     #endregion

@@ -7,22 +7,29 @@ public class MusicManager : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] private List<AudioSource> audioSources;
+    [SerializeField] private List<AudioClip> audioClips;
+    private AudioSource audioSource;
 
     #endregion
 
     #region Mono Behaviour
 
+    void Awake () {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     void OnEnable () {
         EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
         EventManager.StartListening<NewLevelEvent>(OnNewLevelEvent);
         EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+        EventManager.StartListening<CreditsEvent>(OnCreditsEvent);
     }
 
     void OnDisable () {
         EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
         EventManager.StopListening<NewLevelEvent>(OnNewLevelEvent);
         EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
+        EventManager.StopListening<CreditsEvent>(OnCreditsEvent);
     }
 
     #endregion
@@ -30,18 +37,27 @@ public class MusicManager : MonoBehaviour {
     #region Event Behaviour
 
     void OnNewGameEvent (NewGameEvent newGameEvent) {
-        audioSources.ForEach(audioSource => audioSource.Stop());
-        audioSources[0].Play();
+        audioSource.Stop();
+        audioSource.clip = audioClips[(int) Music.Menu];
+        audioSource.Play();
     }
 
     void OnNewLevelEvent (NewLevelEvent newLevelEvent) {
-        audioSources.ForEach(audioSource => audioSource.Stop());
-        audioSources[1].Play();
+        audioSource.Stop();
+        audioSource.clip = audioClips[(int) Music.Level];
+        audioSource.Play();
     }
 
     void OnGameOverEvent (GameOverEvent gameOverEvent) {
-        audioSources.ForEach(audioSource => audioSource.Stop());
-        audioSources[2].Play();
+        audioSource.Stop();
+        audioSource.clip = audioClips[(int) Music.GameOver];
+        audioSource.Play();
+    }
+
+    void OnCreditsEvent (CreditsEvent creditsEvent) {
+        audioSource.Stop();
+        audioSource.clip = audioClips[(int) Music.GameOver];
+        audioSource.Play();
     }
 
     #endregion

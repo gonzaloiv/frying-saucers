@@ -7,12 +7,12 @@ public class WaveController : MonoBehaviour {
 
     #region Fields
 
+    public EnemySpawner EnemySpawner { get { return enemySpawner; } }
+    public List<GameObject> CurrentWaveEnemyObjects { get { return currentWaveEnemyObjects; } }
+
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject enemyTypeLabelPrefab;
-
-    public EnemySpawner EnemySpawner { get { return enemySpawner; } }
-    public List<GameObject> CurrentWaveEnemyObjects { get { return currentWaveEnemyObjects; } }
 
     private EnemySpawner enemySpawner;
     private List<GameObject> currentWaveEnemyObjects;

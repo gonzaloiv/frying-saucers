@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class InfoScreen : MonoBehaviour {
 
-  #region Fields
+    #region Fields
 
-  private Canvas canvas;
+    private Canvas canvas;
 
-  #endregion
+    #endregion
 
-  #region State Behaviour
+    #region State Behaviour
 
-  void Awake() {
-    canvas = GetComponent<Canvas>();
-    canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-    canvas.sortingLayerName = "UI";
-  }
+    void Awake () {
+        canvas = GetComponent<Canvas>();
+        canvas.worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        canvas.sortingLayerName = "UI";
+    }
 
-  #endregion
+    #endregion
 	
 }

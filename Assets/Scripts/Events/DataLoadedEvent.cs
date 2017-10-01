@@ -4,7 +4,12 @@ using UnityEngine;
 using System;
 
 public class DataLoadedEvent : EventArgs {
-    public DataLoadedEvent () {
-        Debug.Log("DataLoadedEvent");
+
+    public Leaderboard Leaderboard { get { return leaderboard; } }
+    private Leaderboard leaderboard;
+
+    public DataLoadedEvent (Leaderboard leaderboard) {
+        this.leaderboard = leaderboard;
     }
+
 }

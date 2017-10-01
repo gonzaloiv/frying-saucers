@@ -7,13 +7,13 @@ public class StateMachine : MonoBehaviour {
     #region Fields
 
     public virtual State CurrentState { get { return currentState; } }
-    private State currentState;
+    protected State currentState;
 
     #endregion
 
     #region Mono Behaviour
 
-    void Update () {
+    protected virtual void Update () {
         if (currentState)
             currentState.Play();
     }

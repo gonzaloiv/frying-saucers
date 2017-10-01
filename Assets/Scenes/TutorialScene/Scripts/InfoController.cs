@@ -7,15 +7,15 @@ public class InfoController : MonoBehaviour {
     #region Fields
 
     [SerializeField] private GameObject[] infoScreenPrefabs;
-    private IInfoScreenController[] infoScreens;
-    private int currentInfoScreen = 0;
-
     [SerializeField] private GameObject[] errorScreenPrefabs;
-    private IInfoScreenController[] errorScreens;
-    private int currentErrorScreen = 0;
 
     private InputManager inputManager;
     private Animator anim;
+
+    private IInfoScreenController[] infoScreens;
+    private IInfoScreenController[] errorScreens;
+    private int currentInfoScreen = 0;
+    private int currentErrorScreen = 0;
 
     #endregion
 
@@ -44,57 +44,19 @@ public class InfoController : MonoBehaviour {
     }
 
     void OnEnable () {
-
-        // Game Mechanics
         EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
         EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
         EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
-
-        // Game
         EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
         EventManager.StartListening<LevelEndEvent>(OnLevelEndEvent);
-
     }
 
     void OnDisable () {
-
-        // Game Mechanics
         EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
         EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
         EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
-
-        // Game
         EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
         EventManager.StopListening<LevelEndEvent>(OnLevelEndEvent);
-
-    }
-
-    #endregion
-
-    #region Event Behaviour
-
-    // Game Mechanics
-    void OnEnemyAttackEvent (EnemyAttackEvent enemyAttackEvent) {
-        NextInfoScreen();
-        currentErrorScreen = 0;
-    }
-
-    void OnEnemyHitEvent (EnemyHitEvent EnemyHitEvent) {
-        NextInfoScreen();
-    }
-
-    void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
-        NextErrorScreen();
-        currentInfoScreen--;
-    }
-
-    // Game
-    void OnNewGameEvent (NewGameEvent newGameEvent) {
-        NextInfoScreen();
-    }
-
-    void OnLevelEndEvent (LevelEndEvent levelEndEvent) {
-        DataManager.SetIsTutorialPlayed();
     }
 
     #endregion
@@ -118,6 +80,28 @@ public class InfoController : MonoBehaviour {
             errorScreens[currentErrorScreen].Play();
         }
         currentErrorScreen++;
+    }
+
+    void OnEnemyAttackEvent (EnemyAttackEvent enemyAttackEvent) {
+        NextInfoScreen();
+        currentErrorScreen = 0;
+    }
+
+    void OnEnemyHitEvent (EnemyHitEvent EnemyHitEvent) {
+        NextInfoScreen();
+    }
+
+    void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
+        NextErrorScreen();
+        currentInfoScreen--;
+    }
+
+    void OnNewGameEvent (NewGameEvent newGameEvent) {
+        NextInfoScreen();
+    }
+
+    void OnLevelEndEvent (LevelEndEvent levelEndEvent) {
+        DataManager.SetHasBeenTutorialPlayed();
     }
 
     #endregion

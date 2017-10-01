@@ -6,14 +6,14 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.EventSystems;
 
-public class CreditsController : MonoBehaviour, IPointerClickHandler {
+public class CreditsScreenController : MonoBehaviour {
 
     #region Fields
 
     [SerializeField] private GameObject title;
     [SerializeField] private List<GameObject> creditsUFOs;
-    private Text[] creditsText;
 
+    private Text[] creditsText;
     private List<GameObject> objects = new List<GameObject>();
 
     #endregion
@@ -35,14 +35,6 @@ public class CreditsController : MonoBehaviour, IPointerClickHandler {
     void Update () {
         if (objects.Last().transform.position.y >= -4)
             SceneManager.LoadScene((int) GameScene.MainMenuScene);
-    }
-
-    #endregion
-
-    #region IPointerClickHandler Behaviour
-
-    public void OnPointerClick (PointerEventData e) {
-        SceneManager.LoadScene((int) GameScene.MainMenuScene);
     }
 
     #endregion

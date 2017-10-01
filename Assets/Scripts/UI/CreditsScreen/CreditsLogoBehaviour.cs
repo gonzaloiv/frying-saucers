@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InfoScreenTextBehaviour : MonoBehaviour {
+public class CreditsLogoBehaviour : MonoBehaviour {
 
     #region Private Behaviour
 
-    private Text text;
+    private SpriteRenderer logo;
     private IEnumerator blinkingRoutine;
 
     #endregion
@@ -15,7 +15,7 @@ public class InfoScreenTextBehaviour : MonoBehaviour {
     #region Mono Behaviour
 
     void Awake () {
-        text = GetComponent<Text>();
+        logo = GetComponent<SpriteRenderer>();
         blinkingRoutine = BlinkingRoutine();
     }
 
@@ -46,11 +46,11 @@ public class InfoScreenTextBehaviour : MonoBehaviour {
     private IEnumerator BlinkingRoutine () {
         float timeToWait;
         while (gameObject.activeSelf) {
-            text.enabled = true;
+            logo.enabled = true;
             timeToWait = Time.realtimeSinceStartup + 0.3f;
             while (Time.realtimeSinceStartup < timeToWait)
                 yield return 0;
-            text.enabled = false;
+            logo.enabled = false;
             timeToWait = Time.realtimeSinceStartup + 0.3f;
             while (Time.realtimeSinceStartup < timeToWait)
                 yield return 0;

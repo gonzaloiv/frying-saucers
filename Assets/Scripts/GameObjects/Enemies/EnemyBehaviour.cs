@@ -8,16 +8,15 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
     #region Fields
 
     [SerializeField] private GameObject laserPrefab;
-    public ParticleSystem Laser { get { return laser; } }
-    private ParticleSystem laser;
 
     public GameObject Player { get { return player; } }
-    private GameObject player;
-
+    public ParticleSystem Laser { get { return laser; } }
     public bool Hit { get { return hit; } }
-    private bool hit = false;
-
     public float RoutineTime { get { return routineTime; } }
+    
+    private ParticleSystem laser;
+    private GameObject player;
+    private bool hit = false;
     private float routineTime;
 
     private Coroutine enemyRoutine;
@@ -42,7 +41,7 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
 
     #region IEnemyBehaviour
 
-    public void Initialize (GameObject player) {
+    public void Init (GameObject player) {
         this.player = player;
     }
 

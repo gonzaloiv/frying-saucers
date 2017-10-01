@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-// Based on TheLiquidFire's: https://theliquidfire.wordpress.com/2015/07/06/object-pooling/
+// Based on The Liquid Fire's: https://theliquidfire.wordpress.com/2015/07/06/object-pooling/
+// and Gamelogic Extension's: https://www.assetstore.unity3d.com/en/#!/content/19323
 public class GameObjectPool : IPool {
 
   #region Fields

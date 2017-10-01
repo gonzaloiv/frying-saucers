@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPool {
-    GameObject PopObject ();
-    GameObject PushObject ();
+public enum Music {
+    Menu,
+    Level,
+	GameOver
 }

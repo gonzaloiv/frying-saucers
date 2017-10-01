@@ -16,6 +16,7 @@ namespace GameStates {
         protected GameObject gameOverScreen;
         protected GameObject leaderboardScreen;
         protected GameObject pauseScreen;
+        protected GameObject creditsScreen;
 
         #endregion
 
@@ -30,6 +31,7 @@ namespace GameStates {
             gameOverScreen = gameController.GameOverScreen;
             leaderboardScreen = gameController.LeaderboardScreen;
             pauseScreen = gameController.PauseScreen;
+            creditsScreen = gameController.CreditsScreen;
         }
 
         #endregion
