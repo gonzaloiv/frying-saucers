@@ -29,7 +29,7 @@ public class PlayerBehaviour : MonoBehaviour {
     }
 
     void OnEnable () {
-        nextPosition = Config.PLAYER_INITIAL_POSITION;
+        nextPosition = new Vector2(0, GameConfig.PlayerInitialYPosition);
         EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
         EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
         EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);

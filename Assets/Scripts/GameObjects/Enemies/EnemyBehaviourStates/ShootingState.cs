@@ -27,7 +27,7 @@ namespace EnemyBehaviourStates {
         }
 
         public override void Play () {
-            transform.position = Vector2.Lerp(transform.position, shootingPosition, Config.ENEMY_MAX_SPEED * Time.deltaTime);
+            transform.position = Vector2.Lerp(transform.position, shootingPosition, GameConfig.EnemyMaxSpeed * Time.deltaTime);
         }
 
         protected override void AddListeners () {
@@ -43,7 +43,7 @@ namespace EnemyBehaviourStates {
         #region Event Behaviour
 
         void OnGestureInput (GestureInput gestureInput) {
-            if (gestureInput.Score < Config.GESTURE_MIN_SCORE) {       // Low score
+            if (gestureInput.Score < GameConfig.GestureMinScore) {       // Low score
                 EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
             } else {
                 if ((int) gestureInput.Type != (int) enemyController.Enemy.EnemyType) { // Wrong gesture

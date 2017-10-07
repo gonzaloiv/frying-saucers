@@ -34,7 +34,7 @@ public class TimeManager : MonoBehaviour {
     }
 
     public static void StartTime () {
-        Time.timeScale = Config.INITIAL_TIME_SCALE;
+        Time.timeScale = GameConfig.GameTimeScale;
     }
 
     public static void AlterTimeScale (float percentage) {

@@ -68,8 +68,8 @@ public class WaveController : MonoBehaviour {
         currentWaveEnemyObjects = new List<GameObject>();
         if (waveData.EnemiesType == null || waveData.EnemiesType.Length == 0) {
             // Random waves
-            currentWaveEnemyGrid = Board.EnemyGrid(Config.RANDOM_WAVE_ENEMY_AMOUNT);
-            currentWaveEnemies = GetRandomWaveEnemies(Config.RANDOM_WAVE_ENEMY_AMOUNT);
+            currentWaveEnemyGrid = Board.EnemyGrid(GameConfig.RandomWaveEnemyAmount);
+            currentWaveEnemies = GetRandomWaveEnemies(GameConfig.RandomWaveEnemyAmount);
             enemyTypeLabelSpawner.Init();
             for (int i = 0; i < currentWaveEnemies.Length; i++) {
                 currentWaveEnemyObjects.Add(enemySpawner.SpawnEnemy(currentWaveEnemies[i], player));

@@ -34,7 +34,7 @@ public class Board {
         Vector2[] grid = new Vector2[enemyAmount];
         float positionXSize = boardSize.x / (grid.Length + 2);
         for (int x = 0; x < enemyAmount; x++)
-            grid[x] = new Vector2(-boardSize.x / 2 + ((positionXSize) * (x + 1)) + positionXSize / 2, Config.ENEMY_INITIAL_Y_POSITION);
+            grid[x] = new Vector2(-boardSize.x / 2 + ((positionXSize) * (x + 1)) + positionXSize / 2, GameConfig.EnemyInitialYPosition);
         return grid;
     }
 

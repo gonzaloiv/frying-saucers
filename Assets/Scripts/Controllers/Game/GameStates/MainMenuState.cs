@@ -10,6 +10,7 @@ namespace GameStates {
 
         public override void Enter () {
             base.Enter();
+            Debug.Log("MainMenuState.Enter()");
             mainMenuScreen.SetActive(true);
             inputManager.SetActive(false);
         }

@@ -10,7 +10,13 @@ namespace GameStates {
 
         public override void Enter () {
             base.Enter();
-            DataManager.Init();
+            new Board();
+            new Player(gameData.PlayerInitialLives);
+            GameConfig.Init(gameConfigData);
+            levelController.gameObject.SetActive(false);
+            inputManager.SetActive(false);
+            InitScreens();
+            DataManager.Init(); // Has to be called the last because of DataLoadedEvent.
         }
 
         public void OnDataLoadedEvent (DataLoadedEvent dataLoadedEvent) {
@@ -32,6 +38,18 @@ namespace GameStates {
 
         protected override void RemoveListeners () {
             EventManager.StopListening<DataLoadedEvent>(OnDataLoadedEvent);
+        }
+
+        #endregion
+
+        #region Private Behaviour
+
+        private void InitScreens () {
+            mainMenuScreen.SetActive(false);
+            levelScreen.SetActive(false);
+            mainMenuScreen.SetActive(false);
+            leaderboardScreen.SetActive(false);
+            pauseScreen.SetActive(false);
         }
 
         #endregion

@@ -131,7 +131,7 @@ public class SFXManager : MonoBehaviour {
     #region Private Behaviour
 
     private IEnumerator EnemyAttackRoutine (float sectionTime) {
-        for (int i = 0; i < Config.SHOOTING_ROUTINE_PARTS - 1; i++) {
+        for (int i = 0; i < GameConfig.ShootingRoutineSections - 1; i++) {
             audioSource.PlayOneShot(enemyAttack[0]);      
             yield return new WaitForSeconds(sectionTime);
         }

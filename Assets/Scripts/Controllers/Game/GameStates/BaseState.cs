@@ -8,6 +8,8 @@ namespace GameStates {
 
         #region Fields
 
+        protected GameData gameData;
+        protected GameConfigData gameConfigData;
         protected GameController gameController;
         protected LevelController levelController;
         protected GameObject inputManager;
@@ -24,6 +26,8 @@ namespace GameStates {
 
         void Awake () {
             gameController = GetComponent<GameController>();
+            gameData = gameController.GameData;
+            gameConfigData = gameController.GameConfigData;
             levelController = gameController.LevelController;
             inputManager = gameController.InputManager;
             mainMenuScreen = gameController.MainMenuScreen;

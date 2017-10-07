@@ -8,9 +8,13 @@ public class GameController : StateMachine {
 
     #region Mono Behaviour
 
+    [Header("Game Data")]
+    [SerializeField] private GameData gameData;
+    [SerializeField] private GameConfigData gameConfigData;
+
+    [Header("Game Controllers")]
     [SerializeField] private LevelController levelController;
     [SerializeField] private GameObject inputManager;
-    [SerializeField] private GameData gameData;
 
     [Header("Game Screens")]
     [SerializeField] private GameObject mainMenuScreen;
@@ -20,6 +24,8 @@ public class GameController : StateMachine {
     [SerializeField] private GameObject pauseScreen;
     [SerializeField] private GameObject creditsScreen;
 
+    public GameData GameData { get { return gameData; } }
+    public GameConfigData GameConfigData { get { return gameConfigData; } }
     public LevelController LevelController { get { return levelController; } }
     public GameObject InputManager { get { return inputManager; } }
     public GameObject MainMenuScreen { get { return mainMenuScreen; } }
@@ -37,20 +43,11 @@ public class GameController : StateMachine {
     #region Mono Behaviour
 
     void Awake () {
-        new Board();
-        new Player(gameData.PlayerInitialLives);
-        levelController.gameObject.SetActive(false);
-        inputManager.SetActive(false);
-        mainMenuScreen.SetActive(false);
-        levelScreen.SetActive(false);
-        mainMenuScreen.SetActive(false);
-        leaderboardScreen.SetActive(false);
-        pauseScreen.SetActive(false);
+        ChangeState<GameStates.InitState>();
     }
 
     void Start () {
         EventManager.TriggerEvent(new NewGameEvent());
-        ToMainMenuState();
     }
 
     void OnEnable () {
@@ -111,7 +108,7 @@ public class GameController : StateMachine {
 
     #region Private Behaviour
 
-    public IEnumerator LoadSceneRoutine (int sceneIndex) {
+    private IEnumerator LoadSceneRoutine (int sceneIndex) {
         yield return new WaitForSeconds(1);
         AsyncOperation sceneLoading = SceneManager.LoadSceneAsync(sceneIndex);
         sceneLoading.allowSceneActivation = false;

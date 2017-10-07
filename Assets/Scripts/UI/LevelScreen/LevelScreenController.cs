@@ -58,7 +58,7 @@ public class LevelScreenController : MonoBehaviour {
             StartCoroutine(EmojiRoutine(EMOJIS[2], 1));
 
         Player.Combo++;
-        Player.Score += (int) Mathf.Ceil(Config.ENEMY_SCORE * Player.Combo * GestureMultiplier(rightGestureInput.GestureInput.Time));
+        Player.Score += (int) Mathf.Ceil(GameConfig.EnemyScore * Player.Combo * GestureMultiplier(rightGestureInput.GestureInput.Time));
 
     }
 

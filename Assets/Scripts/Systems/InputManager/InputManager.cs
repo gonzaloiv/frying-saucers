@@ -103,7 +103,7 @@ public class InputManager : MonoBehaviour {
         while (!mouseUp)
             yield return null;
 
-        yield return new WaitForSeconds(Config.GESTURE_STROKE_TIME);
+        yield return new WaitForSeconds(GameConfig.GestureStrokeTime);
 
         while (!mouseUp)
             yield return null;
