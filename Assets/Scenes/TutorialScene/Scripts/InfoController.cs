@@ -44,19 +44,21 @@ public class InfoController : MonoBehaviour {
     }
 
     void OnEnable () {
-        EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
-        EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
-        EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
-        EventManager.StartListening<LevelEndEvent>(OnLevelEndEvent);
+        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
+        EnemyController.EnemyHitEvent += OnEnemyHitEvent;
+        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+        GameController.NewGameEvent += OnNewGameEvent;
+        LevelController.LevelEndEvent += OnLevelEndEvent;
+        GameController.NewGameEvent += OnNewGameEvent;
     }
 
     void OnDisable () {
-        EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
-        EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
-        EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
-        EventManager.StopListening<LevelEndEvent>(OnLevelEndEvent);
+        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
+        EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
+        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
+        GameController.NewGameEvent -= OnNewGameEvent;
+        LevelController.LevelEndEvent -= OnLevelEndEvent;
+        GameController.NewGameEvent -= OnNewGameEvent;
     }
 
     #endregion
@@ -82,25 +84,25 @@ public class InfoController : MonoBehaviour {
         currentErrorScreen++;
     }
 
-    void OnEnemyAttackEvent (EnemyAttackEvent enemyAttackEvent) {
+    public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
         NextInfoScreen();
         currentErrorScreen = 0;
     }
 
-    void OnEnemyHitEvent (EnemyHitEvent EnemyHitEvent) {
+    public void OnEnemyHitEvent (EnemyHitEventArgs enemyHitEventArgs) {
         NextInfoScreen();
     }
 
-    void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
         NextErrorScreen();
         currentInfoScreen--;
     }
 
-    void OnNewGameEvent (NewGameEvent newGameEvent) {
+    public void OnNewGameEvent (NewGameEventArgs newGameEventArgs) {
         NextInfoScreen();
     }
 
-    void OnLevelEndEvent (LevelEndEvent levelEndEvent) {
+    public void OnLevelEndEvent (LevelEndEventArgs levelEndEventArgs) {
         DataManager.SetHasBeenTutorialPlayed();
     }
 

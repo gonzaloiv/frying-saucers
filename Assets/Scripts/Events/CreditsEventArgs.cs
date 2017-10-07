@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CreditsEvent : EventArgs {
-    public CreditsEvent () {
+public class CreditsEventArgs : EventArgs {
+    public CreditsEventArgs () {
         Debug.Log("CreditsEvent");
     }
 }

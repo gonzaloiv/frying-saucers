@@ -19,8 +19,18 @@ public class InputManager : MonoBehaviour {
 
     private IEnumerator gestureRoutine;
     private bool listening = false;
-    private bool mouseUp = true; // TODO: corregir esto con extensiones para las Coroutines
+    private bool mouseUp = true;
     private float sectionTime;
+
+    #endregion
+
+    #region Events
+
+    public delegate void EscapeInputEventHandler (EscapeInputEventArgs escapeInputEventArgs);
+    public static event EscapeInputEventHandler EscapeInputEvent;
+
+    public delegate void GestureInputEventHandler (GestureInputEventArgs gestureInputEventArgs);
+    public static event GestureInputEventHandler GestureInputEvent;
 
     #endregion
 
@@ -34,13 +44,13 @@ public class InputManager : MonoBehaviour {
     }
 
     void OnEnable () {
-        EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
+        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
     }
 
     void OnDisable () {
         gestureRecognizer.ResetGestureLines();
         handController.RemoveHand();
-        EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
+        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
     }
 
     void Update () {
@@ -49,8 +59,10 @@ public class InputManager : MonoBehaviour {
 
             // KEYBOARD
 
-            if (Input.GetKeyDown(KeyCode.Escape))
-                EventManager.TriggerEvent(new EscapeInputEvent());
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                if (EscapeInputEvent != null)
+                    EscapeInputEvent.Invoke(new EscapeInputEventArgs());
+            }
 
             // MOUSE & TOUCH
 
@@ -87,8 +99,8 @@ public class InputManager : MonoBehaviour {
 
     #region Event Behaviour
 
-    void OnEnemyAttackEvent (EnemyAttackEvent enemyAttackEvent) {
-        sectionTime = enemyAttackEvent.SectionTime;
+    void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
+        sectionTime = enemyAttackEventArgs.SectionTime;
     }
 
     #endregion
@@ -112,7 +124,8 @@ public class InputManager : MonoBehaviour {
 
         if (mouseUp && gestureRecognizer.CurrentPointAmount > 5) { // The library doesn't support one click inputs
             Result result = gestureRecognizer.RecognizeGesture();
-            EventManager.TriggerEvent(new GestureInput(result.GestureClass.ToString(), result.Score, gestureTime));
+            if(GestureInputEvent != null)
+                GestureInputEvent.Invoke(new GestureInputEventArgs(result.GestureClass.ToString(), result.Score, gestureTime));
         }
 
         gestureRecognizer.ResetGestureLines();

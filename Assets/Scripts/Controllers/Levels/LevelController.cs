@@ -22,11 +22,22 @@ public class LevelController : StateMachine {
 
     #endregion
 
+    #region Events
+
+    public delegate void NewLevelEventHandler (NewLevelEventArgs newLevelEventArgs);
+    public static event NewLevelEventHandler NewLevelEvent;
+
+    public delegate void LevelEndEventHandler (LevelEndEventArgs levelEndEventArgs);
+    public static event LevelEndEventHandler LevelEndEvent;
+
+    #endregion
+
     #region Mono Behaviour
 
-    void Awake() {
+    void Awake () {
         player = Instantiate(playerPrefab, transform);
         player.SetActive(false);
+        waveController.Init(player);
     }
 
     #endregion
@@ -40,6 +51,8 @@ public class LevelController : StateMachine {
     }
 
     public void ToNewLevelState () {
+        if (NewLevelEvent != null)
+            NewLevelEvent.Invoke(new NewLevelEventArgs());
         ChangeState<LevelStates.NewLevelState>();
     }
 
@@ -48,7 +61,8 @@ public class LevelController : StateMachine {
             currentWaveIndex++;
             ChangeState<LevelStates.NewWaveState>();
         } else {
-            EventManager.TriggerEvent(new LevelEndEvent(currentLevelData.LevelType));
+            if (LevelEndEvent != null)
+                LevelEndEvent.Invoke(new LevelEndEventArgs(currentLevelData.LevelType));
             ChangeState<LevelStates.StopState>();
         }
     }

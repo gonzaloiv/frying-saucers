@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyHitEvent : EventArgs {
-    public EnemyHitEvent () {
+public class EnemyHitEventArgs : EventArgs {
+    public EnemyHitEventArgs () {
         Debug.Log("EnemyHitEvent");
     }
 }

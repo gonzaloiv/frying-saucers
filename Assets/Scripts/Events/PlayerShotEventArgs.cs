@@ -3,4 +3,4 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerShotEvent : EventArgs {}
+public class PlayerShotEventArgs : EventArgs {}

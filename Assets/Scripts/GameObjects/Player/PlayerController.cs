@@ -19,6 +19,13 @@ public class PlayerController : MonoBehaviour {
 
     #endregion
 
+    #region Events
+
+    public delegate void PlayerHitEventHandler (PlayerHitEventArgs playerHitEventArgs);
+    public static event PlayerHitEventHandler PlayerHitEvent;
+
+    #endregion
+
     #region Mono Behaviour
 
     void Awake () {
@@ -38,7 +45,8 @@ public class PlayerController : MonoBehaviour {
 
     void OnParticleCollision (GameObject particle) {
         if (!shot && particle.layer == (int) CollisionLayer.Enemy) {
-            EventManager.TriggerEvent(new PlayerHitEvent());
+            if (PlayerHitEvent != null)
+                PlayerHitEvent.Invoke(new PlayerHitEventArgs());
             shot = true;
             anim.Play("Disable");
             explosion.Play();

@@ -18,6 +18,13 @@ public class LevelScreenController : MonoBehaviour {
 
     #endregion
 
+    #region Events
+
+    public delegate void GameOverEventHandler (GameOverEventArgs gameOverEventArgs);
+    public static event GameOverEventHandler GameOverEvent;
+
+    #endregion
+
     #region Mono Behaviour
 
     void Awake () {
@@ -33,58 +40,24 @@ public class LevelScreenController : MonoBehaviour {
     }
 
     void OnEnable () {
-        EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
-        EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
-        EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInputEvent;
+        EnemyBehaviour.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+        LevelScreenController.GameOverEvent += OnGameOverEvent;
     }
 
     void OnDisable () {
-        EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
-        EventManager.StopListening<WrongGestureInput>(OnWrongGestureInput);
-        EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
+        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInputEvent;
+        EnemyBehaviour.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
+        LevelScreenController.GameOverEvent -= OnGameOverEvent;
     }
 
     #endregion
 
-    #region Event Behaviour
+    #region Public Behaviour
 
-    void OnRightGestureInput (RightGestureInput rightGestureInput) {
-
-        if (Player.Combo >= 5) 
-            StartCoroutine(EmojiRoutine(EMOJIS[3], 3));
-        else
-            StartCoroutine(EmojiRoutine(EMOJIS[2], 1));
-
-        Player.Combo++;
-        Player.Score += (int) Mathf.Ceil(GameConfig.EnemyScore * Player.Combo * GestureMultiplier(rightGestureInput.GestureInput.Time));
-
-    }
-
-    void OnWrongGestureInput (WrongGestureInput wrongGestureInput) {
-        Player.Combo = 1;
-        StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
-    }
-
-    void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
-        Player.Lives--;
-        if (Player.Lives < 1)
-            EventManager.TriggerEvent(new GameOverEvent(Player.Score));
-        livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
-        SetLives();
-    }
-
-    void OnGameOverEvent (GameOverEvent gameOverEvent) {
-        StopAllCoroutines();
-        StartCoroutine(EmojiRoutine(EMOJIS[1], 4));
-    }
-
-    #endregion
-
-    #region Private Behaviour
-
-    public void Initialize () {
+    public void Init () {
         scoreTextNumber = Player.Score;
         scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
         scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
@@ -92,9 +65,34 @@ public class LevelScreenController : MonoBehaviour {
         livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
     }
 
+    public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
+        IEnumerator emojiRoutine = Player.Combo >= 5 ? EmojiRoutine(EMOJIS[3], 3) : EmojiRoutine(EMOJIS[2], 1);
+        StartCoroutine(emojiRoutine);
+        Player.Combo++;
+        Player.Score += (int) Mathf.Ceil(GameConfig.EnemyScore * Player.Combo * GestureMultiplier(rightGestureInputEventArgs.GestureInputEventArgs.Time));
+    }
+
+    public void OnWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputArgs) {
+        Player.Combo = 1;
+        StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
+    }
+
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+        Player.Lives--;
+        if (Player.Lives < 1)
+            GameOverEvent.Invoke(new GameOverEventArgs(Player.Score));
+        livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+        SetLives();
+    }
+
+    public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
+        StopAllCoroutines();
+        StartCoroutine(EmojiRoutine(EMOJIS[1], 4));
+    }
+
     #endregion
 
-    #region Public Behaviour
+    #region Private Behaviour
 
     private IEnumerator EmojiRoutine (string emoji, float time) {
         emojiLabel.text = emoji;
@@ -114,10 +112,6 @@ public class LevelScreenController : MonoBehaviour {
             return 1;
         }
     }
-
-    #endregion
-
-    #region Private Behaviour
 
     private void SetLives () {
         if (Player.Lives > 100) // Tutorial settings

@@ -7,6 +7,8 @@ namespace EnemyBehaviourStates {
   public class BaseState : State {
 
     #region Fields
+    
+    protected EnemyBehaviour enemyBehaviour;
 
     protected Animator animator;
     protected GameObject player;
@@ -14,8 +16,6 @@ namespace EnemyBehaviourStates {
     protected EnemyController enemyController;
     protected bool hit;
     protected float routineTime;
-
-    private EnemyBehaviour enemyBehaviour;
 
     #endregion
 

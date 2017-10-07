@@ -24,18 +24,18 @@ public class WaveRefillBehaviour : MonoBehaviour {
     }
 
     void OnEnable () {
-        EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
+        EnemyController.EnemyHitEvent += OnEnemyHitEvent;
     }
 
     void OnDisable () {
-        EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
+        EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
     }
 
     #endregion
 
-    #region Event Behaviour
+    #region Public Behaviour
 
-    void OnEnemyHitEvent (EnemyHitEvent enemyHitEvent) {
+    public void OnEnemyHitEvent (EnemyHitEventArgs enemyHitEventArgs) {
         enemyHit = true;
     }
 

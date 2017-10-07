@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GestureInput : EventArgs {
+public class GestureInputEventArgs : EventArgs {
 
     public GestureType Type { get { return type; } }
     private  GestureType type;
@@ -14,7 +14,7 @@ public class GestureInput : EventArgs {
     public GestureTime Time { get { return time; } }
     private GestureTime time;
 
-    public GestureInput (string gestureClass, float score, GestureTime time) {
+    public GestureInputEventArgs (string gestureClass, float score, GestureTime time) {
 
         Debug.Log("Gesture Input: " + gestureClass + " " + score);
 

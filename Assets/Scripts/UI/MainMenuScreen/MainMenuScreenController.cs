@@ -19,7 +19,7 @@ public class MainMenuScreenController : MonoBehaviour {
 
     void Awake () {
         ufoGridController = GetComponentInChildren<UFOGridController>();
-        tutorialButton.onClick.AddListener(() => LoadScene((int) GameScene.TutorialScene));
+        tutorialButton.onClick.AddListener(() => LoadScene((int) GameScene.GameScene));
     }
 
     #endregion

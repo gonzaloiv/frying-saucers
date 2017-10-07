@@ -17,6 +17,13 @@ public class DataManager {
 
     #endregion
 
+    #region Events
+
+    public delegate void DataLoadedEventHandler (DataLoadedEventArgs dataLoadedEventArgs);
+    public static event DataLoadedEventHandler DataLoadedEvent;
+
+    #endregion
+
     #region Public Behaviour
 
     public static void Init () {
@@ -64,7 +71,8 @@ public class DataManager {
             Debug.Log(exception.Message);
             Debug.Log("First play: Data not recorded, yet");
         }
-        EventManager.TriggerEvent(new DataLoadedEvent(leaderboard));
+        if (DataLoadedEvent != null)
+            DataLoadedEvent.Invoke(new DataLoadedEventArgs(leaderboard));
     }
 
     #endregion

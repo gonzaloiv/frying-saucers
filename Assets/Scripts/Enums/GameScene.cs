@@ -4,8 +4,5 @@ using UnityEngine;
 
 public enum GameScene {
     LoadingScene,
-    MainMenuScene,
-    GameScene,
-    TutorialScene,
-    CreditsScene
+    GameScene
 }

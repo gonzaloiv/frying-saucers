@@ -19,42 +19,42 @@ public class MusicManager : MonoBehaviour {
     }
 
     void OnEnable () {
-        EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
-        EventManager.StartListening<NewLevelEvent>(OnNewLevelEvent);
-        EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
-        EventManager.StartListening<CreditsEvent>(OnCreditsEvent);
+        LevelController.NewLevelEvent += OnNewLevelEvent;
+        LevelScreenController.GameOverEvent += OnGameOverEvent;
+        GameController.CreditsEvent += OnCreditsEvent;
+        GameController.NewGameEvent += OnNewGameEvent;
     }
 
     void OnDisable () {
-        EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
-        EventManager.StopListening<NewLevelEvent>(OnNewLevelEvent);
-        EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
-        EventManager.StopListening<CreditsEvent>(OnCreditsEvent);
+        LevelController.NewLevelEvent -= OnNewLevelEvent;
+        LevelScreenController.GameOverEvent -= OnGameOverEvent;
+        GameController.CreditsEvent -= OnCreditsEvent;
+        GameController.NewGameEvent -= OnNewGameEvent;
     }
 
     #endregion
 
     #region Event Behaviour
 
-    void OnNewGameEvent (NewGameEvent newGameEvent) {
+    void OnNewGameEvent (NewGameEventArgs newGameEventArgs) {
         audioSource.Stop();
         audioSource.clip = audioClips[(int) Music.Menu];
         audioSource.Play();
     }
 
-    void OnNewLevelEvent (NewLevelEvent newLevelEvent) {
+    void OnNewLevelEvent (NewLevelEventArgs newLevelEventArgs) {
         audioSource.Stop();
         audioSource.clip = audioClips[(int) Music.Level];
         audioSource.Play();
     }
 
-    void OnGameOverEvent (GameOverEvent gameOverEvent) {
+    void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
         audioSource.Stop();
         audioSource.clip = audioClips[(int) Music.GameOver];
         audioSource.Play();
     }
 
-    void OnCreditsEvent (CreditsEvent creditsEvent) {
+    void OnCreditsEvent (CreditsEventArgs creditsEventArgs) {
         audioSource.Stop();
         audioSource.clip = audioClips[(int) Music.GameOver];
         audioSource.Play();

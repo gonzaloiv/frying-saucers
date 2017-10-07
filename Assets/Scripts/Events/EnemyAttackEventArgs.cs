@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyAttackEvent : EventArgs {
+public class EnemyAttackEventArgs : EventArgs {
 
     public EnemyType EnemyType { get { return enemyType; } }
     private EnemyType enemyType;
@@ -17,7 +17,7 @@ public class EnemyAttackEvent : EventArgs {
     public float SectionTime { get { return sectionTime; } }
     private float sectionTime;
 
-    public EnemyAttackEvent (EnemyType enemyType, Vector2 position, float routineTime) {
+    public EnemyAttackEventArgs (EnemyType enemyType, Vector2 position, float routineTime) {
         this.enemyType = enemyType;
         this.position = position;
         this.routineTime = routineTime;

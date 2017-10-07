@@ -34,7 +34,7 @@ public class CreditsScreenController : MonoBehaviour {
 
     void Update () {
         if (objects.Last().transform.position.y >= -4)
-            SceneManager.LoadScene((int) GameScene.MainMenuScene);
+            SceneManager.LoadScene((int) GameScene.GameScene);
     }
 
     #endregion

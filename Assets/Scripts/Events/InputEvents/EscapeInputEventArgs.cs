@@ -3,4 +3,4 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EscapeInputEvent : EventArgs {}
+public class EscapeInputEventArgs : EventArgs {}

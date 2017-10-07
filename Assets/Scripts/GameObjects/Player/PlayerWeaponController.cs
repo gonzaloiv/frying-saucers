@@ -16,6 +16,13 @@ public class PlayerWeaponController : MonoBehaviour {
 
     #endregion
 
+    #region Events
+
+    public delegate void PlayerShotEventHandler (PlayerShotEventArgs playerShotEventArgs);
+    public static event PlayerShotEventHandler PlayerShotEvent;
+
+    #endregion
+
     #region Mono Behaviour
 
     void Awake () {
@@ -29,26 +36,28 @@ public class PlayerWeaponController : MonoBehaviour {
 
     void OnEnable () {
         enemyPosition = Vector2.zero;
-        EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
-        EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
+        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInput;
+        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
+
     }
 
     void OnDisable () {
-        EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
-        EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
+        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInput;
+        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
     }
 
     #endregion
 
-    #region Event Behaviour
+    #region Public Behaviour
 
-    void OnRightGestureInput (RightGestureInput rightGestureInput) {
+    public void OnRightGestureInput (RightGestureInputEventArgs rightGestureInputEventArgs) {
         laser.Play();
-        EventManager.TriggerEvent(new PlayerShotEvent());
+        if(PlayerShotEvent != null)
+            PlayerShotEvent.Invoke(new PlayerShotEventArgs());
     }
 
-    void OnEnemyAttackEvent (EnemyAttackEvent enemyAttackEvent) {
-        enemyPosition = enemyAttackEvent.Position;
+    public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
+        enemyPosition = enemyAttackEventArgs.Position;
     }
 
     #endregion

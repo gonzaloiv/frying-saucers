@@ -40,6 +40,16 @@ public class GameController : StateMachine {
 
     #endregion
 
+    #region Events
+
+    public delegate void NewGameEventHandler (NewGameEventArgs newGameEventArgs);
+    public static event NewGameEventHandler NewGameEvent;
+
+    public delegate void CreditsEventHandler (CreditsEventArgs creditsEventArgs);
+    public static event CreditsEventHandler CreditsEvent;
+
+    #endregion
+
     #region Mono Behaviour
 
     void Awake () {
@@ -47,17 +57,18 @@ public class GameController : StateMachine {
     }
 
     void Start () {
-        EventManager.TriggerEvent(new NewGameEvent());
+        if (NewGameEvent != null)
+            NewGameEvent.Invoke(new NewGameEventArgs());
     }
 
     void OnEnable () {
-        EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
-        EventManager.StartListening<LevelEndEvent>(OnLevelEndEvent);
+        LevelScreenController.GameOverEvent += OnGameOverEvent;
+        LevelController.LevelEndEvent += OnLevelEndEvent;
     }
 
     void OnDisable () {
-        EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
-        EventManager.StopListening<LevelEndEvent>(OnLevelEndEvent);
+        LevelScreenController.GameOverEvent -= OnGameOverEvent;
+        LevelController.LevelEndEvent -= OnLevelEndEvent;
     }
 
     #endregion
@@ -69,6 +80,10 @@ public class GameController : StateMachine {
     }
 
     public void ToLevelState () {
+        ChangeState<GameStates.LevelState>();
+    }
+
+    public void ToTutorialLevelState () { // TODO: Choosing the Tutorial level as the next.
         ChangeState<GameStates.LevelState>();
     }
 
@@ -85,22 +100,23 @@ public class GameController : StateMachine {
     }
 
     public void ToCreditsState () {
+        if (CreditsEvent != null)
+            CreditsEvent.Invoke(new CreditsEventArgs());
         ChangeState<GameStates.CreditsState>();
     }
 
-    public void OnGameOverEvent (GameOverEvent gameOverEvent) {
+    public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
         levelController.ToStopState();
         ToGameOverState();
     }
 
-    public void OnLevelEndEvent (LevelEndEvent levelEndEvent) {
+    public void OnLevelEndEvent (LevelEndEventArgs levelEndEventArgs) {
         if (currentLevelIndex < gameData.Levels.Count - 1) {
             currentLevelIndex++;
             levelController.InitLevel(gameData.Levels[currentLevelIndex]);
         } else {
             currentLevelIndex = 0;
-            int nextSceneIndex = levelEndEvent.LevelType == LevelType.TutorialLevel ? (int) GameScene.MainMenuScene : (int) GameScene.GameScene;
-            StartCoroutine(LoadSceneRoutine(nextSceneIndex));
+            StartCoroutine(LoadSceneRoutine((int) GameScene.GameScene));
         }
     }
 

@@ -30,32 +30,32 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void OnEnable () {
         nextPosition = new Vector2(0, GameConfig.PlayerInitialYPosition);
-        EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
-        EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
-        EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
+        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
+        EnemyBehaviour.EnemyShotEvent += OnEnemyShotEvent;
+        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInput;
     }
 
     void OnDisable () {
-        EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
-        EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
-        EventManager.StopListening<EnemyShotEvent>(OnEnemyShotEvent);
+        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
+        EnemyBehaviour.EnemyShotEvent -= OnEnemyShotEvent;
+        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInput;
     }
 
     #endregion
 
-    #region Event Behaviour
+    #region Public Behaviour
 
-    void OnEnemyAttackEvent (EnemyAttackEvent enemyAttackEvent) {
-        enemyPosition = enemyAttackEvent.Position;
+    public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
+        enemyPosition = enemyAttackEventArgs.Position;
         rightGesture = false;
     }
 
-    void OnEnemyShotEvent (EnemyShotEvent enemyShotEvent) {
+    public void OnEnemyShotEvent (EnemyShotEventArgs enemyShotEventArgs) {
         if (rightGesture)
             StartCoroutine(EvasionRoutine());
     }
 
-    void OnRightGestureInput (RightGestureInput rightGestureInput) {
+    public void OnRightGestureInput (RightGestureInputEventArgs ightGestureInputEventArgs) {
         nextPosition.x = enemyPosition.x;
         rightGesture = true;
     }

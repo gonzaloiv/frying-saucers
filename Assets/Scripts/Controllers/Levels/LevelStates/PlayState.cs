@@ -39,18 +39,18 @@ namespace LevelStates {
         #region Mono Behaviour
 
         void OnEnable () {
-            EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
+            PlayerController.PlayerHitEvent += OnPlayerHitEvent;
         }
 
         void OnDisable () {
-            EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
+            PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
         }
 
         #endregion
 
-        #region Event Behaviour
+        #region Public Behaviour
 
-        void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
+        public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
             StopCoroutine(waveRoutine);
         }
 

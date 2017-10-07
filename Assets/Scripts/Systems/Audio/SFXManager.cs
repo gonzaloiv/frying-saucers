@@ -37,92 +37,92 @@ public class SFXManager : MonoBehaviour {
     void OnEnable () {
 
         // Input
-        EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
-        EventManager.StartListening<WrongGestureInput>(OnWrongGestureInput);
+        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInputEvent;
+        EnemyBehaviour.WrongGestureInputEvent += OnWrongGestureInputEvent;
 
         // Game Mechanics
-        EventManager.StartListening<EnemyAttackEvent>(OnEnemyAttackEvent);
-        EventManager.StartListening<EnemyShotEvent>(OnEnemyShotEvent);
-        EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
-        EventManager.StartListening<PlayerShotEvent>(OnPlayerShotEvent);
-        EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
+        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
+        EnemyBehaviour.EnemyShotEvent += OnEnemyShotEvent;
+        EnemyController.EnemyHitEvent += OnEnemyHitEvent;
+        PlayerWeaponController.PlayerShotEvent += OnPlayerShotEvent;
+        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
 
         // Game
-        EventManager.StartListening<NewGameEvent>(OnNewGameEvent);
-        EventManager.StartListening<NewLevelEvent>(OnNewLevelEvent);
-        EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+        GameController.NewGameEvent += OnNewGameEvent;
+        LevelController.NewLevelEvent += OnNewLevelEvent;
+        LevelScreenController.GameOverEvent += OnGameOverEvent;
 
     }
 
     void OnDisable () {
 
         // Input
-        EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
-        EventManager.StopListening<WrongGestureInput>(OnWrongGestureInput);
+        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInputEvent;
+        EnemyBehaviour.WrongGestureInputEvent -= OnWrongGestureInputEvent;
 
         // Game Mechanics
-        EventManager.StopListening<EnemyAttackEvent>(OnEnemyAttackEvent);
-        EventManager.StopListening<EnemyShotEvent>(OnEnemyShotEvent);
-        EventManager.StopListening<EnemyHitEvent>(OnEnemyHitEvent);
-        EventManager.StopListening<PlayerShotEvent>(OnPlayerShotEvent);
-        EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
+        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
+        EnemyBehaviour.EnemyShotEvent -= OnEnemyShotEvent;
+        EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
+        PlayerWeaponController.PlayerShotEvent -= OnPlayerShotEvent;
+        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
 
         // Game
-        EventManager.StopListening<NewGameEvent>(OnNewGameEvent);
-        EventManager.StopListening<NewLevelEvent>(OnNewLevelEvent);
-        EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
+        GameController.NewGameEvent -= OnNewGameEvent;
+        LevelController.NewLevelEvent -= OnNewLevelEvent;
+        LevelScreenController.GameOverEvent -= OnGameOverEvent;
 
     }
 
     #endregion
 
-    #region Event Behaviour
+    #region Public Behaviour
 
     // Input
-    void OnRightGestureInput (RightGestureInput rightGestureInput) {
+    public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
         audioSource.PlayOneShot(rightGesture[Random.Range(0, rightGesture.Length)]);
         if (enemyAttackRoutine != null)
             StopCoroutine(enemyAttackRoutine);
     }
 
-    void OnWrongGestureInput (WrongGestureInput wrongGestureInput) {
+    public void OnWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputEventArgs) {
         audioSource.PlayOneShot(wrongGesture[Random.Range(0, wrongGesture.Length)]);
         if (enemyAttackRoutine != null)
             StopCoroutine(enemyAttackRoutine);
     }
 
     // Game Mechanics
-    void OnEnemyAttackEvent (EnemyAttackEvent enemyAttackEvent) {
-        enemyAttackRoutine = EnemyAttackRoutine(enemyAttackEvent.SectionTime);
+    public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
+        enemyAttackRoutine = EnemyAttackRoutine(enemyAttackEventArgs.SectionTime);
         StartCoroutine(enemyAttackRoutine);
     }
 
-    void OnEnemyShotEvent (EnemyShotEvent enemyShotEvent) {
+    public void OnEnemyShotEvent (EnemyShotEventArgs enemyShotEvent) {
         audioSource.PlayOneShot(enemyShot);
     }
 
-    void OnEnemyHitEvent (EnemyHitEvent EnemyHitEvent) {
+    public void OnEnemyHitEvent (EnemyHitEventArgs enemyHitEventArgs) {
         audioSource.PlayOneShot(enemyHit);
     }
 
-    void OnPlayerShotEvent (PlayerShotEvent playerShotEvent) {
+    public void OnPlayerShotEvent (PlayerShotEventArgs playerShotEventArgs) {
         audioSource.PlayOneShot(playerShot);
     }
 
-    void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
         audioSource.PlayOneShot(playerHit);
     }
 
     // Game
-    void OnNewGameEvent (NewGameEvent newGameEvent) {
+    public void OnNewGameEvent (NewGameEventArgs newGameEventArgs) {
         audioSource.PlayOneShot(newGame);
     }
 
-    void OnNewLevelEvent (NewLevelEvent newLevelEvent) {
+    public void OnNewLevelEvent (NewLevelEventArgs newLevelEventArgs) {
         audioSource.PlayOneShot(newLevel);
     }
 
-    void OnGameOverEvent (GameOverEvent gameOverEvent) {
+    public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
         audioSource.PlayOneShot(gameOver);
     }
 

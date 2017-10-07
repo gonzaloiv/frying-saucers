@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class NewGameEvent : EventArgs {
-    public NewGameEvent () {
+public class NewGameEventArgs : EventArgs {
+    public NewGameEventArgs () {
         Debug.Log("NewGameEvent");
     }
 }

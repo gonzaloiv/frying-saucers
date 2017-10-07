@@ -18,6 +18,13 @@ public class EnemyController : MonoBehaviour, IEnemyController {
 
     #endregion
 
+    #region Events
+
+    public delegate void EnemyHitEventHandler (EnemyHitEventArgs enemyHitEventArgs);
+    public static event EnemyHitEventHandler EnemyHitEvent;
+
+    #endregion
+
     #region Mono Behaviour
 
     void Awake () {
@@ -39,7 +46,8 @@ public class EnemyController : MonoBehaviour, IEnemyController {
         animator.Play("Disable");
         explosion.transform.position = transform.position;
         explosion.Play();
-        EventManager.TriggerEvent(new EnemyHitEvent());
+        if (EnemyHitEvent != EnemyHitEvent)
+            EnemyHitEvent.Invoke(new EnemyHitEventArgs());
     }
 
     public void Init (Enemy enemy) {

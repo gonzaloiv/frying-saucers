@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LeaderboardEvent : EventArgs {
-    public LeaderboardEvent () {
+public class LeaderboardEventArgs : EventArgs {
+    public LeaderboardEventArgs () {
         Debug.Log("LeaderboardEvent");
     }
 }

@@ -10,17 +10,24 @@ public class WaveController : MonoBehaviour {
     public EnemySpawner EnemySpawner { get { return enemySpawner; } }
     public List<GameObject> CurrentWaveEnemyObjects { get { return currentWaveEnemyObjects; } }
 
-    [SerializeField] private GameObject player;
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject enemyTypeLabelPrefab;
 
     private EnemySpawner enemySpawner;
-    private List<GameObject> currentWaveEnemyObjects;
     private EnemyTypeLabelSpawner enemyTypeLabelSpawner;
+    private GameObject player;
+    private List<GameObject> currentWaveEnemyObjects;
 
     private Enemy[] currentWaveEnemies;
     private Vector2[] currentWaveEnemyGrid;
     private IEnumerator newWaveRoutine;
+
+    #endregion
+
+    #region Events
+
+    public delegate void WaveEndEventHandler (WaveEndEventArgs waveEndEventArgs);
+    public static event WaveEndEventHandler WaveEndEvent;
 
     #endregion
 
@@ -32,37 +39,24 @@ public class WaveController : MonoBehaviour {
     }
 
     void OnEnable () {
-        EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
-        EventManager.StartListening<GameOverEvent>(OnGameOverEvent);
+        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+        EnemyController.EnemyHitEvent += OnEnemyHitEvent;
+        LevelScreenController.GameOverEvent += OnGameOverEvent;
     }
 
     void OnDisable () {
-        EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StartListening<EnemyHitEvent>(OnEnemyHitEvent);
-        EventManager.StopListening<GameOverEvent>(OnGameOverEvent);
-    }
-
-    #endregion
-
-    #region Event Behaviour
-
-    void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
-        enemyTypeLabelSpawner.ShowGestures(2);
-    }
-
-    void OnEnemyHitEvent (EnemyHitEvent enemyHitEvent) {
-        newWaveRoutine = NewWaveRoutine();
-        StartCoroutine(newWaveRoutine);
-    }
-
-    void OnGameOverEvent (GameOverEvent gameOverEvent) {
-        enemyTypeLabelSpawner.HideGestures();
+        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
+        EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
+        LevelScreenController.GameOverEvent -= OnGameOverEvent;
     }
 
     #endregion
 
     #region Public Behaviour
+
+    public void Init(GameObject player) {
+        this.player = player;
+    }
 
     public void NewWave (WaveData waveData) {
         currentWaveEnemyObjects = new List<GameObject>();
@@ -108,6 +102,19 @@ public class WaveController : MonoBehaviour {
         enemyTypeLabelSpawner.ShowGestures(1);
     }
 
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+        enemyTypeLabelSpawner.ShowGestures(2);
+    }
+
+    public void OnEnemyHitEvent (EnemyHitEventArgs enemyHitEventArgs) {
+        newWaveRoutine = NewWaveRoutine();
+        StartCoroutine(newWaveRoutine);
+    }
+
+    public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
+        enemyTypeLabelSpawner.HideGestures();
+    }
+
     #endregion
 
     #region Private Behaviour
@@ -130,8 +137,10 @@ public class WaveController : MonoBehaviour {
 
     private IEnumerator NewWaveRoutine () {
         yield return new WaitForSeconds(1);
-        if (currentWaveEnemyObjects.ToList().Where(x => x.activeInHierarchy).Count() == 0)
-            EventManager.TriggerEvent(new WaveEndEvent());
+        if (currentWaveEnemyObjects.ToList().Where(x => x.activeInHierarchy).Count() == 0) {
+            if(WaveEndEvent != null)
+                WaveEndEvent.Invoke(new WaveEndEventArgs());
+        }
     }
 
     #endregion

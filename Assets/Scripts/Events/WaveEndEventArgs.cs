@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class WaveEndEvent : EventArgs {
-    public WaveEndEvent () {
+public class WaveEndEventArgs : EventArgs {
+    public WaveEndEventArgs () {
         Debug.Log("WaveEndEvent");
     }
 }

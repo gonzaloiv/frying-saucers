@@ -23,14 +23,26 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
 
     #endregion
 
+    #region Events
+
+    public delegate void EnemyAttackEventHandler (EnemyAttackEventArgs enemyAttackEventArgs);
+    public static event EnemyAttackEventHandler EnemyAttackEvent;
+
+    public delegate void EnemyShotEventHandler (EnemyShotEventArgs enemyShotEventArgs);
+    public static event EnemyShotEventHandler EnemyShotEvent;
+
+    public delegate void RightGestureInputEventHandler (RightGestureInputEventArgs rightGestureInputEventArgs);
+    public static event RightGestureInputEventHandler RightGestureInputEvent;
+
+    public delegate void WrongGestureInputEventHandler (WrongGestureInputEventArgs wrongGestureInputEventArgs);
+    public static event WrongGestureInputEventHandler WrongGestureInputEvent;
+
+    #endregion
+
     #region Mono Behaviour
 
     void Awake () {
         laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
-    }
-
-    void Update () {
-        CurrentState.Play();
     }
 
     void OnEnable () {
@@ -52,6 +64,26 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
 
     public void Stop () {
         StopAllCoroutines();
+    }
+
+    public void InvokeEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
+        if (EnemyAttackEvent != null)
+            EnemyAttackEvent.Invoke(enemyAttackEventArgs);
+    }
+
+    public void InvokeEnemyShotEvent (EnemyShotEventArgs enemyShotEventArgs) {
+        if (EnemyShotEvent != null)
+            EnemyShotEvent.Invoke(enemyShotEventArgs);
+    }
+
+    public void InvokeRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
+        if (RightGestureInputEvent != null)
+            RightGestureInputEvent.Invoke(rightGestureInputEventArgs);
+    }
+
+    public void InvokeWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputEventArgs) {
+        if (WrongGestureInputEvent != null)
+            WrongGestureInputEvent.Invoke(wrongGestureInputEventArgs);
     }
 
     #endregion

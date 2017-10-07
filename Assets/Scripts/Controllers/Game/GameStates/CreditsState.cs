@@ -12,7 +12,6 @@ namespace GameStates {
             base.Enter();
 			creditsScreen.SetActive(true);
             inputManager.SetActive(false);
-            EventManager.TriggerEvent(new CreditsEvent());
         }
 
         public override void Exit () {

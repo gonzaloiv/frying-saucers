@@ -13,7 +13,7 @@ namespace EnemyBehaviourStates {
 
         #endregion
 
-        #region State Behaviour
+        #region Public Behaviour
 
         public override void Enter () {
             base.Enter();
@@ -30,31 +30,31 @@ namespace EnemyBehaviourStates {
             transform.position = Vector2.Lerp(transform.position, shootingPosition, GameConfig.EnemyMaxSpeed * Time.deltaTime);
         }
 
-        protected override void AddListeners () {
-            EventManager.StartListening<GestureInput>(OnGestureInput);
-        }
-
-        protected override void RemoveListeners () {
-            EventManager.StopListening<GestureInput>(OnGestureInput);
-        }
-
-        #endregion
-
-        #region Event Behaviour
-
-        void OnGestureInput (GestureInput gestureInput) {
-            if (gestureInput.Score < GameConfig.GestureMinScore) {       // Low score
-                EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
+        public void OnGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
+            if (gestureInputEventArgs.Score < GameConfig.GestureMinScore) {       // Low score
+                enemyBehaviour.InvokeWrongGestureInputEvent(new WrongGestureInputEventArgs(gestureInputEventArgs));
             } else {
-                if ((int) gestureInput.Type != (int) enemyController.Enemy.EnemyType) { // Wrong gesture
-                    EventManager.TriggerEvent(new WrongGestureInput(gestureInput));
+                if ((int) gestureInputEventArgs.Type != (int) enemyController.Enemy.EnemyType) { // Wrong gesture
+                    enemyBehaviour.InvokeWrongGestureInputEvent(new WrongGestureInputEventArgs(gestureInputEventArgs));
                 } else { // Hit
                     hit = true;
                     RemoveListeners();
                     enemyController.DisableRoutine();
-                    EventManager.TriggerEvent(new RightGestureInput(gestureInput));
+                    enemyBehaviour.InvokeRightGestureInputEvent(new RightGestureInputEventArgs(gestureInputEventArgs));
                 }
             }
+        }
+
+        #endregion
+
+        #region Protected Behaviour
+
+        protected override void AddListeners () {
+            InputManager.GestureInputEvent += OnGestureInputEvent;
+        }
+
+        protected override void RemoveListeners () {
+            InputManager.GestureInputEvent -= OnGestureInputEvent;
         }
 
         #endregion
@@ -63,11 +63,11 @@ namespace EnemyBehaviourStates {
 
         private IEnumerator ShootingRoutine () {
 
-            EventManager.TriggerEvent(new EnemyAttackEvent(enemyController.Enemy.EnemyType, shootingPosition, routineTime));
+            enemyBehaviour.InvokeEnemyAttackEvent(new EnemyAttackEventArgs(enemyController.Enemy.EnemyType, shootingPosition, routineTime));
             animator.Play("Shooting");
 
             yield return new WaitForSeconds(routineTime / 4 * 3);
-            EventManager.TriggerEvent(new EnemyShotEvent(transform.position));
+            enemyBehaviour.InvokeEnemyShotEvent(new EnemyShotEventArgs(transform.position));
             transform.rotation = QuaternionToPlayer();
             GetComponent<SpriteRenderer>().flipY = true;
             laser.Play();

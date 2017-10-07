@@ -16,24 +16,24 @@ public class CameraController : MonoBehaviour {
     #region Mono Behaviour
 
     void OnEnable () {
-        EventManager.StartListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StartListening<RightGestureInput>(OnRightGestureInput);
+        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInput;
     }
 
     void OnDisable () {
-        EventManager.StopListening<PlayerHitEvent>(OnPlayerHitEvent);
-        EventManager.StopListening<RightGestureInput>(OnRightGestureInput);
+        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
+        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInput;
     }
 
     #endregion
 
-    #region Event Behaviour
+    #region Public Behaviour
 
-    void OnPlayerHitEvent (PlayerHitEvent playerHitEvent) {
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
         StartCoroutine(CameraShakeRoutine());
     }
 
-    void OnRightGestureInput (RightGestureInput rightGestureInput) {
+    public void OnRightGestureInput (RightGestureInputEventArgs rightGestureInputEventArgs) {
         StartCoroutine(CameraShakeRoutine());
     }
 

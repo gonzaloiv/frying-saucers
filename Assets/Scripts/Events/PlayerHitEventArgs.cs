@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerHitEvent : EventArgs {
-    public PlayerHitEvent () {
+public class PlayerHitEventArgs : EventArgs {
+    public PlayerHitEventArgs () {
         Debug.Log("PlayerHitEvent");
     }
 }

@@ -19,8 +19,8 @@ namespace GameStates {
             DataManager.Init(); // Has to be called the last because of DataLoadedEvent.
         }
 
-        public void OnDataLoadedEvent (DataLoadedEvent dataLoadedEvent) {
-            if (dataLoadedEvent.Leaderboard.HasBeenTutorialPlayed) {
+        public void OnDataLoadedEvent (DataLoadedEventArgs dataLoadedEventArgs) {
+            if (dataLoadedEventArgs.Leaderboard.HasBeenTutorialPlayed) {
                 gameController.ToMainMenuState();
             } else {
                 // TODO: gameController.ToTutorialState();
@@ -33,11 +33,11 @@ namespace GameStates {
         #region Protected Behaviour
 
         protected override void AddListeners () {
-            EventManager.StartListening<DataLoadedEvent>(OnDataLoadedEvent);
+            DataManager.DataLoadedEvent += OnDataLoadedEvent;
         }
 
         protected override void RemoveListeners () {
-            EventManager.StopListening<DataLoadedEvent>(OnDataLoadedEvent);
+            DataManager.DataLoadedEvent -= OnDataLoadedEvent;
         }
 
         #endregion
