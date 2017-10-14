@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour {
     #region Fields
 
     private float SHAKING_TIME = 0.3f;
-    private float SHAKE_AMOUNT = 0.2f;
+    private float SHAKE_AMOUNT = 0.1f;
 
     private float shake;
 
@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+    public void OnPlayerHitEvent () {
         StartCoroutine(CameraShakeRoutine());
     }
 

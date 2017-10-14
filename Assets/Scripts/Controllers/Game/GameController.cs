@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using System.Linq;
 
 public class GameController : StateMachine {
 
@@ -21,8 +22,8 @@ public class GameController : StateMachine {
     [SerializeField] private GameObject levelScreen;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject leaderboardScreen;
-    [SerializeField] private GameObject pauseScreen;
     [SerializeField] private GameObject creditsScreen;
+    [SerializeField] private GameObject tutorialScreen;
 
     public GameData GameData { get { return gameData; } }
     public GameConfigData GameConfigData { get { return gameConfigData; } }
@@ -32,9 +33,11 @@ public class GameController : StateMachine {
     public GameObject LevelScreen { get { return levelScreen; } }
     public GameObject GameOverScreen { get { return gameOverScreen; } }
     public GameObject LeaderboardScreen { get { return leaderboardScreen; } }
-    public GameObject PauseScreen { get { return pauseScreen; } }
     public GameObject CreditsScreen { get { return creditsScreen; } }
+    public GameObject TutorialScreen { get { return tutorialScreen; } }
+
     public LevelData CurrentLevelData { get { return gameData.Levels[currentLevelIndex]; } }
+    public LevelData TutorialLevelData { get { return gameData.Levels.FirstOrDefault(level => level.LevelType == LevelType.TutorialLevel); } }
 
     private int currentLevelIndex = 0;
 
@@ -42,11 +45,11 @@ public class GameController : StateMachine {
 
     #region Events
 
-    public delegate void NewGameEventHandler (NewGameEventArgs newGameEventArgs);
-    public static event NewGameEventHandler NewGameEvent;
+    public delegate void NewGameEventHandler ();
+    public static event NewGameEventHandler NewGameEvent = delegate {};
 
-    public delegate void CreditsEventHandler (CreditsEventArgs creditsEventArgs);
-    public static event CreditsEventHandler CreditsEvent;
+    public delegate void CreditsEventHandler ();
+    public static event CreditsEventHandler CreditsEvent = delegate {};
 
     #endregion
 
@@ -57,8 +60,7 @@ public class GameController : StateMachine {
     }
 
     void Start () {
-        if (NewGameEvent != null)
-            NewGameEvent.Invoke(new NewGameEventArgs());
+        NewGameEvent.Invoke();
     }
 
     void OnEnable () {
@@ -83,8 +85,8 @@ public class GameController : StateMachine {
         ChangeState<GameStates.LevelState>();
     }
 
-    public void ToTutorialLevelState () { // TODO: Choosing the Tutorial level as the next.
-        ChangeState<GameStates.LevelState>();
+    public void ToTutorialLevelState () {
+        ChangeState<GameStates.TutorialState>();
     }
 
     public void ToGameOverState () {
@@ -95,13 +97,8 @@ public class GameController : StateMachine {
         ChangeState<GameStates.LeaderboardState>();
     }
 
-    public void ToPauseState () {
-        ChangeState<GameStates.PauseState>();
-    }
-
     public void ToCreditsState () {
-        if (CreditsEvent != null)
-            CreditsEvent.Invoke(new CreditsEventArgs());
+        CreditsEvent.Invoke();
         ChangeState<GameStates.CreditsState>();
     }
 
@@ -110,30 +107,8 @@ public class GameController : StateMachine {
         ToGameOverState();
     }
 
-    public void OnLevelEndEvent (LevelEndEventArgs levelEndEventArgs) {
-        if (currentLevelIndex < gameData.Levels.Count - 1) {
-            currentLevelIndex++;
-            levelController.InitLevel(gameData.Levels[currentLevelIndex]);
-        } else {
-            currentLevelIndex = 0;
-            StartCoroutine(LoadSceneRoutine((int) GameScene.GameScene));
-        }
-    }
-
-    #endregion
-
-    #region Private Behaviour
-
-    private IEnumerator LoadSceneRoutine (int sceneIndex) {
-        yield return new WaitForSeconds(1);
-        AsyncOperation sceneLoading = SceneManager.LoadSceneAsync(sceneIndex);
-        sceneLoading.allowSceneActivation = false;
-        while (!sceneLoading.isDone) {
-            Debug.Log("Loading...");
-            if (sceneLoading.progress == 0.9f)
-                sceneLoading.allowSceneActivation = true;
-            yield return null;
-        }
+    public void OnLevelEndEvent () {
+        ToMainMenuState();
     }
 
     #endregion

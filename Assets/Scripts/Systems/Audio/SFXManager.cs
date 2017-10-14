@@ -101,24 +101,24 @@ public class SFXManager : MonoBehaviour {
         audioSource.PlayOneShot(enemyShot);
     }
 
-    public void OnEnemyHitEvent (EnemyHitEventArgs enemyHitEventArgs) {
+    public void OnEnemyHitEvent () {
         audioSource.PlayOneShot(enemyHit);
     }
 
-    public void OnPlayerShotEvent (PlayerShotEventArgs playerShotEventArgs) {
+    public void OnPlayerShotEvent () {
         audioSource.PlayOneShot(playerShot);
     }
 
-    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+    public void OnPlayerHitEvent () {
         audioSource.PlayOneShot(playerHit);
     }
 
     // Game
-    public void OnNewGameEvent (NewGameEventArgs newGameEventArgs) {
+    public void OnNewGameEvent () {
         audioSource.PlayOneShot(newGame);
     }
 
-    public void OnNewLevelEvent (NewLevelEventArgs newLevelEventArgs) {
+    public void OnNewLevelEvent () {
         audioSource.PlayOneShot(newLevel);
     }
 

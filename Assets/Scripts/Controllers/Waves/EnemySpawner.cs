@@ -6,7 +6,7 @@ public class EnemySpawner : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] GameObject[] ufoPrefabs;
+    [SerializeField] GameObject[] ufoPrefabs; // Same order than EnemyType
     private GameObjectArrayPool ufoPool;
 
     #endregion
@@ -22,7 +22,7 @@ public class EnemySpawner : MonoBehaviour {
     #region Public Behaviour
 
     public GameObject SpawnEnemy (Enemy enemy, GameObject player) {
-        GameObject enemyObject = ufoPool.PopObject((int) enemy.EnemyType - 1); // -1 to match null enemy type
+        GameObject enemyObject = ufoPool.PopObject((int) enemy.EnemyType); // - 1 to match null enemy type
         enemyObject.transform.position = Board.GetRandomOutOfBoardPosition();
         enemyObject.GetComponent<IEnemyBehaviour>().Init(player);
         enemyObject.GetComponent<IEnemyController>().Init(enemy);

@@ -8,18 +8,14 @@ public class PlayerWeaponController : MonoBehaviour {
 
     [SerializeField] private GameObject laserPrefab;
     private ParticleSystem laser;
-
-    [SerializeField] private GameObject powerWavePrefab;
-    private ParticleSystemController powerWaveController;
-
     private Vector2 enemyPosition;
 
     #endregion
 
     #region Events
 
-    public delegate void PlayerShotEventHandler (PlayerShotEventArgs playerShotEventArgs);
-    public static event PlayerShotEventHandler PlayerShotEvent;
+    public delegate void PlayerShotEventHandler ();
+    public static event PlayerShotEventHandler PlayerShotEvent = delegate {};
 
     #endregion
 
@@ -27,7 +23,6 @@ public class PlayerWeaponController : MonoBehaviour {
 
     void Awake () {
         laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
-        powerWaveController = Instantiate(powerWavePrefab, transform.parent).GetComponent<ParticleSystemController>();
     }
 
     void Update () {
@@ -52,8 +47,7 @@ public class PlayerWeaponController : MonoBehaviour {
 
     public void OnRightGestureInput (RightGestureInputEventArgs rightGestureInputEventArgs) {
         laser.Play();
-        if(PlayerShotEvent != null)
-            PlayerShotEvent.Invoke(new PlayerShotEventArgs());
+        PlayerShotEvent.Invoke();
     }
 
     public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {

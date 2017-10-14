@@ -17,7 +17,6 @@ namespace GameStates {
         protected GameObject levelScreen;
         protected GameObject gameOverScreen;
         protected GameObject leaderboardScreen;
-        protected GameObject pauseScreen;
         protected GameObject creditsScreen;
 
         #endregion
@@ -34,7 +33,6 @@ namespace GameStates {
             levelScreen = gameController.LevelScreen;
             gameOverScreen = gameController.GameOverScreen;
             leaderboardScreen = gameController.LeaderboardScreen;
-            pauseScreen = gameController.PauseScreen;
             creditsScreen = gameController.CreditsScreen;
         }
 
@@ -44,6 +42,10 @@ namespace GameStates {
 
         protected LevelData GetCurrentLevelData () {
             return gameController.CurrentLevelData;
+        }
+
+        protected LevelData GetTutorialLevelData () {
+            return gameController.TutorialLevelData;   
         }
 
         #endregion

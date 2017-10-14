@@ -10,8 +10,10 @@ namespace LevelStates {
 
         protected LevelController levelController;
         protected WaveController waveController;
-        protected LevelScreenController levelScreenController;
+        protected GameObject inputManager;
         protected GameObject player;
+        protected LevelScreenController levelScreenController;
+        protected GameObject pauseScreen;
 
         #endregion
 
@@ -20,8 +22,10 @@ namespace LevelStates {
         void Awake () {
             levelController = GetComponent<LevelController>();
             waveController = levelController.WaveController;
-            levelScreenController = levelController.LevelScreenController;
+            inputManager = levelController.InputManagerObject;
             player = levelController.Player;
+            levelScreenController = levelController.LevelScreenController;
+            pauseScreen = levelController.PauseScreen;
         }
 
         #endregion

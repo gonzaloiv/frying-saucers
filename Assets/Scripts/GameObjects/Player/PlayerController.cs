@@ -7,11 +7,10 @@ public class PlayerController : MonoBehaviour {
     #region Fields
 
     [SerializeField] GameObject jetPrefab;
-    private GameObject jet;
-
     [SerializeField] GameObject explosionPrefab;
-    private ParticleSystem explosion;
 
+    private GameObject jet;
+    private ParticleSystem explosion;
     private Animator anim;
     private PlayerWeaponController playerWeapon;
 
@@ -21,8 +20,8 @@ public class PlayerController : MonoBehaviour {
 
     #region Events
 
-    public delegate void PlayerHitEventHandler (PlayerHitEventArgs playerHitEventArgs);
-    public static event PlayerHitEventHandler PlayerHitEvent;
+    public delegate void PlayerHitEventHandler ();
+    public static event PlayerHitEventHandler PlayerHitEvent = delegate {};
 
     #endregion
 
@@ -45,8 +44,7 @@ public class PlayerController : MonoBehaviour {
 
     void OnParticleCollision (GameObject particle) {
         if (!shot && particle.layer == (int) CollisionLayer.Enemy) {
-            if (PlayerHitEvent != null)
-                PlayerHitEvent.Invoke(new PlayerHitEventArgs());
+            PlayerHitEvent.Invoke();
             shot = true;
             anim.Play("Disable");
             explosion.Play();

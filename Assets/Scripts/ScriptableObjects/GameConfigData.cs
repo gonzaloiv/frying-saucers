@@ -6,12 +6,13 @@ using UnityEngine;
 public class GameConfigData : ScriptableObject {
 
     [Header("Enemies")]
+    public float EnemyInitialYPosition = 3.5f;
     public float EnemyMaxSpeed = 10f;
     public int EnemyScore = 10;
-    public float EnemyInitialYPosition = 3.5f;
 
     [Header("Player")]
     public float PlayerInitialYPosition = -1f;
+    public float PlayerMaxSpeed = 10f;
 
     [Header("Waves")]    
     public int RandomWaveEnemyAmount = 4;

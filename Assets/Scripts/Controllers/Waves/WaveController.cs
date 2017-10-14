@@ -26,8 +26,8 @@ public class WaveController : MonoBehaviour {
 
     #region Events
 
-    public delegate void WaveEndEventHandler (WaveEndEventArgs waveEndEventArgs);
-    public static event WaveEndEventHandler WaveEndEvent;
+    public delegate void WaveEndEventHandler ();
+    public static event WaveEndEventHandler WaveEndEvent = delegate {};
 
     #endregion
 
@@ -54,7 +54,7 @@ public class WaveController : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void Init(GameObject player) {
+    public void Init (GameObject player) {
         this.player = player;
     }
 
@@ -102,11 +102,11 @@ public class WaveController : MonoBehaviour {
         enemyTypeLabelSpawner.ShowGestures(1);
     }
 
-    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+    public void OnPlayerHitEvent () {
         enemyTypeLabelSpawner.ShowGestures(2);
     }
 
-    public void OnEnemyHitEvent (EnemyHitEventArgs enemyHitEventArgs) {
+    public void OnEnemyHitEvent () {
         newWaveRoutine = NewWaveRoutine();
         StartCoroutine(newWaveRoutine);
     }
@@ -122,7 +122,7 @@ public class WaveController : MonoBehaviour {
     private Enemy[] GetRandomWaveEnemies (int enemyAmount) {
         Enemy[] enemies = new Enemy[enemyAmount];
         for (int i = 0; i < enemies.Length; i++) { 
-            EnemyType enemyType = (EnemyType) UnityEngine.Random.Range(1, EnemyType.GetNames(typeof(EnemyType)).Length);
+            EnemyType enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length - 1);
             enemies[i] = GetEnemyByType(enemyType, i);
         }
         return enemies;
@@ -138,8 +138,7 @@ public class WaveController : MonoBehaviour {
     private IEnumerator NewWaveRoutine () {
         yield return new WaitForSeconds(1);
         if (currentWaveEnemyObjects.ToList().Where(x => x.activeInHierarchy).Count() == 0) {
-            if(WaveEndEvent != null)
-                WaveEndEvent.Invoke(new WaveEndEventArgs());
+            WaveEndEvent.Invoke();
         }
     }
 

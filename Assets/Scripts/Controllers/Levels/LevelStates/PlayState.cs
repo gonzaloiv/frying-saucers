@@ -20,13 +20,20 @@ namespace LevelStates {
         #region State Behaviour
 
         public override void Enter () {
+            base.Enter();
             previousEnemy = null;
             currentWaveData = GetCurrentWaveData();
             waveRoutine = WaveRoutine();
             StartCoroutine(waveRoutine);
         }
 
+        public override void Exit() {
+            base.Exit();
+            StopAllCoroutines();
+        }
+
         public override void Play () {
+            base.Play();
             if (!playing && waveController.CurrentWaveEnemyObjects.Where(x => x.activeSelf).Count() > 0) {
                 StopCoroutine(waveRoutine);
                 waveRoutine = WaveRoutine();
@@ -50,7 +57,7 @@ namespace LevelStates {
 
         #region Public Behaviour
 
-        public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+        public void OnPlayerHitEvent () {
             StopCoroutine(waveRoutine);
         }
 

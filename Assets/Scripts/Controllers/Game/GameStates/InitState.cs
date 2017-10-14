@@ -11,7 +11,6 @@ namespace GameStates {
         public override void Enter () {
             base.Enter();
             new Board();
-            new Player(gameData.PlayerInitialLives);
             GameConfig.Init(gameConfigData);
             levelController.gameObject.SetActive(false);
             inputManager.SetActive(false);
@@ -49,7 +48,6 @@ namespace GameStates {
             levelScreen.SetActive(false);
             mainMenuScreen.SetActive(false);
             leaderboardScreen.SetActive(false);
-            pauseScreen.SetActive(false);
         }
 
         #endregion

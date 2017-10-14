@@ -20,15 +20,11 @@ namespace GameStates {
             levelController.ToStopState();
         }
 
-        public void OnEscapeInput (EscapeInputEventArgs escapeInputEventArgs) {
-            gameController.ToPauseState();
-        }
-
-        public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+        public void OnPlayerHitEvent () {
             levelController.ToRestartState();
         }
 
-        public void OnWaveEndEvent (WaveEndEventArgs waveEndEventArgs) {
+        public void OnWaveEndEvent () {
             levelController.ToNewWaveState();
         }
 
@@ -37,13 +33,11 @@ namespace GameStates {
         #region Protected Behaviour
 
         protected override void AddListeners () {
-            InputManager.EscapeInputEvent += OnEscapeInput;
             PlayerController.PlayerHitEvent += OnPlayerHitEvent;
             WaveController.WaveEndEvent += OnWaveEndEvent;
         }
 
         protected override void RemoveListeners () {
-            InputManager.EscapeInputEvent -= OnEscapeInput;
             PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
             WaveController.WaveEndEvent -= OnWaveEndEvent;
         }

@@ -26,11 +26,11 @@ public class InputManager : MonoBehaviour {
 
     #region Events
 
-    public delegate void EscapeInputEventHandler (EscapeInputEventArgs escapeInputEventArgs);
-    public static event EscapeInputEventHandler EscapeInputEvent;
+    public delegate void EscapeInputEventHandler ();
+    public static event EscapeInputEventHandler EscapeInputEvent = delegate {};
 
     public delegate void GestureInputEventHandler (GestureInputEventArgs gestureInputEventArgs);
-    public static event GestureInputEventHandler GestureInputEvent;
+    public static event GestureInputEventHandler GestureInputEvent = delegate {};
 
     #endregion
 
@@ -59,10 +59,8 @@ public class InputManager : MonoBehaviour {
 
             // KEYBOARD
 
-            if (Input.GetKeyDown(KeyCode.Escape)) {
-                if (EscapeInputEvent != null)
-                    EscapeInputEvent.Invoke(new EscapeInputEventArgs());
-            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+                EscapeInputEvent.Invoke();
 
             // MOUSE & TOUCH
 
@@ -124,8 +122,7 @@ public class InputManager : MonoBehaviour {
 
         if (mouseUp && gestureRecognizer.CurrentPointAmount > 5) { // The library doesn't support one click inputs
             Result result = gestureRecognizer.RecognizeGesture();
-            if(GestureInputEvent != null)
-                GestureInputEvent.Invoke(new GestureInputEventArgs(result.GestureClass.ToString(), result.Score, gestureTime));
+            GestureInputEvent.Invoke(new GestureInputEventArgs(result.GestureClass.ToString(), result.Score, gestureTime));
         }
 
         gestureRecognizer.ResetGestureLines();

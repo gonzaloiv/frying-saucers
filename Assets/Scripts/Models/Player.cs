@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player {
 
+    #region Fields / Properties
+
     public static int Lives { get { return lives; } set { lives = value; } }
     private static int lives;
 
@@ -13,10 +15,16 @@ public class Player {
     public static int Combo { get { return combo; } set { combo = value; } }
     private static int combo;
 
+    #endregion
+
+    #region Public Behaviour
+
     public Player (int lives) {
         Player.score = 0;
         Player.combo = 0;
         Player.lives = lives;
     }
+
+    #endregion
 
 }

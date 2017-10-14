@@ -6,9 +6,10 @@ using System.Linq;
 public class WaveData : ScriptableObject {
 
     public EnemyType[] EnemiesType { get { return enemiesType; } }
-    [SerializeField] private EnemyType[] enemiesType;
-
     public float[] RoutineTime { get { return routineTime; } }
+
+    [Header("Empty for random spawning")]
+    [SerializeField] private EnemyType[] enemiesType;
     [SerializeField] private float[] routineTime = new float[2];
         
 }

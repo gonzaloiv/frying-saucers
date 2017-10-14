@@ -35,7 +35,7 @@ public class WaveRefillBehaviour : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void OnEnemyHitEvent (EnemyHitEventArgs enemyHitEventArgs) {
+    public void OnEnemyHitEvent () {
         enemyHit = true;
     }
 

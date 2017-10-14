@@ -19,23 +19,21 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
     private bool hit = false;
     private float routineTime;
 
-    private Coroutine enemyRoutine;
-
     #endregion
 
     #region Events
 
     public delegate void EnemyAttackEventHandler (EnemyAttackEventArgs enemyAttackEventArgs);
-    public static event EnemyAttackEventHandler EnemyAttackEvent;
+    public static event EnemyAttackEventHandler EnemyAttackEvent = delegate {};
 
     public delegate void EnemyShotEventHandler (EnemyShotEventArgs enemyShotEventArgs);
-    public static event EnemyShotEventHandler EnemyShotEvent;
+    public static event EnemyShotEventHandler EnemyShotEvent = delegate {};
 
     public delegate void RightGestureInputEventHandler (RightGestureInputEventArgs rightGestureInputEventArgs);
-    public static event RightGestureInputEventHandler RightGestureInputEvent;
+    public static event RightGestureInputEventHandler RightGestureInputEvent = delegate {};
 
     public delegate void WrongGestureInputEventHandler (WrongGestureInputEventArgs wrongGestureInputEventArgs);
-    public static event WrongGestureInputEventHandler WrongGestureInputEvent;
+    public static event WrongGestureInputEventHandler WrongGestureInputEvent = delegate {};
 
     #endregion
 
@@ -59,7 +57,7 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
 
     public void Play (float routineTime) {
         this.routineTime = routineTime;
-        enemyRoutine = StartCoroutine(EnemyRoutine());
+        StartCoroutine(EnemyRoutine());
     }
 
     public void Stop () {
@@ -67,23 +65,19 @@ public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
     }
 
     public void InvokeEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
-        if (EnemyAttackEvent != null)
-            EnemyAttackEvent.Invoke(enemyAttackEventArgs);
+        EnemyAttackEvent.Invoke(enemyAttackEventArgs);
     }
 
     public void InvokeEnemyShotEvent (EnemyShotEventArgs enemyShotEventArgs) {
-        if (EnemyShotEvent != null)
-            EnemyShotEvent.Invoke(enemyShotEventArgs);
+        EnemyShotEvent.Invoke(enemyShotEventArgs);
     }
 
     public void InvokeRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
-        if (RightGestureInputEvent != null)
-            RightGestureInputEvent.Invoke(rightGestureInputEventArgs);
+        RightGestureInputEvent.Invoke(rightGestureInputEventArgs);
     }
 
     public void InvokeWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputEventArgs) {
-        if (WrongGestureInputEvent != null)
-            WrongGestureInputEvent.Invoke(wrongGestureInputEventArgs);
+        WrongGestureInputEvent.Invoke(wrongGestureInputEventArgs);
     }
 
     #endregion

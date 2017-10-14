@@ -20,8 +20,8 @@ public class EnemyController : MonoBehaviour, IEnemyController {
 
     #region Events
 
-    public delegate void EnemyHitEventHandler (EnemyHitEventArgs enemyHitEventArgs);
-    public static event EnemyHitEventHandler EnemyHitEvent;
+    public delegate void EnemyHitEventHandler ();
+    public static event EnemyHitEventHandler EnemyHitEvent = delegate {};
 
     #endregion
 
@@ -46,8 +46,7 @@ public class EnemyController : MonoBehaviour, IEnemyController {
         animator.Play("Disable");
         explosion.transform.position = transform.position;
         explosion.Play();
-        if (EnemyHitEvent != EnemyHitEvent)
-            EnemyHitEvent.Invoke(new EnemyHitEventArgs());
+        EnemyHitEvent.Invoke();
     }
 
     public void Init (Enemy enemy) {

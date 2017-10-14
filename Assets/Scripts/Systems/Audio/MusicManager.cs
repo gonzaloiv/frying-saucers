@@ -36,27 +36,27 @@ public class MusicManager : MonoBehaviour {
 
     #region Event Behaviour
 
-    void OnNewGameEvent (NewGameEventArgs newGameEventArgs) {
+    void OnNewGameEvent () {
         audioSource.Stop();
-        audioSource.clip = audioClips[(int) Music.Menu];
+        audioSource.clip = audioClips[(int) MusicTrack.Menu];
         audioSource.Play();
     }
 
-    void OnNewLevelEvent (NewLevelEventArgs newLevelEventArgs) {
+    void OnNewLevelEvent () {
         audioSource.Stop();
-        audioSource.clip = audioClips[(int) Music.Level];
+        audioSource.clip = audioClips[(int) MusicTrack.Level];
         audioSource.Play();
     }
 
     void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
         audioSource.Stop();
-        audioSource.clip = audioClips[(int) Music.GameOver];
+        audioSource.clip = audioClips[(int) MusicTrack.GameOver];
         audioSource.Play();
     }
 
-    void OnCreditsEvent (CreditsEventArgs creditsEventArgs) {
+    void OnCreditsEvent () {
         audioSource.Stop();
-        audioSource.clip = audioClips[(int) Music.GameOver];
+        audioSource.clip = audioClips[(int) MusicTrack.GameOver];
         audioSource.Play();
     }
 

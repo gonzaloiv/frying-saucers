@@ -7,11 +7,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     #region Fields
 
-    public const float MAX_SPEED = 10f;
-    public static Vector2[] PLAYER_POSITIONS;
- 
     private Collider2D col;
-
     private Vector2 nextPosition;
     private Vector2 enemyPosition;
     private bool rightGesture;
@@ -22,14 +18,14 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void Awake () {
         col = GetComponent<Collider2D>();
+        nextPosition = new Vector2(0, GameConfig.PlayerInitialYPosition);
     }
 
     void Update () {
-        transform.position = Vector2.Lerp(transform.position, nextPosition, MAX_SPEED * Time.deltaTime);
+        transform.position = Vector2.Lerp(transform.position, nextPosition, GameConfig.PlayerMaxSpeed * Time.deltaTime);
     }
 
     void OnEnable () {
-        nextPosition = new Vector2(0, GameConfig.PlayerInitialYPosition);
         EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
         EnemyBehaviour.EnemyShotEvent += OnEnemyShotEvent;
         EnemyBehaviour.RightGestureInputEvent += OnRightGestureInput;

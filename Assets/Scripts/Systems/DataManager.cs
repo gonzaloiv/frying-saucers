@@ -20,7 +20,7 @@ public class DataManager {
     #region Events
 
     public delegate void DataLoadedEventHandler (DataLoadedEventArgs dataLoadedEventArgs);
-    public static event DataLoadedEventHandler DataLoadedEvent;
+    public static event DataLoadedEventHandler DataLoadedEvent = delegate {};
 
     #endregion
 
@@ -29,7 +29,6 @@ public class DataManager {
     public static void Init () {
         dataPath = Application.persistentDataPath;
         Debug.Log("Data: " + Application.persistentDataPath);
-        leaderboard = new Leaderboard();
         LoadData();
     }
 
@@ -42,7 +41,8 @@ public class DataManager {
                 leaderboard.Dates[i] = DateTime.Now;
                 break;
             }
-        } 
+        }
+        SaveData();
     }
 
     public static void SetHasBeenTutorialPlayed () {
@@ -50,29 +50,28 @@ public class DataManager {
         SaveData();
     }
 
-    public static void SaveData () {
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream saveFile = File.Create(dataPath + "/leaderboard.binary");
-        formatter.Serialize(saveFile, leaderboard);
-        saveFile.Close();
-    }
-
     #endregion
 
     #region Private Behaviour
 
     private static void LoadData () {
+        leaderboard = new Leaderboard();
         try {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream saveFile = File.Open(dataPath + "/leaderboard.binary", FileMode.Open);
             leaderboard = (Leaderboard) formatter.Deserialize(saveFile);
             saveFile.Close();
-        } catch (FileNotFoundException exception) {
+        } catch (Exception exception) {
             Debug.Log(exception.Message);
-            Debug.Log("First play: Data not recorded, yet");
         }
-        if (DataLoadedEvent != null)
-            DataLoadedEvent.Invoke(new DataLoadedEventArgs(leaderboard));
+        DataLoadedEvent.Invoke(new DataLoadedEventArgs(leaderboard));
+    }
+
+    private static void SaveData () {
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream saveFile = File.Create(dataPath + "/leaderboard.binary");
+        formatter.Serialize(saveFile, leaderboard);
+        saveFile.Close();
     }
 
     #endregion
