@@ -10,8 +10,6 @@ public class TutorialScreenController : MonoBehaviour {
     [SerializeField] private GameObject[] errorScreenPrefabs;
 
     private InputManager inputManager;
-    private Animator anim;
-
     private IInfoScreenController[] infoScreens;
     private IInfoScreenController[] errorScreens;
     private int currentInfoScreen = 0;
@@ -22,9 +20,6 @@ public class TutorialScreenController : MonoBehaviour {
     #region Mono Behaviour
 
     void Awake () {
-
-        anim = GetComponent<Animator>();
-
         infoScreens = new IInfoScreenController[infoScreenPrefabs.Length];
         for (int i = 0; i < infoScreenPrefabs.Length; i++) {
             GameObject infoScreen = Instantiate(infoScreenPrefabs[i], transform);
@@ -46,7 +41,7 @@ public class TutorialScreenController : MonoBehaviour {
     void OnEnable () {
         EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
-        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+        Player.PlayerHitEvent += OnPlayerHitEvent;
         GameController.NewGameEvent += OnNewGameEvent;
         GameController.NewGameEvent += OnNewGameEvent;
     }
@@ -54,7 +49,7 @@ public class TutorialScreenController : MonoBehaviour {
     void OnDisable () {
         EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
-        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
+        Player.PlayerHitEvent -= OnPlayerHitEvent;
         GameController.NewGameEvent -= OnNewGameEvent;
         GameController.NewGameEvent -= OnNewGameEvent;
     }
@@ -68,8 +63,6 @@ public class TutorialScreenController : MonoBehaviour {
             if (currentInfoScreen > 0)
                 infoScreens[currentInfoScreen - 1].Stop();
             infoScreens[currentInfoScreen].Play();
-        } else {
-            anim.Play("FadeOut");
         }
         currentInfoScreen++;
     }
@@ -91,7 +84,7 @@ public class TutorialScreenController : MonoBehaviour {
         NextInfoScreen();
     }
 
-    public void OnPlayerHitEvent () {
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
         NextErrorScreen();
         currentInfoScreen--;
     }

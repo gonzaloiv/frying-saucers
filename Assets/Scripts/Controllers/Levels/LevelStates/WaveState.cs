@@ -10,55 +10,44 @@ namespace LevelStates {
         #region Fields
 
         private WaveData currentWaveData;
-        private GameObject currentEnemy;
-        private GameObject previousEnemy;
-        private IEnumerator waveRoutine;
         private bool playing = false;
 
         #endregion
 
-        #region State Behaviour
+        #region Public Behaviour
 
         public override void Enter () {
             base.Enter();
-            previousEnemy = null;
             currentWaveData = GetCurrentWaveData();
-            waveRoutine = WaveRoutine();
-            StartCoroutine(waveRoutine);
+            StartCoroutine(WaveRoutine());
+            waveRefillBehaviour.enabled = GetCurrentLevelData().LevelType != LevelType.TutorialLevel;
         }
 
-        public override void Exit() {
+        public override void Exit () {
             base.Exit();
             StopAllCoroutines();
         }
 
         public override void Play () {
             base.Play();
-            if (!playing && waveController.CurrentWaveEnemyObjects.Where(x => x.activeSelf).Count() > 0) {
-                StopCoroutine(waveRoutine);
-                waveRoutine = WaveRoutine();
-                StartCoroutine(waveRoutine);
-            }
+            if (!playing && waveController.CurrentWaveEnemies.Where(x => x.activeSelf).Count() > 0)
+                StartCoroutine(WaveRoutine());
+        }
+
+        public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+            StopCoroutine(WaveRoutine());
         }
 
         #endregion
 
-        #region Mono Behaviour
+        #region Protected Behaviour
 
-        void OnEnable () {
-            PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+        protected override void AddListeners () {
+            Player.PlayerHitEvent += OnPlayerHitEvent;
         }
 
-        void OnDisable () {
-            PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
-        }
-
-        #endregion
-
-        #region Public Behaviour
-
-        public void OnPlayerHitEvent () {
-            StopCoroutine(waveRoutine);
+        protected override void RemoveListeners () {
+            Player.PlayerHitEvent -= OnPlayerHitEvent;
         }
 
         #endregion
@@ -66,25 +55,13 @@ namespace LevelStates {
         #region Private Behaviour
 
         private IEnumerator WaveRoutine () {
-            float routineTime = Random.Range(currentWaveData.RoutineTime[0], currentWaveData.RoutineTime[1]);
             playing = true;
+            float routineTime = Random.Range(currentWaveData.RoutineTime[0], currentWaveData.RoutineTime[1]);
             yield return new WaitForSeconds(1);
-            currentEnemy = waveController.CurrentWaveEnemyObjects[Random.Range(0, waveController.CurrentWaveEnemyObjects.Count)];
-            currentEnemy.GetComponent<IEnemyBehaviour>().Play(routineTime);
-            previousEnemy = currentEnemy;
+            GameObject currentEnemy = waveController.GetRandomActiveEnemy();
+            currentEnemy.GetComponent<EnemyBehaviour>().Play(routineTime);
             yield return new WaitForSeconds(routineTime);
             playing = false;
-        }
-
-        private void SetCurrentEnemy () {
-            if (waveController.CurrentWaveEnemyObjects.Count == 1) {
-                currentEnemy = waveController.CurrentWaveEnemyObjects[0];
-            } else {
-                currentEnemy = previousEnemy;
-                while (currentEnemy == previousEnemy) {
-                    currentEnemy = waveController.CurrentWaveEnemyObjects[Random.Range(0, waveController.CurrentWaveEnemyObjects.Count)];
-                }
-            }
         }
 
         #endregion

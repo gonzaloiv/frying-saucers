@@ -18,6 +18,13 @@ public class CreditsScreenController : MonoBehaviour {
 
     #endregion
 
+    #region Events
+
+    public delegate void CreditsEventHandler ();
+    public static event CreditsEventHandler CreditsEvent = delegate {};
+
+    #endregion
+
     #region Mono Behaviour
 
     void Awake () {
@@ -29,6 +36,7 @@ public class CreditsScreenController : MonoBehaviour {
     }
 
     void OnEnable () {
+        CreditsEvent.Invoke();
         StartCoroutine(ScrollingTextRoutine());
     }
 

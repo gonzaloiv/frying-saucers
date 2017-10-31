@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 [Serializable] public class UserData {
 
@@ -10,7 +11,7 @@ using System;
     private const int MAX_USER_LEADERBOARD_ENTRIES = 5;
 
     public int TotalPlaysAmount;
-    public LeaderboardEntry[] LeaderboardEntries;
+    public List<LeaderboardEntry> LeaderboardEntries;
 
     #endregion
 
@@ -18,28 +19,31 @@ using System;
 
     public UserData () {
         this.TotalPlaysAmount = 0;
-        this.LeaderboardEntries = new LeaderboardEntry[MAX_USER_LEADERBOARD_ENTRIES];
+        this.LeaderboardEntries = new List<LeaderboardEntry>();
     }
 
-    public UserData (int totalPlaysAmount, LeaderboardEntry[] leaderboardEntries) {
+    public UserData (int totalPlaysAmount, List<LeaderboardEntry> leaderboardEntries) {
         this.TotalPlaysAmount = totalPlaysAmount;
         this.LeaderboardEntries = leaderboardEntries;
     }
 
-    public void SetNewScore (int newScore) {
-        for (int i = 0; i < LeaderboardEntries.Length; i++) {
-            if (newScore > LeaderboardEntries[i].Score) {
-                for (int j = LeaderboardEntries.Length; j < i; i--)
-                    LeaderboardEntries[i] = LeaderboardEntries[j - 1];
-                LeaderboardEntries[i].Score = newScore;
-                LeaderboardEntries[i].Date = DateTime.Now;
-                break;
-            }
-        }
+    public void SetTotalPlaysAmount (int amount) {
+        this.TotalPlaysAmount = amount;
     }
 
-    public void IncreaseTotalPlaysAmount() {
+    public void SetLeaderboardEntries (List<LeaderboardEntry> leaderboardEntries) {
+        this.LeaderboardEntries = leaderboardEntries;
+    }
+
+    public void IncreaseTotalPlaysAmount () {
         TotalPlaysAmount++;
+    }
+
+    public void AddNewScore (LeaderboardEntry leaderboardEntry) {
+        LeaderboardEntries.Add(leaderboardEntry);
+        LeaderboardEntries = LeaderboardEntries.OrderByDescending(entry => entry.Score).ThenByDescending(entry => entry.Date).ToList();
+        if (LeaderboardEntries.Count > MAX_USER_LEADERBOARD_ENTRIES)
+            LeaderboardEntries.RemoveAt(LeaderboardEntries.Count - 1);
     }
 
     #endregion

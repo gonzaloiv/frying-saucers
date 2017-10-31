@@ -25,4 +25,7 @@ public class GameConfigData : ScriptableObject {
     public float GestureStrokeTime = 0.5f;
     public float GestureMinScore = 0.85f;
 
+    [Header("Launch Mode")]
+    public bool ResetUserData = false;
+
 }

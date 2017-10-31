@@ -5,11 +5,11 @@ using System.Linq;
 [CreateAssetMenu(fileName = "WaveData", menuName = "ScriptableObject/Wave", order = 1)]
 public class WaveData : ScriptableObject {
 
-    public EnemyType[] EnemiesType { get { return enemiesType; } }
+    public EnemyType[] EnemyTypes { get { return enemyTypes; } }
     public float[] RoutineTime { get { return routineTime; } }
 
     [Header("Empty for random spawning")]
-    [SerializeField] private EnemyType[] enemiesType;
+    [SerializeField] private EnemyType[] enemyTypes;
     [SerializeField] private float[] routineTime = new float[2];
         
 }

@@ -36,8 +36,8 @@ public class GameController : StateMachine {
     public GameObject CreditsScreen { get { return creditsScreen; } }
     public GameObject TutorialScreen { get { return tutorialScreen; } }
 
-    public LevelData CurrentLevelData { get { return gameData.Levels[currentLevelIndex]; } }
-    public LevelData TutorialLevelData { get { return gameData.Levels.FirstOrDefault(level => level.LevelType == LevelType.TutorialLevel); } }
+    public LevelData RandomLevelData { get { return gameData.Levels[(int) LevelType.RandomLevel]; } }
+    public LevelData TutorialLevelData { get { return gameData.Levels[(int) LevelType.TutorialLevel]; } }
 
     private int currentLevelIndex = 0;
 
@@ -47,9 +47,6 @@ public class GameController : StateMachine {
 
     public delegate void NewGameEventHandler ();
     public static event NewGameEventHandler NewGameEvent = delegate {};
-
-    public delegate void CreditsEventHandler ();
-    public static event CreditsEventHandler CreditsEvent = delegate {};
 
     #endregion
 
@@ -65,12 +62,12 @@ public class GameController : StateMachine {
     }
 
     void OnEnable () {
-        LevelScreenController.GameOverEvent += OnGameOverEvent;
+        Player.PlayerHitEvent += OnPlayerHitEvent;
         LevelController.LevelEndEvent += OnLevelEndEvent;
     }
 
     void OnDisable () {
-        LevelScreenController.GameOverEvent -= OnGameOverEvent;
+        Player.PlayerHitEvent -= OnPlayerHitEvent;
         LevelController.LevelEndEvent -= OnLevelEndEvent;
     }
 
@@ -99,12 +96,14 @@ public class GameController : StateMachine {
     }
 
     public void ToCreditsState () {
-        CreditsEvent.Invoke();
         ChangeState<GameStates.CreditsState>();
     }
 
-    public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
-        ToGameOverState();
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+        if (playerHitEventArgs.IsDead) {
+            DataManager.AddNewScore(new LeaderboardEntry(playerHitEventArgs.Score, DateTime.Now));
+            ToGameOverState();
+        }
     }
 
     public void OnLevelEndEvent () {
@@ -115,7 +114,7 @@ public class GameController : StateMachine {
 
     #region Private Behaviour
 
-    private void Reset() {
+    private void Reset () {
         mainMenuScreen.SetActive(false);
         levelScreen.SetActive(false);
         gameOverScreen.SetActive(false);

@@ -6,11 +6,10 @@ public class HandController : MonoBehaviour {
 
     #region Fields
 
-    // 0 => index, 1 => right, 2 => wrong
-    [SerializeField] private List<GameObject> handPrefabs;
-    private List<GameObject> hands;
-
+    [SerializeField] private List<GameObject> handPrefabs; // 0 => index, 1 => right, 2 => wrong
     [SerializeField] private GameObject tracePrefab;
+
+    private List<GameObject> hands;
     private GameObjectPool tracePool;
 
     private GameObject currentHand = null;
@@ -23,11 +22,7 @@ public class HandController : MonoBehaviour {
 
     void Awake () {
         hands = new List<GameObject>();
-        handPrefabs.ForEach(x => {
-            GameObject hand = Instantiate(x, transform);
-            hand.SetActive(false);
-            hands.Add(hand);
-        });
+        handPrefabs.ForEach(x => { GameObject hand = Instantiate(x, transform); hand.SetActive(false); hands.Add(hand); });
         tracePool = new GameObjectPool("TracePool", tracePrefab, 10, transform);
     }
 

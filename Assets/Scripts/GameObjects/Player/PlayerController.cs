@@ -12,16 +12,10 @@ public class PlayerController : MonoBehaviour {
     private GameObject jet;
     private ParticleSystem explosion;
     private Animator anim;
+    private Player player;
     private PlayerWeaponController playerWeapon;
 
     private bool shot;
-
-    #endregion
-
-    #region Events
-
-    public delegate void PlayerHitEventHandler ();
-    public static event PlayerHitEventHandler PlayerHitEvent = delegate {};
 
     #endregion
 
@@ -44,10 +38,10 @@ public class PlayerController : MonoBehaviour {
 
     void OnParticleCollision (GameObject particle) {
         if (!shot && particle.layer == (int) CollisionLayer.Enemy) {
-            PlayerHitEvent.Invoke();
-            shot = true;
+            player.DecreaseLives();
             anim.Play("Disable");
             explosion.Play();
+            shot = true;
         }
     }
 
@@ -55,7 +49,11 @@ public class PlayerController : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void Initialize () {
+    public void Init (Player player) {
+        this.player = player;
+    }
+
+    public void Reset () {
         playerWeapon.enabled = true;
         jet.SetActive(true);
         shot = false;

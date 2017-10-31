@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using EnemyBehaviourStates;
 
-public class EnemyBehaviour : StateMachine, IEnemyBehaviour {
+public class EnemyBehaviour : StateMachine {
 
     #region Fields
 

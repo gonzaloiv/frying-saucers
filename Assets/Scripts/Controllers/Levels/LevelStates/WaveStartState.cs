@@ -11,7 +11,7 @@ namespace LevelStates {
 
         public override void Enter () {
             waveController.Reset();
-            waveController.NewWave(GetCurrentWaveData());
+            waveController.NewWave(GetCurrentLevelData().LevelType, GetCurrentWaveData());
         }
 
         #endregion

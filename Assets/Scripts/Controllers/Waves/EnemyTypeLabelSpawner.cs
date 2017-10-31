@@ -61,7 +61,7 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     #region Private Behaviour
 
     private IEnumerator ShowGesturesRoutine (float time) {
-        gestures = new List<GameObject>();
+        gestures = new List<GameObject>(); 
         for (int i = 0; i < currentEnemies.Count; i++) {
             GameObject gesture = gesturePool.PopObject((int) currentEnemies[i].EnemyType);
             gesture.transform.position = currentEnemies[i].Position + new Vector2(0, -0.7f);

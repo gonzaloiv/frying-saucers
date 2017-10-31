@@ -22,7 +22,6 @@ public class EnemyAttackEventArgs : EventArgs {
         this.position = position;
         this.routineTime = routineTime;
         this.sectionTime = routineTime / GameConfig.ShootingRoutineSections;
-        Debug.Log("EnemyAttackEvent " + EnemyType.ToString());
     }
 
 }

@@ -22,13 +22,6 @@ public class LevelScreenController : MonoBehaviour {
 
     #endregion
 
-    #region Events
-
-    public delegate void GameOverEventHandler (GameOverEventArgs gameOverEventArgs);
-    public static event GameOverEventHandler GameOverEvent = delegate {};
-
-    #endregion
-
     #region Mono Behaviour
 
     void Update () {
@@ -36,17 +29,17 @@ public class LevelScreenController : MonoBehaviour {
     }
 
     void OnEnable () {
+        DOTween.Sequence().Append(scoreLabel.DOFade(0, FADE_IN_TIME / 2)).Append(scoreLabel.DOFade(1, FADE_IN_TIME / 2));
+        DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
         EnemyBehaviour.RightGestureInputEvent += OnRightGestureInputEvent;
         EnemyBehaviour.WrongGestureInputEvent += OnWrongGestureInputEvent;
-        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
-        LevelScreenController.GameOverEvent += OnGameOverEvent;
+        Player.PlayerHitEvent += OnPlayerHitEvent;
     }
 
     void OnDisable () {
         EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInputEvent;
         EnemyBehaviour.WrongGestureInputEvent -= OnWrongGestureInputEvent;
-        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
-        LevelScreenController.GameOverEvent -= OnGameOverEvent;
+        Player.PlayerHitEvent -= OnPlayerHitEvent;
     }
 
     #endregion
@@ -56,9 +49,7 @@ public class LevelScreenController : MonoBehaviour {
     public void Init (Player player) {
         this.player = player;
         resultIndicatorController.Init(player);
-        SetLives();
-        DOTween.Sequence().Append(scoreLabel.DOFade(0, FADE_IN_TIME / 2)).Append(scoreLabel.DOFade(1, FADE_IN_TIME / 2));
-        DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
+        UpdateLivesLabel(player.Lives);
     }
 
     public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
@@ -73,17 +64,13 @@ public class LevelScreenController : MonoBehaviour {
         StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
     }
 
-    public void OnPlayerHitEvent () {
-        player.DecreaseLives();
-        if (player.IsDead)
-            GameOverEvent.Invoke(new GameOverEventArgs(player.Score));
-        DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
-        SetLives();
-    }
-
-    public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
-        StopAllCoroutines();
-        StartCoroutine(EmojiRoutine(EMOJIS[1], 4));
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+        if (playerHitEventArgs.IsDead) {
+            StopAllCoroutines();
+            StartCoroutine(EmojiRoutine(EMOJIS[1], 4));
+        } else {
+            UpdateLivesLabel(playerHitEventArgs.Lives);
+        }
     }
 
     #endregion
@@ -109,8 +96,9 @@ public class LevelScreenController : MonoBehaviour {
         }
     }
 
-    private void SetLives () {
-        livesLabel.text = player.Lives > 100 ? LIVES_TEXT + "\n∞" : LIVES_TEXT + "\n" + player.Lives;
+    private void UpdateLivesLabel (int amount) {
+        DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
+        livesLabel.text = amount > 100 ? LIVES_TEXT + "\n∞" : LIVES_TEXT + "\n" + amount;
     }
 
     #endregion

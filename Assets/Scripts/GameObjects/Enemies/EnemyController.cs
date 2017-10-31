@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour, IEnemyController {
+public class EnemyController : MonoBehaviour {
 
     #region Fields
 

@@ -40,6 +40,8 @@ public class GameConfig {
         ShootingRoutineSections = gameConfigData.ShootingRoutineSections;
         GestureStrokeTime = gameConfigData.GestureStrokeTime;
         GestureMinScore = gameConfigData.GestureMinScore;
+        if (gameConfigData.ResetUserData)
+            PlayerPrefs.DeleteAll();
     }
 
     #endregion

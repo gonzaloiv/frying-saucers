@@ -62,7 +62,6 @@ public class LevelController : StateMachine {
     public void InitLevel (LevelData levelData) {
         currentWaveIndex = 0;
         currentLevelData = levelData;
-        new Player(levelData.PlayerInitialLives);
         ToNewLevelState();
     }
 
@@ -72,12 +71,11 @@ public class LevelController : StateMachine {
     }
 
     public void ToNewWaveState () {
-        if (currentWaveIndex < currentLevelData.WavesData.Count()) {
+        if (currentWaveIndex < currentLevelData.WavesData.Count) {
             currentWaveIndex++;
             ChangeState<LevelStates.WaveStartState>();
         } else {
             LevelEndEvent.Invoke();
-            ChangeState<LevelStates.StopState>();
         }
     }
 
@@ -95,10 +93,6 @@ public class LevelController : StateMachine {
         } else {
             ChangeState<LevelStates.WaveState>();
         }
-    }
-
-    public void ToStopState () {
-        ChangeState<LevelStates.StopState>();
     }
 
     #endregion

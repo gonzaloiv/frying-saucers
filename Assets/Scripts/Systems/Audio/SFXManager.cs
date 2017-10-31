@@ -45,12 +45,11 @@ public class SFXManager : MonoBehaviour {
         EnemyBehaviour.EnemyShotEvent += OnEnemyShotEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
         PlayerWeaponController.PlayerShotEvent += OnPlayerShotEvent;
-        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+        Player.PlayerHitEvent += OnPlayerHitEvent;
 
         // Game
         GameController.NewGameEvent += OnNewGameEvent;
         LevelController.NewLevelEvent += OnNewLevelEvent;
-        LevelScreenController.GameOverEvent += OnGameOverEvent;
 
     }
 
@@ -65,12 +64,11 @@ public class SFXManager : MonoBehaviour {
         EnemyBehaviour.EnemyShotEvent -= OnEnemyShotEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
         PlayerWeaponController.PlayerShotEvent -= OnPlayerShotEvent;
-        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
+        Player.PlayerHitEvent -= OnPlayerHitEvent;
 
         // Game
         GameController.NewGameEvent -= OnNewGameEvent;
         LevelController.NewLevelEvent -= OnNewLevelEvent;
-        LevelScreenController.GameOverEvent -= OnGameOverEvent;
 
     }
 
@@ -109,8 +107,12 @@ public class SFXManager : MonoBehaviour {
         audioSource.PlayOneShot(playerShot);
     }
 
-    public void OnPlayerHitEvent () {
-        audioSource.PlayOneShot(playerHit);
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+        if (playerHitEventArgs.IsDead) {
+            audioSource.PlayOneShot(gameOver);
+        } else {
+            audioSource.PlayOneShot(playerHit);
+        }
     }
 
     // Game
@@ -120,10 +122,6 @@ public class SFXManager : MonoBehaviour {
 
     public void OnNewLevelEvent () {
         audioSource.PlayOneShot(newLevel);
-    }
-
-    public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
-        audioSource.PlayOneShot(gameOver);
     }
 
     #endregion

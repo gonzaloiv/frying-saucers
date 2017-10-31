@@ -20,15 +20,15 @@ public class MusicManager : MonoBehaviour {
 
     void OnEnable () {
         LevelController.NewLevelEvent += OnNewLevelEvent;
-        LevelScreenController.GameOverEvent += OnGameOverEvent;
-        GameController.CreditsEvent += OnCreditsEvent;
+        Player.PlayerHitEvent += OnPlayerHitEvent;
+        CreditsScreenController.CreditsEvent += OnCreditsEvent;
         GameController.NewGameEvent += OnNewGameEvent;
     }
 
     void OnDisable () {
         LevelController.NewLevelEvent -= OnNewLevelEvent;
-        LevelScreenController.GameOverEvent -= OnGameOverEvent;
-        GameController.CreditsEvent -= OnCreditsEvent;
+        Player.PlayerHitEvent -= OnPlayerHitEvent;
+        CreditsScreenController.CreditsEvent -= OnCreditsEvent;
         GameController.NewGameEvent -= OnNewGameEvent;
     }
 
@@ -48,7 +48,9 @@ public class MusicManager : MonoBehaviour {
         audioSource.Play();
     }
 
-    void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
+    void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+        if(!playerHitEventArgs.IsDead)
+            return;
         audioSource.Stop();
         audioSource.clip = audioClips[(int) MusicTrack.GameOver];
         audioSource.Play();

@@ -9,7 +9,7 @@ public class DataManager {
 
     #region Fields
 
-    private const string USER_DATA_FILE_NAME = "UserData.binary";
+    private const string USER_DATA = "UserData";
 
     public static UserData UserData { get { return userData; } }
     private static UserData userData;
@@ -26,20 +26,11 @@ public class DataManager {
     #region Public Behaviour
 
     public static void Init () {
-        
         LoadData();
     }
 
-    public static void SetNewScore (int newScore) { 
-        for (int i = 0; i < userData.LeaderboardEntries.Length; i++) {
-            if (newScore > userData.LeaderboardEntries[i].Score) {
-                for (int j = userData.LeaderboardEntries.Length; j < i; i--)
-                    userData.LeaderboardEntries[j] = userData.LeaderboardEntries[j - 1];
-                userData.LeaderboardEntries[i].Score = newScore;
-                userData.LeaderboardEntries[i].Date = DateTime.Now;
-                break;
-            }
-        }
+    public static void AddNewScore (LeaderboardEntry leaderboardEntry) { 
+        userData.AddNewScore(leaderboardEntry);
         SaveData();
     }
 
@@ -54,27 +45,20 @@ public class DataManager {
 
     private static void LoadData () {
         userData = new UserData();
-        try {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream saveFile = File.Open(Path.Combine(Application.persistentDataPath, USER_DATA_FILE_NAME), FileMode.Open);
-            userData = (UserData) formatter.Deserialize(saveFile);
-            saveFile.Close();
-        } catch (Exception exception) {
-            Debug.Log(exception.Message);
+        UserData persistedUserData = JsonUtility.FromJson<UserData>(PlayerPrefs.GetString(USER_DATA));
+        if (persistedUserData != null) {
+            userData.SetTotalPlaysAmount(persistedUserData.TotalPlaysAmount);
+            if (persistedUserData.LeaderboardEntries != null)
+                userData.SetLeaderboardEntries(persistedUserData.LeaderboardEntries);
         }
         DataLoadedEvent.Invoke(new DataLoadedEventArgs(userData.TotalPlaysAmount));
         Debug.Log("UserData.TotalPlaysAmount " + userData.TotalPlaysAmount);
     }
 
     private static void SaveData () {
-        try {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream saveFile = File.Create(Path.Combine(Application.persistentDataPath, USER_DATA_FILE_NAME));
-            formatter.Serialize(saveFile, userData);
-            saveFile.Close();
-        } catch (Exception exception) {
-            Debug.Log(exception.Message);
-        }
+        PlayerPrefs.SetString(USER_DATA, JsonUtility.ToJson(userData));
+        PlayerPrefs.Save();
+        Debug.Log("UserData saved correctly.");
     }
 
     #endregion

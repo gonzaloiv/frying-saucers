@@ -10,6 +10,7 @@ namespace LevelStates {
 
         protected LevelController levelController;
         protected WaveController waveController;
+        protected WaveRefillBehaviour waveRefillBehaviour;
         protected GameObject inputManager;
         protected PlayerController playerController;
         protected LevelScreenController levelScreenController;
@@ -24,6 +25,7 @@ namespace LevelStates {
         void Awake () {
             levelController = GetComponent<LevelController>();
             waveController = levelController.WaveController;
+            waveRefillBehaviour = waveController.GetComponent<WaveRefillBehaviour>();
             inputManager = levelController.InputManagerObject;
             playerController = levelController.PlayerController;
             levelScreenController = levelController.LevelScreenController;

@@ -24,6 +24,18 @@ namespace LevelStates {
 
         #endregion
 
+        #region Protected Behaviour
+
+        protected override void AddListeners() {
+            
+        }
+
+        protected override void RemoveListeners() {
+
+        }
+
+        #endregion
+
     }
 
 }

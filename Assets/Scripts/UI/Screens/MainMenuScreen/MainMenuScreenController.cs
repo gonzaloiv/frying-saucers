@@ -8,19 +8,7 @@ public class MainMenuScreenController : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] private Button tutorialButton;
-
-    private UFOGridController ufoGridController;
     private AsyncOperation sceneLoading;
-
-    #endregion
-
-    #region Mono Behaviour
-
-    void Awake () {
-        ufoGridController = GetComponentInChildren<UFOGridController>();
-        tutorialButton.onClick.AddListener(() => LoadScene((int) GameScene.GameScene));
-    }
 
     #endregion
 

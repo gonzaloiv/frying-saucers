@@ -18,6 +18,7 @@ namespace GameStates {
         protected GameObject gameOverScreen;
         protected GameObject leaderboardScreen;
         protected GameObject creditsScreen;
+        protected GameObject tutorialScreen;
 
         #endregion
 
@@ -34,14 +35,15 @@ namespace GameStates {
             gameOverScreen = gameController.GameOverScreen;
             leaderboardScreen = gameController.LeaderboardScreen;
             creditsScreen = gameController.CreditsScreen;
+            tutorialScreen = gameController.TutorialScreen;
         }
 
         #endregion
 
         #region Protected Behaviour
 
-        protected LevelData GetCurrentLevelData () {
-            return gameController.CurrentLevelData;
+        protected LevelData GetRandomLevelData () {
+            return gameController.RandomLevelData;
         }
 
         protected LevelData GetTutorialLevelData () {

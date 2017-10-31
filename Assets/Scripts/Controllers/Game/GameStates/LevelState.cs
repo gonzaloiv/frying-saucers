@@ -11,17 +11,14 @@ namespace GameStates {
         public override void Enter () {
             base.Enter();
             levelController.gameObject.SetActive(true);
-            levelController.InitLevel(GetCurrentLevelData());
+            levelController.InitLevel(GetRandomLevelData());
             inputManager.SetActive(true);
+            levelScreen.SetActive(true);
         }
 
-        public override void Exit () {
-            base.Exit();
-            levelController.ToStopState();
-        }
-
-        public void OnPlayerHitEvent () {
-            levelController.ToRestartState();
+        public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
+            if (!playerHitEventArgs.IsDead)
+                levelController.ToRestartState();
         }
 
         public void OnWaveEndEvent () {
@@ -33,12 +30,12 @@ namespace GameStates {
         #region Protected Behaviour
 
         protected override void AddListeners () {
-            PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+            Player.PlayerHitEvent += OnPlayerHitEvent;
             WaveController.WaveEndEvent += OnWaveEndEvent;
         }
 
         protected override void RemoveListeners () {
-            PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
+            Player.PlayerHitEvent -= OnPlayerHitEvent;
             WaveController.WaveEndEvent -= OnWaveEndEvent;
         }
 

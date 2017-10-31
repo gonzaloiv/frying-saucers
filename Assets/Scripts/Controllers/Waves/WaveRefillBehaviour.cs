@@ -44,7 +44,7 @@ public class WaveRefillBehaviour : MonoBehaviour {
     #region Private Behaviour
 
     private void FillWave () {
-        List<GameObject> currentLevelObjects = waveController.CurrentWaveEnemyObjects;
+        List<GameObject> currentLevelObjects = waveController.CurrentWaveEnemies;
         for (int i = 0; i < currentLevelObjects.Count(); i++) {
             if (!currentLevelObjects[i].activeInHierarchy) {
                 waveController.AddEnemy(i);

@@ -16,12 +16,12 @@ public class CameraController : MonoBehaviour {
     #region Mono Behaviour
 
     void OnEnable () {
-        PlayerController.PlayerHitEvent += OnPlayerHitEvent;
+        Player.PlayerHitEvent += OnPlayerHitEvent;
         EnemyBehaviour.RightGestureInputEvent += OnRightGestureInput;
     }
 
     void OnDisable () {
-        PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
+        Player.PlayerHitEvent -= OnPlayerHitEvent;
         EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInput;
     }
 
@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void OnPlayerHitEvent () {
+    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
         StartCoroutine(CameraShakeRoutine());
     }
 
