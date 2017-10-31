@@ -9,7 +9,6 @@ public class DataManager {
 
     #region Fields
 
-    public static bool HasBeenTutorialPlayed { get { return leaderboard.HasBeenTutorialPlayed; } }
     public static Leaderboard Leaderboard { get { return leaderboard; } }
 
     private static Leaderboard leaderboard;
@@ -46,7 +45,7 @@ public class DataManager {
     }
 
     public static void SetHasBeenTutorialPlayed () {
-        leaderboard.HasBeenTutorialPlayed = true;
+        leaderboard.IsFirstPlay = false;
         SaveData();
     }
 

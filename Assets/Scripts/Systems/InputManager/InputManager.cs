@@ -6,11 +6,8 @@ public class InputManager : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] private GameObject handPrefab;
-    private HandController handController;
-
-    [SerializeField] private GameObject resultPrefab;
-    private ResultController resultController;
+    [SerializeField] private ResultController resultController;
+    [SerializeField] private HandController handController;
 
     private GestureRecognizer gestureRecognizer;
 
@@ -38,8 +35,6 @@ public class InputManager : MonoBehaviour {
 
     void Awake () {
         gestureRecognizer = GetComponentInChildren<GestureRecognizer>();
-        handController = Instantiate(handPrefab, transform).GetComponent<HandController>();
-        resultController = Instantiate(resultPrefab, transform).GetComponent<ResultController>();
         platform = Application.platform;
     }
 

@@ -8,8 +8,7 @@ namespace EnemyBehaviourStates {
     
         #region Fields
 
-        IEnumerator shootingRoutine;
-        Vector2 shootingPosition;
+        private Vector2 shootingPosition;
 
         #endregion
 
@@ -18,8 +17,7 @@ namespace EnemyBehaviourStates {
         public override void Enter () {
             base.Enter();
             shootingPosition = Board.EmptyEnemyShotPosition();
-            shootingRoutine = ShootingRoutine();
-            StartCoroutine(shootingRoutine);
+            StartCoroutine(ShootingRoutine());
         }
 
         public override void Exit () {
@@ -31,7 +29,7 @@ namespace EnemyBehaviourStates {
         }
 
         public void OnGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
-            if (gestureInputEventArgs.Score < GameConfig.GestureMinScore) {       // Low score
+            if (gestureInputEventArgs.Score < GameConfig.GestureMinScore) { // Low score
                 enemyBehaviour.InvokeWrongGestureInputEvent(new WrongGestureInputEventArgs(gestureInputEventArgs));
             } else {
                 if ((int) gestureInputEventArgs.Type != (int) enemyController.Enemy.EnemyType) { // Wrong gesture

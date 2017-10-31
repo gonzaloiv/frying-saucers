@@ -10,7 +10,6 @@ public class GameOverEventArgs : EventArgs {
 
     public GameOverEventArgs (int score) {
         this.score = score;
-        Debug.Log("GameOverEvent " + this.score);
     }
 
 }

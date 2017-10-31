@@ -129,7 +129,6 @@ public class WaveController : MonoBehaviour {
     }
 
     private Enemy GetEnemyByType (EnemyType enemyType, int enemyIndex) {
-        Debug.Log("EnemyType " + enemyType);
         EnemyScore enemyScore = (EnemyScore) (int) enemyType;
         Vector2 enemyPosition = currentWaveEnemyGrid[enemyIndex];
         return new Enemy(enemyType, enemyPosition, enemyScore);

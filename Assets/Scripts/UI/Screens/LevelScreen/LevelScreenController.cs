@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class LevelScreenController : MonoBehaviour {
 
     #region Fields
 
+    private const float FADE_IN_TIME = 0.5f;
     private const string SCORE_TEXT = "SCORE";
     private const string LIVES_TEXT = "LIVES";
-    private static string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
+    private string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
 
-    private Text scoreLabel;
-    private Text emojiLabel;
-    private int scoreTextNumber;
-    private Text livesLabel;
+    [SerializeField] private Text emojiLabel;
+    [SerializeField] private Text scoreLabel;
+    [SerializeField] private Text livesLabel;
+    private int playerCurrentScore;
 
     #endregion
 
@@ -27,16 +29,10 @@ public class LevelScreenController : MonoBehaviour {
 
     #region Mono Behaviour
 
-    void Awake () {
-        scoreLabel = GetComponentsInChildren<Text>()[0];
-        emojiLabel = GetComponentsInChildren<Text>()[1];
-        livesLabel = GetComponentsInChildren<Text>()[2];
-    }
-
     void Update () {
-        if (scoreTextNumber < Player.Score)
-            scoreTextNumber++;
-        scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
+        if (playerCurrentScore < Player.Score)
+            playerCurrentScore++;
+        scoreLabel.text = SCORE_TEXT + "\n" + playerCurrentScore;
     }
 
     void OnEnable () {
@@ -58,11 +54,11 @@ public class LevelScreenController : MonoBehaviour {
     #region Public Behaviour
 
     public void Init () {
-        scoreTextNumber = Player.Score;
-        scoreLabel.text = SCORE_TEXT + "\n" + scoreTextNumber;
-        scoreLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+        playerCurrentScore = Player.Score;
+        scoreLabel.text = SCORE_TEXT + "\n" + playerCurrentScore;
         SetLives();
-        livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+        DOTween.Sequence().Append(scoreLabel.DOFade(0, FADE_IN_TIME / 2)).Append(scoreLabel.DOFade(1, FADE_IN_TIME / 2));
+        DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
     }
 
     public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
@@ -81,7 +77,7 @@ public class LevelScreenController : MonoBehaviour {
         Player.Lives--;
         if (Player.Lives < 1)
             GameOverEvent.Invoke(new GameOverEventArgs(Player.Score));
-        livesLabel.gameObject.GetComponent<Animator>().Play("FadeIn");
+        DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
         SetLives();
     }
 

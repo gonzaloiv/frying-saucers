@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour, IEnemyController {
 
     private ParticleSystem explosion;
     private ParticleSystem halo;
-    private Animator animator;
+    private Animator anim;
     private Enemy enemy;
 
     #endregion
@@ -30,7 +30,7 @@ public class EnemyController : MonoBehaviour, IEnemyController {
     void Awake () {
         explosion = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
         halo = Instantiate(haloPrefab, transform).GetComponent<ParticleSystem>();
-        animator = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     void OnEnable () {
@@ -43,7 +43,7 @@ public class EnemyController : MonoBehaviour, IEnemyController {
 
     public void DisableRoutine () {
         StopAllCoroutines();
-        animator.Play("Disable");
+        anim.Play("Disable");
         explosion.transform.position = transform.position;
         explosion.Play();
         EnemyHitEvent.Invoke();

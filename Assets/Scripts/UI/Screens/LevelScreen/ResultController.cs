@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class ResultController : MonoBehaviour {
 
     #region Fields
 
+    private const float ANIMATION_TIME = 0.3f;
     private static string[] RESULT_TEXT = new string[] {"Perfect!", "Not bad", "Too fast", "Too slow", "Gross"};
     private const string COMBO_TEXT = "x";
 
-    private Text comboLabel;
-    private Animator comboLabelAnimator;
-    private Text resultLabel;
-    private Animator resultLabelAnimator;
+    [SerializeField] private Text resultLabel;
+    [SerializeField] private Text comboLabel;
 
     private Vector2 cursorPosition = Vector2.zero;
 
@@ -22,10 +22,6 @@ public class ResultController : MonoBehaviour {
     #region Mono Behaviour
 
     void Awake () {
-        resultLabel = GetComponentsInChildren<Text>()[0];
-        resultLabelAnimator = resultLabel.gameObject.GetComponentInChildren<Animator>();
-        comboLabel = GetComponentsInChildren<Text>()[1];
-        comboLabelAnimator = comboLabel.gameObject.GetComponentInChildren<Animator>();
         comboLabel.enabled = false;
         resultLabel.enabled = false;
     }
@@ -69,15 +65,16 @@ public class ResultController : MonoBehaviour {
         resultLabel.text = RESULT_TEXT[(int) gestureTime];
         resultLabel.transform.position = cursorPosition + new Vector2(1, 0.6f);
         resultLabel.enabled = true;
-        resultLabelAnimator.Play("Spawn");
+        DOTween.Sequence().Append(resultLabel.DOFade(0, 0.001f)).Append(resultLabel.DOFade(1, ANIMATION_TIME));
+
 
         if (combo) {
             comboLabel.transform.position = cursorPosition + new Vector2(1, 0.2f);
             comboLabel.enabled = true;
-            comboLabelAnimator.Play("Spawn");
+            DOTween.Sequence().Append(comboLabel.DOFade(0, 0.001f)).Append(comboLabel.DOFade(1, ANIMATION_TIME));
         }
 
-        yield return TimeManager.WaitForRealTime(1f);
+        yield return TimeManager.WaitForRealTime(ANIMATION_TIME);
 
         comboLabel.enabled = false;
         resultLabel.enabled = false;

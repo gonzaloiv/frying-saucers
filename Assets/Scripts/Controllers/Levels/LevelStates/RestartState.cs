@@ -11,7 +11,6 @@ namespace LevelStates {
 
         public override void Enter () {
             StartCoroutine(RestartRoutine());
-            levelScreenController.gameObject.SetActive(false);
         }
 
         #endregion

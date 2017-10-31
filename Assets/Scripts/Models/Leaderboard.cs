@@ -5,8 +5,8 @@ using System;
 
 [Serializable] public class Leaderboard {
 
-    public bool HasBeenTutorialPlayed { get { return hasBeenTutorialPlayed; } set { hasBeenTutorialPlayed = value; } }
-    private bool hasBeenTutorialPlayed = false;
+    public bool IsFirstPlay { get { return isFirstPlay; } set { isFirstPlay = value; } }
+    private bool isFirstPlay = true;
 
     public int[] Scores { get { return scores; } set { scores = value; } }
     private int[] scores = new int[5];

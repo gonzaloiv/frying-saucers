@@ -11,22 +11,12 @@ public class LeaderboardScreenController : MonoBehaviour {
 
     private const string NO_DATA = "No data";
 
-    private Text[] scores = new Text[3];
-    private Text[] dates = new Text[3];
+    [SerializeField] private Text[] scoreLabels = new Text[3];
+    [SerializeField] private Text[] dateLabels = new Text[3];
 
     #endregion
 
     #region Mono Behaviour
-
-    void Awake () {
-        // TODO: Refactoring this !
-        scores[0] = GetComponentsInChildren<Text>()[1];
-        scores[1] = GetComponentsInChildren<Text>()[3];
-        scores[2] = GetComponentsInChildren<Text>()[5];
-        dates[0] = GetComponentsInChildren<Text>()[2];
-        dates[1] = GetComponentsInChildren<Text>()[4];
-        dates[2] = GetComponentsInChildren<Text>()[6];
-    }
 
     void OnEnable () {
         SetScores();
@@ -37,29 +27,23 @@ public class LeaderboardScreenController : MonoBehaviour {
     #region Private Behaviour
 
     private void SetScores () {
-
-        for (int i = 0; i < scores.Length; i++) {
+        for (int i = 0; i < scoreLabels.Length; i++) {
             if (DataManager.Leaderboard.Scores[i] != 0) {
-
-                scores[i].text = DataManager.Leaderboard.Scores[i].ToString("00000");
-                scores[i].enabled = true;
-
-                dates[i].text = DataManager.Leaderboard.Dates[i].ToString("yyyy/MM/dd");
-                dates[i].enabled = true;
-
+                scoreLabels[i].text = DataManager.Leaderboard.Scores[i].ToString("00000");
+                scoreLabels[i].enabled = true;
+                dateLabels[i].text = DataManager.Leaderboard.Dates[i].ToString("yyyy/MM/dd");
+                dateLabels[i].enabled = true;
                 if ((DateTime.Now - DataManager.Leaderboard.Dates[i]).TotalSeconds <= 5) {
-                    scores[i].GetComponent<BlinkingTextBehaviour>().enabled = true;
+                    scoreLabels[i].GetComponent<BlinkingTextBehaviour>().enabled = true;
                 } else {
-                    scores[i].GetComponent<BlinkingTextBehaviour>().enabled = false;
+                    scoreLabels[i].GetComponent<BlinkingTextBehaviour>().enabled = false;
                 }
-
             } else {
-                scores[i].text = NO_DATA;
-                scores[i].enabled = true;
-                dates[i].enabled = false;
+                scoreLabels[i].text = NO_DATA;
+                scoreLabels[i].enabled = true;
+                dateLabels[i].enabled = false;
             }
         }
-
     }
 
     #endregion

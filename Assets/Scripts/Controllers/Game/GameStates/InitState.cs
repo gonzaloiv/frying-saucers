@@ -19,7 +19,7 @@ namespace GameStates {
         }
 
         public void OnDataLoadedEvent (DataLoadedEventArgs dataLoadedEventArgs) {
-            if (dataLoadedEventArgs.Leaderboard.HasBeenTutorialPlayed) {
+            if (!dataLoadedEventArgs.Leaderboard.IsFirstPlay) {
                 gameController.ToMainMenuState();
             } else {
                 // TODO: gameController.ToTutorialState();
