@@ -56,6 +56,7 @@ public class GameController : StateMachine {
     #region Mono Behaviour
 
     void Awake () {
+        Reset();
         ChangeState<GameStates.InitState>();
     }
 
@@ -103,12 +104,24 @@ public class GameController : StateMachine {
     }
 
     public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
-        levelController.ToStopState();
         ToGameOverState();
     }
 
     public void OnLevelEndEvent () {
         ToMainMenuState();
+    }
+
+    #endregion
+
+    #region Private Behaviour
+
+    private void Reset() {
+        mainMenuScreen.SetActive(false);
+        levelScreen.SetActive(false);
+        gameOverScreen.SetActive(false);
+        leaderboardScreen.SetActive(false);
+        creditsScreen.SetActive(false);
+        tutorialScreen.SetActive(false);       
     }
 
     #endregion

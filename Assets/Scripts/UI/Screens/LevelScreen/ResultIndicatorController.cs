@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class ResultController : MonoBehaviour {
+public class ResultIndicatorController : MonoBehaviour {
 
     #region Fields
 
@@ -15,6 +15,7 @@ public class ResultController : MonoBehaviour {
     [SerializeField] private Text resultLabel;
     [SerializeField] private Text comboLabel;
 
+    private Player player;
     private Vector2 cursorPosition = Vector2.zero;
 
     #endregion
@@ -27,7 +28,7 @@ public class ResultController : MonoBehaviour {
     }
 
     void Update () {
-        comboLabel.text = COMBO_TEXT + Player.Combo;
+        comboLabel.text = COMBO_TEXT + player.Combo;
     }
 
     void OnEnable () {
@@ -43,6 +44,10 @@ public class ResultController : MonoBehaviour {
     #endregion
 
     #region Public Behaviour
+
+    public void Init(Player player) {
+        this.player = player;
+    }
 
     public void SetCursorPosition (Vector2 cursorPosition) {
         this.cursorPosition = cursorPosition;

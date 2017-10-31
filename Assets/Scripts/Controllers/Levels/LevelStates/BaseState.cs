@@ -11,9 +11,11 @@ namespace LevelStates {
         protected LevelController levelController;
         protected WaveController waveController;
         protected GameObject inputManager;
-        protected GameObject player;
+        protected PlayerController playerController;
         protected LevelScreenController levelScreenController;
         protected GameObject pauseScreen;
+
+        protected Player player;
 
         #endregion
 
@@ -23,7 +25,7 @@ namespace LevelStates {
             levelController = GetComponent<LevelController>();
             waveController = levelController.WaveController;
             inputManager = levelController.InputManagerObject;
-            player = levelController.Player;
+            playerController = levelController.PlayerController;
             levelScreenController = levelController.LevelScreenController;
             pauseScreen = levelController.PauseScreen;
         }
@@ -31,6 +33,10 @@ namespace LevelStates {
         #endregion
 
         #region Public Behaviour
+
+        protected LevelData GetCurrentLevelData () {
+            return levelController.CurrentLevelData;
+        }
 
         protected WaveData GetCurrentWaveData () {
             return levelController.CurrentWaveData;

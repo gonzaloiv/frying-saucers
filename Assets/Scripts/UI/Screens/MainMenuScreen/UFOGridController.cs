@@ -14,11 +14,11 @@ public class UFOGridController : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void Play () {
+    void OnEnable () {
         StartCoroutine(DisablingRoutine());
     }
 
-    public void Stop () {
+    void OnDisable () {
         StopAllCoroutines();
     }
 
@@ -27,13 +27,15 @@ public class UFOGridController : MonoBehaviour {
     #region Private Behaviour
 
     private IEnumerator DisablingRoutine () {
+        ufos.ForEach(ufo => ufo.SetActive(true));
         while (gameObject.activeSelf) {
             yield return new WaitForSeconds(disablingSpeed);
             List<GameObject> activeUFOs = ufos.Where(x => x.activeSelf).ToList();
-            if (activeUFOs.Count() > 0)
+            if (activeUFOs.Count() > 0) {
                 activeUFOs[Random.Range(0, activeUFOs.Count())].GetComponent<EnemyController>().DisableRoutine();
-            else
+            } else {
                 StartCoroutine(RestartGridRoutine());
+            }
         }
     }
 

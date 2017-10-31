@@ -5,11 +5,11 @@ using System;
 
 public class DataLoadedEventArgs : EventArgs {
 
-    public Leaderboard Leaderboard { get { return leaderboard; } }
-    private Leaderboard leaderboard;
+    public int TotalPlaysAmount { get { return totalPlaysAmount; } }
+    private int totalPlaysAmount;
 
-    public DataLoadedEventArgs (Leaderboard leaderboard) {
-        this.leaderboard = leaderboard;
+    public DataLoadedEventArgs (int totalPlaysAmount) {
+        this.totalPlaysAmount = totalPlaysAmount;
     }
 
 }

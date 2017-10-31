@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LevelStates {
 
-    public class PlayState : BaseState {
+    public class WaveState : BaseState {
 
         #region Fields
 

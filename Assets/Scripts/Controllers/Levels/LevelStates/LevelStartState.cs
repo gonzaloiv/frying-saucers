@@ -5,13 +5,18 @@ using System.Linq;
 
 namespace LevelStates {
 
-    public class NewWaveState : BaseState {
+    public class LevelStartState : BaseState {
 
         #region State Behaviour
 
         public override void Enter () {
+            player = new Player(GetCurrentLevelData().PlayerInitialLives);
+            levelScreenController.gameObject.SetActive(true);
+            levelScreenController.Init(player);
             waveController.Reset();
             waveController.NewWave(GetCurrentWaveData());
+            playerController.gameObject.SetActive(true);
+            levelController.ToWaveState();
         }
 
         #endregion

@@ -13,10 +13,12 @@ public class LevelScreenController : MonoBehaviour {
     private const string LIVES_TEXT = "LIVES";
     private string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
 
+    [SerializeField] private ResultIndicatorController resultIndicatorController;
     [SerializeField] private Text emojiLabel;
     [SerializeField] private Text scoreLabel;
     [SerializeField] private Text livesLabel;
-    private int playerCurrentScore;
+
+    private Player player;
 
     #endregion
 
@@ -30,9 +32,7 @@ public class LevelScreenController : MonoBehaviour {
     #region Mono Behaviour
 
     void Update () {
-        if (playerCurrentScore < Player.Score)
-            playerCurrentScore++;
-        scoreLabel.text = SCORE_TEXT + "\n" + playerCurrentScore;
+        scoreLabel.text = SCORE_TEXT + "\n" + player.Score;
     }
 
     void OnEnable () {
@@ -53,30 +53,30 @@ public class LevelScreenController : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void Init () {
-        playerCurrentScore = Player.Score;
-        scoreLabel.text = SCORE_TEXT + "\n" + playerCurrentScore;
+    public void Init (Player player) {
+        this.player = player;
+        resultIndicatorController.Init(player);
         SetLives();
         DOTween.Sequence().Append(scoreLabel.DOFade(0, FADE_IN_TIME / 2)).Append(scoreLabel.DOFade(1, FADE_IN_TIME / 2));
         DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
     }
 
     public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
-        IEnumerator emojiRoutine = Player.Combo >= 5 ? EmojiRoutine(EMOJIS[3], 3) : EmojiRoutine(EMOJIS[2], 1);
+        IEnumerator emojiRoutine = player.Combo >= 5 ? EmojiRoutine(EMOJIS[3], 3) : EmojiRoutine(EMOJIS[2], 1);
         StartCoroutine(emojiRoutine);
-        Player.Combo++;
-        Player.Score += (int) Mathf.Ceil(GameConfig.EnemyScore * Player.Combo * GestureMultiplier(rightGestureInputEventArgs.GestureInputEventArgs.Time));
+        player.IncreaseCombo();
+        player.IncreaseScore((int) Mathf.Ceil(GameConfig.EnemyScore * player.Combo * GestureMultiplier(rightGestureInputEventArgs.GestureInputEventArgs.Time)));
     }
 
     public void OnWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputArgs) {
-        Player.Combo = 1;
+        player.ResetCombo();
         StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
     }
 
     public void OnPlayerHitEvent () {
-        Player.Lives--;
-        if (Player.Lives < 1)
-            GameOverEvent.Invoke(new GameOverEventArgs(Player.Score));
+        player.DecreaseLives();
+        if (player.IsDead)
+            GameOverEvent.Invoke(new GameOverEventArgs(player.Score));
         DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
         SetLives();
     }
@@ -110,10 +110,7 @@ public class LevelScreenController : MonoBehaviour {
     }
 
     private void SetLives () {
-        if (Player.Lives > 100) // Tutorial settings
-      livesLabel.text = LIVES_TEXT + "\n∞";
-        else
-            livesLabel.text = LIVES_TEXT + "\n" + Player.Lives;
+        livesLabel.text = player.Lives > 100 ? LIVES_TEXT + "\n∞" : LIVES_TEXT + "\n" + player.Lives;
     }
 
     #endregion

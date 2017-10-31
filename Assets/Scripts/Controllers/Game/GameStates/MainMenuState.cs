@@ -13,6 +13,7 @@ namespace GameStates {
             mainMenuScreen.SetActive(true);
             inputManager.SetActive(false);
             levelScreen.SetActive(false);
+            levelController.gameObject.SetActive(false);
         }
 
         public override void Exit () {

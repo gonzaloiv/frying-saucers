@@ -28,7 +28,6 @@ public class EnemySpawner : MonoBehaviour {
         enemyObject.GetComponent<IEnemyController>().Init(enemy);
         enemyObject.GetComponent<SpriteRenderer>().flipY = false;
         enemyObject.SetActive(true);
-
         return enemyObject;
     }
 

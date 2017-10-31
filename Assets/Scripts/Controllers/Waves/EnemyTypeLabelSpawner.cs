@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class EnemyTypeLabelSpawner : MonoBehaviour {
 
     #region Fields
 
-    // Same order as EnemyType
-    [SerializeField] private GameObject[] gesturePrefabs;
+    [SerializeField] private GameObject[] gesturePrefabs; // Same order as EnemyType
+
     private GameObjectArrayPool gesturePool;
-
     private List<Enemy> currentEnemies;
-    private GameObject[] gestures;
-
-    private IEnumerator showGesturesRoutine;
-    private IEnumerator showGestureRoutine;
-    private IEnumerator hideGesturesRoutine;
+    private List<GameObject> gestures;
 
     #endregion
 
@@ -26,13 +22,17 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
         gesturePool = new GameObjectArrayPool("GesturePool", gesturePrefabs, 16, transform);
     }
 
+    void OnDisable () {
+        if (gestures != null)
+            gestures.ForEach(gesture => gesture.SetActive(false));
+        StopAllCoroutines();
+    }
+
     #endregion
 
     #region Public Behaviour
 
     public void Init () {
-        if (showGesturesRoutine != null)
-            StopCoroutine(showGesturesRoutine);
         currentEnemies = new List<Enemy>();
     }
 
@@ -45,18 +45,15 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     }
 
     public void ShowGestures (float time) {
-        showGesturesRoutine = ShowGesturesRoutine(time);
-        StartCoroutine(showGesturesRoutine);
+        StartCoroutine(ShowGesturesRoutine(time));
     }
 
     public void ShowGesture (int index, float time) {
-        showGestureRoutine = ShowGestureRoutine(index, time);
-        StartCoroutine(showGestureRoutine);
+        StartCoroutine(ShowGestureRoutine(index, time));
     }
 
     public void HideGestures () {
-        hideGesturesRoutine = HideGesturesRoutine();      
-        StartCoroutine(hideGesturesRoutine);
+        StartCoroutine(HideGesturesRoutine());
     }
 
     #endregion
@@ -64,15 +61,15 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     #region Private Behaviour
 
     private IEnumerator ShowGesturesRoutine (float time) {
-        gestures = new GameObject[currentEnemies.Count];
+        gestures = new List<GameObject>();
         for (int i = 0; i < currentEnemies.Count; i++) {
-            gestures[i] = gesturePool.PopObject((int) currentEnemies[i].EnemyType);
-            gestures[i].transform.position = currentEnemies[i].Position + new Vector2(0, -0.7f);
-            gestures[i].SetActive(true);
+            GameObject gesture = gesturePool.PopObject((int) currentEnemies[i].EnemyType);
+            gesture.transform.position = currentEnemies[i].Position + new Vector2(0, -0.7f);
+            gesture.SetActive(true);
+            gestures.Add(gesture);
         }
         yield return new WaitForSeconds(time);
-        for (int i = 0; i < gestures.Length; i++)
-            gestures[i].SetActive(false);
+        gestures.ForEach(gesture => gesture.SetActive(false));
     }
 
     private IEnumerator ShowGestureRoutine (int index, float time) {
@@ -85,7 +82,7 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     }
 
     private IEnumerator HideGesturesRoutine () {
-        for (int i = 0; i < gestures.Length; i++) {
+        for (int i = 0; i < gestures.Count; i++) {
             gestures[i].SetActive(false);
             yield return new WaitForSeconds(.15f);
         }

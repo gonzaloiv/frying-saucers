@@ -5,23 +5,23 @@ using System.Linq;
 
 namespace LevelStates {
 
-    public class RestartState : BaseState {
+    public class WaveRestartState : BaseState {
 
         #region State Behaviour
 
         public override void Enter () {
-            StartCoroutine(RestartRoutine());
+            StartCoroutine(WaveRestartRoutine());
         }
 
         #endregion
 
         #region Private Behaviour
 
-        private IEnumerator RestartRoutine () {
+        private IEnumerator WaveRestartRoutine () {
             yield return new WaitForSeconds(0.8f);
-            player.SetActive(true);
+            playerController.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.2f);
-            levelController.ToPlayState();
+            levelController.ToWaveState();
         }
 
         #endregion

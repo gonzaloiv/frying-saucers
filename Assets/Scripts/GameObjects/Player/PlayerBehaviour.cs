@@ -20,7 +20,7 @@ public class PlayerBehaviour : MonoBehaviour {
         col = GetComponent<Collider2D>();
     }
 
-    void Start() {
+    void Start () {
         nextPosition = new Vector2(0, GameConfig.PlayerInitialYPosition);
     }
 

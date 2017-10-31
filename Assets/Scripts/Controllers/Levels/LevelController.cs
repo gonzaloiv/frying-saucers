@@ -15,13 +15,14 @@ public class LevelController : StateMachine {
 
     public WaveController WaveController { get { return waveController; } }
     public GameObject InputManagerObject { get { return inputManager; } } // Temporarily...
-    public GameObject Player { get { return player; } }
+    public PlayerController PlayerController { get { return playerController; } }
     public LevelScreenController LevelScreenController { get { return levelScreenController; } }
     public GameObject PauseScreen { get { return pauseScreen; } }
 
+    public LevelData CurrentLevelData { get { return currentLevelData; } }
     public WaveData CurrentWaveData { get { return currentLevelData.WavesData[currentWaveIndex]; } }
 
-    private GameObject player;
+    private PlayerController playerController;
     private LevelData currentLevelData;
     private int currentWaveIndex = 0;
 
@@ -40,9 +41,9 @@ public class LevelController : StateMachine {
     #region Mono Behaviour
 
     void Awake () {
-        player = Instantiate(playerPrefab, transform);
-        player.SetActive(false);
-        waveController.Init(player);
+        playerController = Instantiate(playerPrefab, transform).GetComponent<PlayerController>();
+        playerController.gameObject.SetActive(false);
+        waveController.Init(playerController.gameObject);
         pauseScreen.SetActive(false);
     }
 
@@ -67,32 +68,32 @@ public class LevelController : StateMachine {
 
     public void ToNewLevelState () {
         NewLevelEvent.Invoke();
-        ChangeState<LevelStates.NewLevelState>();
+        ChangeState<LevelStates.LevelStartState>();
     }
 
     public void ToNewWaveState () {
         if (currentWaveIndex < currentLevelData.WavesData.Count()) {
             currentWaveIndex++;
-            ChangeState<LevelStates.NewWaveState>();
+            ChangeState<LevelStates.WaveStartState>();
         } else {
             LevelEndEvent.Invoke();
             ChangeState<LevelStates.StopState>();
         }
     }
 
-    public void ToPlayState () {
-        ChangeState<LevelStates.PlayState>();
+    public void ToWaveState () {
+        ChangeState<LevelStates.WaveState>();
     }
 
     public void ToRestartState () {
-        ChangeState<LevelStates.RestartState>();
+        ChangeState<LevelStates.WaveRestartState>();
     }
 
     public void ToPauseState () {
         if (Time.timeScale != 0) {
             ChangeState<LevelStates.PauseState>();
         } else {
-            ChangeState<LevelStates.PlayState>();
+            ChangeState<LevelStates.WaveState>();
         }
     }
 

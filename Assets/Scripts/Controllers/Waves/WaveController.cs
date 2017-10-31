@@ -41,13 +41,11 @@ public class WaveController : MonoBehaviour {
     void OnEnable () {
         PlayerController.PlayerHitEvent += OnPlayerHitEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
-        LevelScreenController.GameOverEvent += OnGameOverEvent;
     }
 
     void OnDisable () {
         PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
-        LevelScreenController.GameOverEvent -= OnGameOverEvent;
     }
 
     #endregion
@@ -61,7 +59,7 @@ public class WaveController : MonoBehaviour {
     public void NewWave (WaveData waveData) {
         currentWaveEnemyObjects = new List<GameObject>();
         if (waveData.EnemiesType == null || waveData.EnemiesType.Length == 0) {
-            // Random waves
+            // Random wave spawning
             currentWaveEnemyGrid = Board.EnemyGrid(GameConfig.RandomWaveEnemyAmount);
             currentWaveEnemies = GetRandomWaveEnemies(GameConfig.RandomWaveEnemyAmount);
             enemyTypeLabelSpawner.Init();
@@ -70,7 +68,7 @@ public class WaveController : MonoBehaviour {
                 enemyTypeLabelSpawner.AddGesture(currentWaveEnemies[i]);
             }
         } else {
-            // Static data defined waves
+            // Resources-defined wave spawning
             currentWaveEnemyGrid = Board.EnemyGrid(waveData.EnemiesType.Length);
             currentWaveEnemies = new Enemy[waveData.EnemiesType.Length];
             enemyTypeLabelSpawner.Init();
@@ -109,10 +107,6 @@ public class WaveController : MonoBehaviour {
     public void OnEnemyHitEvent () {
         newWaveRoutine = NewWaveRoutine();
         StartCoroutine(newWaveRoutine);
-    }
-
-    public void OnGameOverEvent (GameOverEventArgs gameOverEventArgs) {
-        enemyTypeLabelSpawner.HideGestures();
     }
 
     #endregion

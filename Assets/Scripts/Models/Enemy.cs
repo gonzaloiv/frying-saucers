@@ -25,7 +25,7 @@ public struct Enemy {
     }
 
     public void SetRandomType () {
-        this.enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length);
+        this.enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length - 1);
     }
 
     #endregion

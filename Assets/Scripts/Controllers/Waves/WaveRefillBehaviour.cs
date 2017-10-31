@@ -19,7 +19,7 @@ public class WaveRefillBehaviour : MonoBehaviour {
     }
 
     void Update () {
-        if (enemyHit) // true when there was a EnemyHitEvent, but the filling is done after the Enemy is desabled from scene.
+        if (enemyHit) // true when there was a EnemyHitEvent, but the filling is done after the Enemy is disabled from scene.
             FillWave();
     }
 

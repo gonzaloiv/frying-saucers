@@ -4,35 +4,35 @@ using UnityEngine;
 
 namespace EnemyBehaviourStates {
 
-  public class BaseState : State {
+    public class BaseState : State {
 
-    #region Fields
-    
-    protected EnemyBehaviour enemyBehaviour;
+        #region Fields
 
-    protected Animator animator;
-    protected GameObject player;
-    protected ParticleSystem laser;
-    protected EnemyController enemyController;
-    protected bool hit;
-    protected float routineTime;
+        protected EnemyBehaviour enemyBehaviour;
 
-    #endregion
+        protected Animator animator;
+        protected GameObject player;
+        protected ParticleSystem laser;
+        protected EnemyController enemyController;
+        protected bool hit;
+        protected float routineTime;
 
-    #region Mono Behaviour
+        #endregion
 
-    void Awake() {
-      enemyBehaviour = GetComponent<EnemyBehaviour>();
-      animator = GetComponent<Animator>();
-      player = enemyBehaviour.Player;
-      laser = enemyBehaviour.Laser;
-      enemyController = GetComponent<EnemyController>();
-      hit = enemyBehaviour.Hit;
-      routineTime = enemyBehaviour.RoutineTime;
+        #region Mono Behaviour
+
+        void Awake () {
+            enemyBehaviour = GetComponent<EnemyBehaviour>();
+            animator = GetComponent<Animator>();
+            player = enemyBehaviour.Player;
+            laser = enemyBehaviour.Laser;
+            enemyController = GetComponent<EnemyController>();
+            hit = enemyBehaviour.Hit;
+            routineTime = enemyBehaviour.RoutineTime;
+        }
+
+        #endregion
+
     }
-
-    #endregion
-
-  }
 
 }

@@ -22,10 +22,6 @@ public class MainMenuScreenController : MonoBehaviour {
         tutorialButton.onClick.AddListener(() => LoadScene((int) GameScene.GameScene));
     }
 
-    void Start() {
-        ufoGridController.Play();
-    }
-
     #endregion
 
     #region Public Behaviour
@@ -42,7 +38,6 @@ public class MainMenuScreenController : MonoBehaviour {
         sceneLoading = SceneManager.LoadSceneAsync(scene);
         sceneLoading.allowSceneActivation = false;
         while (!sceneLoading.isDone) {
-            ufoGridController.Stop();
             Debug.Log("Loading...");
             if (sceneLoading.progress == 0.9f)
                 sceneLoading.allowSceneActivation = true;

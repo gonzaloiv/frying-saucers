@@ -14,17 +14,16 @@ namespace GameStates {
             GameConfig.Init(gameConfigData);
             levelController.gameObject.SetActive(false);
             inputManager.SetActive(false);
-            InitScreens();
             DataManager.Init(); // Has to be called the last because of DataLoadedEvent.
         }
 
         public void OnDataLoadedEvent (DataLoadedEventArgs dataLoadedEventArgs) {
-            if (!dataLoadedEventArgs.Leaderboard.IsFirstPlay) {
+            if (dataLoadedEventArgs.TotalPlaysAmount > 0) {
                 gameController.ToMainMenuState();
             } else {
-                // TODO: gameController.ToTutorialState();
-                gameController.ToMainMenuState();   
+                gameController.ToMainMenuState(); // TODO: gameController.ToTutorialState();
             }
+            DataManager.IncreaseUserDataTotalPlaysAmount();
         }
 
         #endregion
@@ -37,17 +36,6 @@ namespace GameStates {
 
         protected override void RemoveListeners () {
             DataManager.DataLoadedEvent -= OnDataLoadedEvent;
-        }
-
-        #endregion
-
-        #region Private Behaviour
-
-        private void InitScreens () {
-            mainMenuScreen.SetActive(false);
-            levelScreen.SetActive(false);
-            mainMenuScreen.SetActive(false);
-            leaderboardScreen.SetActive(false);
         }
 
         #endregion

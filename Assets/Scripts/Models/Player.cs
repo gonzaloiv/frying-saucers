@@ -6,23 +6,40 @@ public class Player {
 
     #region Fields / Properties
 
-    public static int Lives { get { return lives; } set { lives = value; } }
-    private static int lives;
+    public int Lives { get { return lives; } }
+    public int Score { get { return score; } }
+    public int Combo { get { return combo; } }
 
-    public static int Score { get { return score; } set { score = value; } }
-    private static int score;
+    public bool IsDead { get { return lives < 1; } }
 
-    public static int Combo { get { return combo; } set { combo = value; } }
-    private static int combo;
+    private int lives;
+    private int score;
+    private int combo;
 
     #endregion
 
     #region Public Behaviour
 
     public Player (int lives) {
-        Player.score = 0;
-        Player.combo = 0;
-        Player.lives = lives;
+        this.score = 0;
+        this.combo = 0;
+        this.lives = lives;
+    }
+
+    public void DecreaseLives(int livesAmount = 1) {
+        this.lives -= livesAmount;
+    }
+
+    public void IncreaseScore(int scoreAmount) {
+        this.score += scoreAmount;
+    }
+
+    public void ResetCombo() {
+        this.combo = 1;
+    }
+
+    public void IncreaseCombo(int comboAmount = 1) {
+        this.combo += comboAmount;
     }
 
     #endregion

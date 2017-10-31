@@ -6,7 +6,7 @@ public class InputManager : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] private ResultController resultController;
+    [SerializeField] private ResultIndicatorController resultIndicatorController;
     [SerializeField] private HandController handController;
 
     private GestureRecognizer gestureRecognizer;
@@ -81,7 +81,7 @@ public class InputManager : MonoBehaviour {
 
             if (Input.GetMouseButtonUp(0)) {
                 mouseUp = true;
-                resultController.SetCursorPosition(Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+                resultIndicatorController.SetCursorPosition(Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
             }
 
         }

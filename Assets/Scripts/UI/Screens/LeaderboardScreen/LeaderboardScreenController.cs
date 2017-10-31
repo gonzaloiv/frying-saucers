@@ -9,7 +9,8 @@ public class LeaderboardScreenController : MonoBehaviour {
 
     #region Fields
 
-    private const string NO_DATA = "No data";
+    private const string NO_DATA_SCORE_LABEL = "No data";
+    private const string NO_DATA_DATE_LABEL = "6666/66/66";
 
     [SerializeField] private Text[] scoreLabels = new Text[3];
     [SerializeField] private Text[] dateLabels = new Text[3];
@@ -28,20 +29,14 @@ public class LeaderboardScreenController : MonoBehaviour {
 
     private void SetScores () {
         for (int i = 0; i < scoreLabels.Length; i++) {
-            if (DataManager.Leaderboard.Scores[i] != 0) {
-                scoreLabels[i].text = DataManager.Leaderboard.Scores[i].ToString("00000");
-                scoreLabels[i].enabled = true;
-                dateLabels[i].text = DataManager.Leaderboard.Dates[i].ToString("yyyy/MM/dd");
-                dateLabels[i].enabled = true;
-                if ((DateTime.Now - DataManager.Leaderboard.Dates[i]).TotalSeconds <= 5) {
-                    scoreLabels[i].GetComponent<BlinkingTextBehaviour>().enabled = true;
-                } else {
-                    scoreLabels[i].GetComponent<BlinkingTextBehaviour>().enabled = false;
-                }
+            LeaderboardEntry leaderboardEntry = DataManager.UserData.LeaderboardEntries[i];
+            if (leaderboardEntry != null && leaderboardEntry.Score != 0) {
+                scoreLabels[i].text = leaderboardEntry.Score.ToString("00000");
+                dateLabels[i].text = leaderboardEntry.Date.ToString("yyyy/MM/dd");
+                scoreLabels[i].GetComponent<BlinkingTextBehaviour>().enabled = (DateTime.Now - leaderboardEntry.Date).TotalSeconds <= 5 ? true : false;
             } else {
-                scoreLabels[i].text = NO_DATA;
-                scoreLabels[i].enabled = true;
-                dateLabels[i].enabled = false;
+                scoreLabels[i].text = NO_DATA_SCORE_LABEL;
+                dateLabels[i].text = NO_DATA_DATE_LABEL;
             }
         }
     }

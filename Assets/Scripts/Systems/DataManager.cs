@@ -9,10 +9,10 @@ public class DataManager {
 
     #region Fields
 
-    public static Leaderboard Leaderboard { get { return leaderboard; } }
+    private const string USER_DATA_FILE_NAME = "UserData.binary";
 
-    private static Leaderboard leaderboard;
-    private static string dataPath;
+    public static UserData UserData { get { return userData; } }
+    private static UserData userData;
 
     #endregion
 
@@ -26,26 +26,25 @@ public class DataManager {
     #region Public Behaviour
 
     public static void Init () {
-        dataPath = Application.persistentDataPath;
-        Debug.Log("Data: " + Application.persistentDataPath);
+        
         LoadData();
     }
 
     public static void SetNewScore (int newScore) { 
-        for (int i = 0; i < leaderboard.Scores.Length; i++) {
-            if (newScore > leaderboard.Scores[i]) {
-                for (int j = leaderboard.Scores.Length; j < i; i--)
-                    leaderboard.Scores[j] = leaderboard.Scores[j - 1];
-                leaderboard.Scores[i] = newScore;
-                leaderboard.Dates[i] = DateTime.Now;
+        for (int i = 0; i < userData.LeaderboardEntries.Length; i++) {
+            if (newScore > userData.LeaderboardEntries[i].Score) {
+                for (int j = userData.LeaderboardEntries.Length; j < i; i--)
+                    userData.LeaderboardEntries[j] = userData.LeaderboardEntries[j - 1];
+                userData.LeaderboardEntries[i].Score = newScore;
+                userData.LeaderboardEntries[i].Date = DateTime.Now;
                 break;
             }
         }
         SaveData();
     }
 
-    public static void SetHasBeenTutorialPlayed () {
-        leaderboard.IsFirstPlay = false;
+    public static void IncreaseUserDataTotalPlaysAmount () {
+        userData.IncreaseTotalPlaysAmount();
         SaveData();
     }
 
@@ -54,23 +53,28 @@ public class DataManager {
     #region Private Behaviour
 
     private static void LoadData () {
-        leaderboard = new Leaderboard();
+        userData = new UserData();
         try {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream saveFile = File.Open(dataPath + "/leaderboard.binary", FileMode.Open);
-            leaderboard = (Leaderboard) formatter.Deserialize(saveFile);
+            FileStream saveFile = File.Open(Path.Combine(Application.persistentDataPath, USER_DATA_FILE_NAME), FileMode.Open);
+            userData = (UserData) formatter.Deserialize(saveFile);
             saveFile.Close();
         } catch (Exception exception) {
             Debug.Log(exception.Message);
         }
-        DataLoadedEvent.Invoke(new DataLoadedEventArgs(leaderboard));
+        DataLoadedEvent.Invoke(new DataLoadedEventArgs(userData.TotalPlaysAmount));
+        Debug.Log("UserData.TotalPlaysAmount " + userData.TotalPlaysAmount);
     }
 
     private static void SaveData () {
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream saveFile = File.Create(dataPath + "/leaderboard.binary");
-        formatter.Serialize(saveFile, leaderboard);
-        saveFile.Close();
+        try {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream saveFile = File.Create(Path.Combine(Application.persistentDataPath, USER_DATA_FILE_NAME));
+            formatter.Serialize(saveFile, userData);
+            saveFile.Close();
+        } catch (Exception exception) {
+            Debug.Log(exception.Message);
+        }
     }
 
     #endregion

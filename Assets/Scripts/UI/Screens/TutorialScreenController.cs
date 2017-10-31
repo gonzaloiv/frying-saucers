@@ -48,7 +48,6 @@ public class TutorialScreenController : MonoBehaviour {
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
         PlayerController.PlayerHitEvent += OnPlayerHitEvent;
         GameController.NewGameEvent += OnNewGameEvent;
-        LevelController.LevelEndEvent += OnLevelEndEvent;
         GameController.NewGameEvent += OnNewGameEvent;
     }
 
@@ -57,7 +56,6 @@ public class TutorialScreenController : MonoBehaviour {
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
         PlayerController.PlayerHitEvent -= OnPlayerHitEvent;
         GameController.NewGameEvent -= OnNewGameEvent;
-        LevelController.LevelEndEvent -= OnLevelEndEvent;
         GameController.NewGameEvent -= OnNewGameEvent;
     }
 
@@ -100,10 +98,6 @@ public class TutorialScreenController : MonoBehaviour {
 
     public void OnNewGameEvent () {
         NextInfoScreen();
-    }
-
-    public void OnLevelEndEvent () {
-        DataManager.SetHasBeenTutorialPlayed();
     }
 
     #endregion
