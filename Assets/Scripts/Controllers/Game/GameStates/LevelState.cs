@@ -11,18 +11,12 @@ namespace GameStates {
         public override void Enter () {
             base.Enter();
             levelController.gameObject.SetActive(true);
-            levelController.InitLevel(GetRandomLevelData());
-            inputManager.SetActive(true);
+            levelController.ToInitState(GetRandomLevelData());
             levelScreen.SetActive(true);
         }
 
-        public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
-            if (!playerHitEventArgs.IsDead)
-                levelController.ToRestartState();
-        }
-
-        public void OnWaveEndEvent () {
-            levelController.ToNewWaveState();
+        public void OnEscapeInputEvent () {
+            levelController.ToPauseState();
         }
 
         #endregion
@@ -30,13 +24,11 @@ namespace GameStates {
         #region Protected Behaviour
 
         protected override void AddListeners () {
-            Player.PlayerHitEvent += OnPlayerHitEvent;
-            WaveController.WaveEndEvent += OnWaveEndEvent;
+            InputManager.EscapeInputEvent += OnEscapeInputEvent;
         }
 
         protected override void RemoveListeners () {
-            Player.PlayerHitEvent -= OnPlayerHitEvent;
-            WaveController.WaveEndEvent -= OnWaveEndEvent;
+            InputManager.EscapeInputEvent -= OnEscapeInputEvent;
         }
 
         #endregion

@@ -47,27 +47,15 @@ public class LevelController : StateMachine {
         pauseScreen.SetActive(false);
     }
 
-    void OnEnable() {
-        InputManager.EscapeInputEvent += ToPauseState;
-    }
-
-    void OnDisable() {
-        InputManager.EscapeInputEvent -= ToPauseState;
-    }
-
     #endregion
 
     #region Public Behaviour
 
-    public void InitLevel (LevelData levelData) {
+    public void ToInitState (LevelData levelData) {
         currentWaveIndex = 0;
         currentLevelData = levelData;
-        ToNewLevelState();
-    }
-
-    public void ToNewLevelState () {
         NewLevelEvent.Invoke();
-        ChangeState<LevelStates.LevelStartState>();
+        ChangeState<LevelStates.InitState>();
     }
 
     public void ToNewWaveState () {
@@ -88,11 +76,7 @@ public class LevelController : StateMachine {
     }
 
     public void ToPauseState () {
-        if (Time.timeScale != 0) {
-            ChangeState<LevelStates.PauseState>();
-        } else {
-            ChangeState<LevelStates.WaveState>();
-        }
+        ChangeState<LevelStates.PauseState>();
     }
 
     #endregion

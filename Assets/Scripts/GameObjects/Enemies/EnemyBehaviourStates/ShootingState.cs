@@ -48,11 +48,11 @@ namespace EnemyBehaviourStates {
         #region Protected Behaviour
 
         protected override void AddListeners () {
-            InputManager.GestureInputEvent += OnGestureInputEvent;
+            GestureManager.GestureInputEvent += OnGestureInputEvent;
         }
 
         protected override void RemoveListeners () {
-            InputManager.GestureInputEvent -= OnGestureInputEvent;
+            GestureManager.GestureInputEvent -= OnGestureInputEvent;
         }
 
         #endregion

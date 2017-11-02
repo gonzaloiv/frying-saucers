@@ -24,24 +24,24 @@ public class WaveSpawner : MonoBehaviour {
 
     #region Public Behaviour
 
-    public List<GameObject> SpawnWaveEnemies (EnemyType[] waveEnemyTypes, GameObject player) {
+    public GameObject[] SpawnWaveEnemies (EnemyType[] waveEnemyTypes, GameObject player) {
         currentWaveEnemyGrid = Board.EnemyGrid(waveEnemyTypes.Length);
         currentWaveEnemies = new Enemy[waveEnemyTypes.Length];
-        List<GameObject> currentWaveEnemyObjects = new List<GameObject>();
+        GameObject[] currentWaveEnemyObjects = new GameObject[waveEnemyTypes.Length];
         for (int i = 0; i < waveEnemyTypes.Length; i++) {
             Enemy enemy = GetEnemyByType(waveEnemyTypes[i], i);
             currentWaveEnemies[i] = enemy;
-            currentWaveEnemyObjects.Add(enemySpawner.SpawnEnemy(enemy, player));
+            currentWaveEnemyObjects[i] = enemySpawner.SpawnEnemy(enemy, player);
         }
         return currentWaveEnemyObjects;
     }
 
-    public List<GameObject> SpawnRandomWaveEnemies (GameObject player) {
+    public GameObject[] SpawnRandomWaveEnemies (GameObject player) {
         currentWaveEnemyGrid = Board.EnemyGrid(GameConfig.RandomWaveEnemyAmount);
         currentWaveEnemies = GetRandomWaveEnemies(GameConfig.RandomWaveEnemyAmount);
-        List<GameObject> currentWaveEnemyObjects = new List<GameObject>();
+        GameObject[] currentWaveEnemyObjects = new GameObject[GameConfig.RandomWaveEnemyAmount];
         for (int i = 0; i < currentWaveEnemies.Length; i++)
-            currentWaveEnemyObjects.Add(enemySpawner.SpawnEnemy(currentWaveEnemies[i], player));
+            currentWaveEnemyObjects[i] = enemySpawner.SpawnEnemy(currentWaveEnemies[i], player);
         return currentWaveEnemyObjects;
     }
 

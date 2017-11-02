@@ -15,7 +15,6 @@ public class GameController : StateMachine {
 
     [Header("Game Controllers")]
     [SerializeField] private LevelController levelController;
-    [SerializeField] private GameObject inputManager;
 
     [Header("Game Screens")]
     [SerializeField] private GameObject mainMenuScreen;
@@ -28,7 +27,6 @@ public class GameController : StateMachine {
     public GameData GameData { get { return gameData; } }
     public GameConfigData GameConfigData { get { return gameConfigData; } }
     public LevelController LevelController { get { return levelController; } }
-    public GameObject InputManager { get { return inputManager; } }
     public GameObject MainMenuScreen { get { return mainMenuScreen; } }
     public GameObject LevelScreen { get { return levelScreen; } }
     public GameObject GameOverScreen { get { return gameOverScreen; } }
@@ -56,11 +54,7 @@ public class GameController : StateMachine {
         Reset();
         ChangeState<GameStates.InitState>();
     }
-
-    void Start () {
-        NewGameEvent.Invoke();
-    }
-
+        
     void OnEnable () {
         Player.PlayerHitEvent += OnPlayerHitEvent;
         LevelController.LevelEndEvent += OnLevelEndEvent;
@@ -76,6 +70,7 @@ public class GameController : StateMachine {
     #region Public Behaviour
 
     public void ToMainMenuState () {
+        NewGameEvent.Invoke();
         ChangeState<GameStates.MainMenuState>();
     }
 
@@ -83,7 +78,7 @@ public class GameController : StateMachine {
         ChangeState<GameStates.LevelState>();
     }
 
-    public void ToTutorialLevelState () {
+    public void ToTutorialState () {
         ChangeState<GameStates.TutorialState>();
     }
 

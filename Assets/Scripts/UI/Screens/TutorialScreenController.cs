@@ -42,16 +42,12 @@ public class TutorialScreenController : MonoBehaviour {
         EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
         Player.PlayerHitEvent += OnPlayerHitEvent;
-        GameController.NewGameEvent += OnNewGameEvent;
-        GameController.NewGameEvent += OnNewGameEvent;
     }
 
     void OnDisable () {
         EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
         Player.PlayerHitEvent -= OnPlayerHitEvent;
-        GameController.NewGameEvent -= OnNewGameEvent;
-        GameController.NewGameEvent -= OnNewGameEvent;
     }
 
     #endregion
@@ -89,9 +85,6 @@ public class TutorialScreenController : MonoBehaviour {
         currentInfoScreen--;
     }
 
-    public void OnNewGameEvent () {
-        NextInfoScreen();
-    }
 
     #endregion
 

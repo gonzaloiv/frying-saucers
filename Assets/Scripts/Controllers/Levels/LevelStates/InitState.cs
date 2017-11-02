@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LevelStates {
 
-    public class LevelStartState : BaseState {
+    public class InitState : BaseState {
 
         #region State Behaviour
 
@@ -15,8 +15,7 @@ namespace LevelStates {
             playerController.gameObject.SetActive(true);
             levelScreenController.Init(player);
             levelScreenController.gameObject.SetActive(true);
-            waveController.Reset();
-            waveController.NewWave(GetCurrentLevelData().LevelType, GetCurrentWaveData());
+            waveController.InitWave(GetCurrentLevelData().LevelType, GetCurrentWaveData());
             levelController.ToWaveState();
         }
 

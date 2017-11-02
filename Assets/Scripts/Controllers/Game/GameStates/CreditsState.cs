@@ -11,7 +11,6 @@ namespace GameStates {
         public override void Enter () {
             base.Enter();
 			creditsScreen.SetActive(true);
-            inputManager.SetActive(false);
         }
 
         public override void Exit () {

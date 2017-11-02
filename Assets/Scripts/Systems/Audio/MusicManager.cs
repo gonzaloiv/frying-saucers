@@ -16,16 +16,26 @@ public class MusicManager : MonoBehaviour {
 
     void Awake () {
         audioSource = GetComponent<AudioSource>();
+        AddListeners();
     }
 
-    void OnEnable () {
+    void Start() {
+        audioSource.clip = audioClips[(int) MusicTrack.MainMenu];
+        audioSource.Play();
+    }
+
+    void OnDestroy () {
+        RemoveListeners();
+    }
+
+    void AddListeners () {
         LevelController.NewLevelEvent += OnNewLevelEvent;
         Player.PlayerHitEvent += OnPlayerHitEvent;
         CreditsScreenController.CreditsEvent += OnCreditsEvent;
         GameController.NewGameEvent += OnNewGameEvent;
     }
 
-    void OnDisable () {
+    void RemoveListeners () {
         LevelController.NewLevelEvent -= OnNewLevelEvent;
         Player.PlayerHitEvent -= OnPlayerHitEvent;
         CreditsScreenController.CreditsEvent -= OnCreditsEvent;
@@ -36,9 +46,9 @@ public class MusicManager : MonoBehaviour {
 
     #region Event Behaviour
 
-    void OnNewGameEvent () {
+    void OnNewGameEvent() {
         audioSource.Stop();
-        audioSource.clip = audioClips[(int) MusicTrack.Menu];
+        audioSource.clip = audioClips[(int) MusicTrack.MainMenu];
         audioSource.Play();
     }
 
@@ -49,7 +59,7 @@ public class MusicManager : MonoBehaviour {
     }
 
     void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
-        if(!playerHitEventArgs.IsDead)
+        if (!playerHitEventArgs.IsDead)
             return;
         audioSource.Stop();
         audioSource.clip = audioClips[(int) MusicTrack.GameOver];

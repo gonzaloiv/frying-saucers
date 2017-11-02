@@ -5,58 +5,60 @@ using UnityEngine.UI;
 
 public class BlinkingTextBehaviour : MonoBehaviour {
 
-  #region Private Behaviour
+    #region Private Behaviour
 
-  private Text pauseScreenLabel;
-  private IEnumerator blinkingRoutine;
+    [SerializeField] private float animationTime = 0.3f;
 
-  #endregion
+    private Text pauseScreenLabel;
+    private IEnumerator blinkingRoutine;
 
-  #region Mono Behaviour
+    #endregion
 
-  void Awake() {
-    pauseScreenLabel = GetComponent<Text>();
-    blinkingRoutine = BlinkingRoutine();
-  }
+    #region Mono Behaviour
 
-  void OnEnable() {
-    Play();
-  }
-
-  void OnDisable() {
-    Stop();
-  }
-
-  #endregion
-
-  #region Public Behaviour
-
-  public void Play() {
-    StartCoroutine(blinkingRoutine);
-  }
-
-  public void Stop() {
-    StopCoroutine(blinkingRoutine);
-  }
-
-  #endregion
-
-  #region Private Behaviour
-
-  private IEnumerator BlinkingRoutine() {
-    float timeToWait;
-    while (gameObject.activeSelf) {
-      pauseScreenLabel.enabled = true;
-      timeToWait = Time.realtimeSinceStartup + 0.3f;
-      while (Time.realtimeSinceStartup < timeToWait)
-        yield return 0;
-      pauseScreenLabel.enabled = false;
-      timeToWait = Time.realtimeSinceStartup + 0.3f;
-      while (Time.realtimeSinceStartup < timeToWait)
-        yield return 0;
+    void Awake () {
+        pauseScreenLabel = GetComponent<Text>();
+        blinkingRoutine = BlinkingRoutine();
     }
-  }
 
-  #endregion
+    void OnEnable () {
+        Play();
+    }
+
+    void OnDisable () {
+        Stop();
+    }
+
+    #endregion
+
+    #region Public Behaviour
+
+    public void Play () {
+        StartCoroutine(blinkingRoutine);
+    }
+
+    public void Stop () {
+        StopCoroutine(blinkingRoutine);
+    }
+
+    #endregion
+
+    #region Private Behaviour
+
+    private IEnumerator BlinkingRoutine () {
+        float timeToWait;
+        while (gameObject.activeInHierarchy) {
+            pauseScreenLabel.enabled = true;
+            timeToWait = Time.realtimeSinceStartup + animationTime;
+            while (Time.realtimeSinceStartup < timeToWait)
+                yield return 0;
+            pauseScreenLabel.enabled = false;
+            timeToWait = Time.realtimeSinceStartup + animationTime;
+            while (Time.realtimeSinceStartup < timeToWait)
+                yield return 0;
+        }
+    }
+
+    #endregion
 
 }

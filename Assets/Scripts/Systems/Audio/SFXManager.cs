@@ -32,9 +32,14 @@ public class SFXManager : MonoBehaviour {
 
     void Awake () {
         audioSource = GetComponent<AudioSource>();
+        AddListeners();
     }
 
-    void OnEnable () {
+    void OnDestroy () {
+        RemoveListeners();
+    }
+
+    void AddListeners () {
 
         // Input
         EnemyBehaviour.RightGestureInputEvent += OnRightGestureInputEvent;
@@ -53,7 +58,7 @@ public class SFXManager : MonoBehaviour {
 
     }
 
-    void OnDisable () {
+    void RemoveListeners () {
 
         // Input
         EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInputEvent;

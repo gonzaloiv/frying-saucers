@@ -12,7 +12,6 @@ namespace GameStates {
             base.Enter();
             gameOverScreen.SetActive(true);
             levelController.gameObject.SetActive(false);
-            inputManager.SetActive(false);
         }
 
         public override void Exit () {

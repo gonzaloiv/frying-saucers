@@ -10,8 +10,8 @@ namespace LevelStates {
         #region State Behaviour
 
         public override void Enter () {
-            waveController.Reset();
-            waveController.NewWave(GetCurrentLevelData().LevelType, GetCurrentWaveData());
+            waveController.InitWave(GetCurrentLevelData().LevelType, GetCurrentWaveData());
+            waveRefillBehaviour.enabled = GetCurrentLevelData().LevelType != LevelType.TutorialLevel;
         }
 
         #endregion

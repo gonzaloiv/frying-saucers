@@ -9,11 +9,11 @@ public class WaveController : MonoBehaviour {
 
     [SerializeField] private GameObject enemyTypeLabelPrefab;
 
-    public List<GameObject> CurrentWaveEnemies { get { return currentWaveEnemies; } }
+    public GameObject[] CurrentWaveEnemies { get { return currentWaveEnemies; } }
 
     private EnemyTypeLabelSpawner enemyTypeLabelSpawner;
     private WaveSpawner waveSpawner;
-    private List<GameObject> currentWaveEnemies;
+    private GameObject[] currentWaveEnemies;
     private GameObject player;
 
     #endregion
@@ -50,8 +50,8 @@ public class WaveController : MonoBehaviour {
         this.player = player;
     }
 
-    public void NewWave (LevelType levelType, WaveData waveData) {
-        currentWaveEnemies = new List<GameObject>();
+    public void InitWave (LevelType levelType, WaveData waveData) {
+        ResetWaveEnemies();
         enemyTypeLabelSpawner.Init();
         switch (levelType) {
         case LevelType.RandomLevel:
@@ -61,20 +61,24 @@ public class WaveController : MonoBehaviour {
             currentWaveEnemies = waveSpawner.SpawnWaveEnemies(waveData.EnemyTypes, player);
             break;
         }
-        currentWaveEnemies.ForEach(enemy => enemyTypeLabelSpawner.AddGesture(enemy.GetComponent<EnemyController>().Enemy));
+        foreach (GameObject enemy in currentWaveEnemies)
+            enemyTypeLabelSpawner.AddGesture(enemy.GetComponent<EnemyController>().Enemy);
         enemyTypeLabelSpawner.ShowGestures(2);
     }
 
-    public void Reset () {
-        if (currentWaveEnemies != null)
-            currentWaveEnemies.ForEach(enemy => {
+    public void ResetWaveEnemies () {
+        if (currentWaveEnemies != null) {
+            foreach (GameObject enemy in currentWaveEnemies) {
                 if (enemy != null)
                     enemy.SetActive(false);
-            });
+            }
+        }
+        currentWaveEnemies = null;
     }
 
     public void AddEnemy (int index) {
         GameObject enemy = waveSpawner.SpawnRandomEnemy(index, player);
+        currentWaveEnemies[index] = enemy;
         enemyTypeLabelSpawner.SetGestureByIndex(index, enemy.GetComponent<EnemyController>().Enemy);
         enemyTypeLabelSpawner.ShowGestures(1);
     }
@@ -88,8 +92,7 @@ public class WaveController : MonoBehaviour {
     }
 
     public GameObject GetRandomActiveEnemy () {
-        currentWaveEnemies = currentWaveEnemies.Where(enemy => enemy.activeInHierarchy).ToList();
-        return currentWaveEnemies[Random.Range(0, currentWaveEnemies.Count)];
+        return currentWaveEnemies[Random.Range(0, currentWaveEnemies.Length)];
     }
 
     #endregion
@@ -98,8 +101,7 @@ public class WaveController : MonoBehaviour {
 
     private IEnumerator EnemyHitRoutine () {
         yield return new WaitForSeconds(1);
-        currentWaveEnemies = currentWaveEnemies.Where(enemy => enemy.activeInHierarchy).ToList();
-        if (currentWaveEnemies.Count() == 0)
+        if (currentWaveEnemies.Length == 0)
             WaveEndEvent.Invoke();
     }
 

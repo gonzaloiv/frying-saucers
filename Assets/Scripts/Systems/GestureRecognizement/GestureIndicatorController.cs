@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GestureSpawner : MonoBehaviour {
+public class GestureIndicatorController : MonoBehaviour {
 
     #region Fields
 

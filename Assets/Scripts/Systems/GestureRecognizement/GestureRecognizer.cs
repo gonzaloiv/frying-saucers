@@ -10,7 +10,7 @@ public class GestureRecognizer : MonoBehaviour {
 
     #region Fields
 
-    private GestureSpawner gestureSpawner;
+    [SerializeField] private GestureIndicatorController gestureIndicatorController;
     private List<Gesture> trainingSet = new List<Gesture>();
 
     public int CurrentPointAmount { get { return points.Count; } }
@@ -28,7 +28,6 @@ public class GestureRecognizer : MonoBehaviour {
     #region Mono Behaviour
 
     void Awake () {
-        gestureSpawner = GetComponent<GestureSpawner>();
         foreach (TextAsset gestureXml in Resources.LoadAll<TextAsset>("GestureSet/"))
             trainingSet.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
     }
@@ -40,7 +39,7 @@ public class GestureRecognizer : MonoBehaviour {
     public void NewLine (Transform position) {
         if (gestureLines.Count >= 2) // Problems with time based recognition
             return; 
-        currentGestureLine = gestureSpawner.SpawnGestureLineRenderer(position);
+        currentGestureLine = gestureIndicatorController.SpawnGestureLineRenderer(position);
         gestureLines.Add(currentGestureLine);
         ++strokeId;
         vertexCount = 0;

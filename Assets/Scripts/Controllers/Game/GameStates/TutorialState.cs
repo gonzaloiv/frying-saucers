@@ -11,13 +11,12 @@ namespace GameStates {
         public override void Enter () {
             base.Enter();
             levelController.gameObject.SetActive(true);
-            levelController.InitLevel(GetTutorialLevelData());
-            inputManager.SetActive(true);
+            levelController.ToInitState(GetTutorialLevelData());
             levelScreen.SetActive(true);
             tutorialScreen.SetActive(true);
         }
 
-        public override void Exit() {
+        public override void Exit () {
             base.Exit();
             tutorialScreen.SetActive(false);
         }

@@ -1,19 +1,17 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using PDollarGestureRecognizer;
 
-public class InputManager : MonoBehaviour {
+public class GestureManager : MonoBehaviour {
 
-    #region Fields
+    #region Fields / Properties
 
     [SerializeField] private ResultIndicatorController resultIndicatorController;
-    [SerializeField] private HandController handController;
+    [SerializeField] private HandIndicatorController handIndicatorController;
 
     private GestureRecognizer gestureRecognizer;
-
-    private RuntimePlatform platform;
     private Vector3 virtualKeyPosition = Vector2.zero;
-
     private IEnumerator gestureRoutine;
     private bool listening = false;
     private bool mouseUp = true;
@@ -22,9 +20,6 @@ public class InputManager : MonoBehaviour {
     #endregion
 
     #region Events
-
-    public delegate void EscapeInputEventHandler ();
-    public static event EscapeInputEventHandler EscapeInputEvent = delegate {};
 
     public delegate void GestureInputEventHandler (GestureInputEventArgs gestureInputEventArgs);
     public static event GestureInputEventHandler GestureInputEvent = delegate {};
@@ -35,64 +30,52 @@ public class InputManager : MonoBehaviour {
 
     void Awake () {
         gestureRecognizer = GetComponentInChildren<GestureRecognizer>();
-        platform = Application.platform;
     }
 
     void OnEnable () {
         EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
     }
 
-    void OnDisable () {
-        gestureRecognizer.ResetGestureLines();
-        handController.RemoveHand();
-        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
-    }
-
     void Update () {
 
-        if (Time.timeScale != 0) { 
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+            if (Input.touchCount > 0)
+                virtualKeyPosition = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y);
+        } else {
+            if (Input.GetMouseButton(0))
+                virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
+        }
 
-            // KEYBOARD
+        if (Input.GetMouseButtonDown(0)) {
+            if (!listening)
+                StartCoroutine(GestureRoutine(sectionTime));
+            gestureRecognizer.NewLine(transform);
+            mouseUp = false;
+        }
 
-            if (Input.GetKeyDown(KeyCode.Escape))
-                EscapeInputEvent.Invoke();
+        if (Input.GetMouseButton(0)) {
+            handIndicatorController.SetHand(0, Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+            gestureRecognizer.NewPoint(virtualKeyPosition);
+        }
 
-            // MOUSE & TOUCH
-
-            if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
-                if (Input.touchCount > 0)
-                    virtualKeyPosition = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y);
-            } else {
-                if (Input.GetMouseButton(0))
-                    virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
-            }
-
-            if (Input.GetMouseButtonDown(0)) {
-                if (!listening)
-                    StartCoroutine(GestureRoutine(sectionTime));
-                gestureRecognizer.NewLine(transform);
-                mouseUp = false;
-            }
-
-            if (Input.GetMouseButton(0)) {
-                handController.SetHand(0, Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
-                gestureRecognizer.NewPoint(virtualKeyPosition);
-            }
-
-            if (Input.GetMouseButtonUp(0)) {
-                mouseUp = true;
-                resultIndicatorController.SetCursorPosition(Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
-            }
-
+        if (Input.GetMouseButtonUp(0)) {
+            mouseUp = true;
+            resultIndicatorController.SetCursorPosition(Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
         }
 
     }
 
+    void OnDisable () {
+        gestureRecognizer.ResetGestureLines();
+        handIndicatorController.RemoveHand();
+        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
+    }
+
     #endregion
 
-    #region Event Behaviour
+    #region Public Behaviour
 
-    void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
+    public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
         sectionTime = enemyAttackEventArgs.SectionTime;
     }
 
@@ -101,7 +84,7 @@ public class InputManager : MonoBehaviour {
     #region Private Behaviour
 
     private IEnumerator GestureRoutine (float sectionTime) {
-        
+
         listening = true;
         float initialTime = Time.time;
 

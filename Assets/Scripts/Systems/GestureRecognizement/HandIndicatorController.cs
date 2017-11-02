@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandController : MonoBehaviour {
+public class HandIndicatorController : MonoBehaviour {
 
     #region Fields
 

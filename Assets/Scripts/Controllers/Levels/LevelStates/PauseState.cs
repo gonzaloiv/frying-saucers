@@ -22,16 +22,20 @@ namespace LevelStates {
             TimeManager.StartTime();
         }
 
+        public void OnTapInputEvent()   {
+            levelController.ToWaveState();
+        }
+
         #endregion
 
         #region Protected Behaviour
 
         protected override void AddListeners() {
-            
+            InputManager.TapInputEvent += OnTapInputEvent;
         }
 
         protected override void RemoveListeners() {
-
+            InputManager.TapInputEvent -= OnTapInputEvent;
         }
 
         #endregion

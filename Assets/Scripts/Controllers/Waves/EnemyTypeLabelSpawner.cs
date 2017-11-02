@@ -8,7 +8,8 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] private GameObject[] gesturePrefabs; // Same order as EnemyType
+    [Header("Same order as EnemyType")]
+    [SerializeField] private GameObject[] gesturePrefabs;
 
     private GameObjectArrayPool gesturePool;
     private List<Enemy> currentEnemies;
@@ -23,8 +24,6 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     }
 
     void OnDisable () {
-        if (gestures != null)
-            gestures.ForEach(gesture => gesture.SetActive(false));
         StopAllCoroutines();
     }
 
@@ -33,7 +32,7 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     #region Public Behaviour
 
     public void Init () {
-        currentEnemies = new List<Enemy>();
+        ResetGestures();
     }
 
     public void AddGesture (Enemy enemy) {
@@ -86,6 +85,12 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
             gestures[i].SetActive(false);
             yield return new WaitForSeconds(.15f);
         }
+    }
+
+    private void ResetGestures () {
+        if (gestures != null)
+            gestures.ForEach(gesture => gesture.SetActive(false));
+        currentEnemies = new List<Enemy>();       
     }
 
     #endregion

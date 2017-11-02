@@ -9,7 +9,6 @@ namespace LevelStates {
 
         #region Fields
 
-        private WaveData currentWaveData;
         private bool playing = false;
 
         #endregion
@@ -18,9 +17,7 @@ namespace LevelStates {
 
         public override void Enter () {
             base.Enter();
-            currentWaveData = GetCurrentWaveData();
             StartCoroutine(WaveRoutine());
-            waveRefillBehaviour.enabled = GetCurrentLevelData().LevelType != LevelType.TutorialLevel;
         }
 
         public override void Exit () {
@@ -44,10 +41,12 @@ namespace LevelStates {
 
         protected override void AddListeners () {
             Player.PlayerHitEvent += OnPlayerHitEvent;
+            WaveController.WaveEndEvent += OnWaveEndEvent;
         }
 
         protected override void RemoveListeners () {
             Player.PlayerHitEvent -= OnPlayerHitEvent;
+            WaveController.WaveEndEvent -= OnWaveEndEvent;
         }
 
         #endregion
@@ -56,12 +55,17 @@ namespace LevelStates {
 
         private IEnumerator WaveRoutine () {
             playing = true;
-            float routineTime = Random.Range(currentWaveData.RoutineTime[0], currentWaveData.RoutineTime[1]);
+            float[] waveRoutineTime = GetCurrentWaveData().RoutineTime; 
+            float routineTime = Random.Range(waveRoutineTime[0], waveRoutineTime[1]);
             yield return new WaitForSeconds(1);
             GameObject currentEnemy = waveController.GetRandomActiveEnemy();
             currentEnemy.GetComponent<EnemyBehaviour>().Play(routineTime);
             yield return new WaitForSeconds(routineTime);
             playing = false;
+        }
+
+        private void OnWaveEndEvent () {
+            levelController.ToNewWaveState();
         }
 
         #endregion

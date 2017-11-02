@@ -13,7 +13,6 @@ namespace GameStates {
             new Board();
             GameConfig.Init(gameConfigData);
             levelController.gameObject.SetActive(false);
-            inputManager.SetActive(false);
             DataManager.Init(); // Has to be called the last because of DataLoadedEvent.
         }
 
@@ -21,7 +20,7 @@ namespace GameStates {
             if (dataLoadedEventArgs.TotalPlaysAmount > 0) {
                 gameController.ToMainMenuState();
             } else {
-                gameController.ToMainMenuState(); // TODO: gameController.ToTutorialState();
+                gameController.ToTutorialState(); // TODO: gameController.ToTutorialState();
             }
             DataManager.IncreaseUserDataTotalPlaysAmount();
         }
