@@ -7,8 +7,9 @@ public class PlayerWeaponController : MonoBehaviour {
     #region Fields
 
     [SerializeField] private GameObject laserPrefab;
+
     private ParticleSystem laser;
-    private Vector2 enemyPosition;
+    private Vector2 enemyPosition = Vector2.zero;
 
     #endregion
 
@@ -30,22 +31,21 @@ public class PlayerWeaponController : MonoBehaviour {
     }
 
     void OnEnable () {
-        enemyPosition = Vector2.zero;
-        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInput;
-        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
-
+        GestureManager.RightGestureInputEvent += OnRightGestureInput;
+        EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
+        enemyPosition = Vector2.zero; 
     }
 
     void OnDisable () {
-        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInput;
-        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
+        GestureManager.RightGestureInputEvent -= OnRightGestureInput;
+        EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
     }
 
     #endregion
 
     #region Public Behaviour
 
-    public void OnRightGestureInput (RightGestureInputEventArgs rightGestureInputEventArgs) {
+    public void OnRightGestureInput (GestureInputEventArgs gestureInputEventArgs) {
         laser.Play();
         PlayerShotEvent.Invoke();
     }

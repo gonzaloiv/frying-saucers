@@ -11,7 +11,6 @@ public class HandIndicatorController : MonoBehaviour {
 
     private List<GameObject> hands;
     private GameObjectPool tracePool;
-
     private GameObject currentHand = null;
     private Vector2 currentPosition;
     private GameObject currentParticle = null;
@@ -27,13 +26,13 @@ public class HandIndicatorController : MonoBehaviour {
     }
 
     void OnEnable () {
-        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInputEvent;
-        EnemyBehaviour.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
+        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
     }
 
     void OnDisable () {
-        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInputEvent;
-        EnemyBehaviour.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
+        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
     }
 
     #endregion
@@ -41,6 +40,9 @@ public class HandIndicatorController : MonoBehaviour {
     #region Public Behaviour
 
     public void SetHand (int index, Vector2 position) {
+
+        if (hands == null)
+            return;
 
         currentPosition = position;
 
@@ -64,11 +66,11 @@ public class HandIndicatorController : MonoBehaviour {
             currentHand.SetActive(false); 
     }
 
-    public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
+    public void OnRightGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
         StartCoroutine(GestureRoutine(1));    
     }
 
-    public void OnWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputEventArgs) {
+    public void OnWrongGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
         StartCoroutine(GestureRoutine(2));
     }
 

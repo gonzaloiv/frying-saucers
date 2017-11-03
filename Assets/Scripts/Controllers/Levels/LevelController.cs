@@ -8,13 +8,13 @@ public class LevelController : StateMachine {
     #region Fields
 
     [SerializeField] private WaveController waveController;
-    [SerializeField] private GameObject inputManager;
+    [SerializeField] private GameObject gestureManager;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private LevelScreenController levelScreenController;
     [SerializeField] private GameObject pauseScreen;
 
     public WaveController WaveController { get { return waveController; } }
-    public GameObject InputManagerObject { get { return inputManager; } } // Temporarily...
+    public GameObject GestureManager { get { return gestureManager; } } // Temporarily...
     public PlayerController PlayerController { get { return playerController; } }
     public LevelScreenController LevelScreenController { get { return levelScreenController; } }
     public GameObject PauseScreen { get { return pauseScreen; } }
@@ -24,7 +24,7 @@ public class LevelController : StateMachine {
 
     private PlayerController playerController;
     private LevelData currentLevelData;
-    private int currentWaveIndex = 0;
+    private int currentWaveIndex;
 
     #endregion
 
@@ -47,18 +47,22 @@ public class LevelController : StateMachine {
         pauseScreen.SetActive(false);
     }
 
+    void OnDisable() {
+        gestureManager.SetActive(false);
+    }
+
     #endregion
 
     #region Public Behaviour
 
     public void ToInitState (LevelData levelData) {
-        currentWaveIndex = 0;
+        currentWaveIndex = -1;
         currentLevelData = levelData;
         NewLevelEvent.Invoke();
         ChangeState<LevelStates.InitState>();
     }
 
-    public void ToNewWaveState () {
+    public void ToWaveStartState () {
         if (currentWaveIndex < currentLevelData.WavesData.Count) {
             currentWaveIndex++;
             ChangeState<LevelStates.WaveStartState>();

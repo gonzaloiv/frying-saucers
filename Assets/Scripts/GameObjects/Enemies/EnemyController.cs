@@ -1,24 +1,43 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnemyBehaviourStates;
 
-public class EnemyController : MonoBehaviour {
+public class EnemyController : StateMachine {
 
     #region Fields
 
+    [SerializeField] private GameObject laserPrefab;
+    [SerializeField] private GameObject haloPrefab;
+    [SerializeField] private GameObject explosionPrefab;
+
     public Enemy Enemy { get { return enemy; } }
 
-    [SerializeField] private GameObject explosionPrefab;
-    [SerializeField] private GameObject haloPrefab;
+    public GameObject Player { get { return player; } }
+    public ParticleSystem Laser { get { return laser; } }
+    public bool Hit { get { return hit; } }
+    public float RoutineTime { get { return routineTime; } }
+    
+    private Enemy enemy;
+    private GameObject player;
 
+    private ParticleSystem laser;
     private ParticleSystem explosion;
     private ParticleSystem halo;
     private Animator anim;
-    private Enemy enemy;
+
+    private bool hit = false;
+    private float routineTime;
 
     #endregion
 
     #region Events
+
+    public delegate void EnemyAttackEventHandler (EnemyAttackEventArgs enemyAttackEventArgs);
+    public static event EnemyAttackEventHandler EnemyAttackEvent = delegate {};
+
+    public delegate void EnemyShotEventHandler (EnemyShotEventArgs enemyShotEventArgs);
+    public static event EnemyShotEventHandler EnemyShotEvent = delegate {};
 
     public delegate void EnemyHitEventHandler ();
     public static event EnemyHitEventHandler EnemyHitEvent = delegate {};
@@ -28,18 +47,33 @@ public class EnemyController : MonoBehaviour {
     #region Mono Behaviour
 
     void Awake () {
+        laser = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
         explosion = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
         halo = Instantiate(haloPrefab, transform).GetComponent<ParticleSystem>();
         anim = GetComponent<Animator>();
     }
 
-    void OnEnable () {
-        transform.rotation = Quaternion.identity;
-    }
-
     #endregion
 
-    #region Public Behaviour
+    #region IEnemyBehaviour
+
+    public void Init (GameObject player) {
+        this.player = player;
+        ChangeState<IdleState>();
+    }
+
+    public void Play (float routineTime) {
+        this.routineTime = routineTime;
+        StartCoroutine(EnemyRoutine());
+    }
+
+    public void Stop () {
+        StopAllCoroutines();
+    }
+
+    public void Init (Enemy enemy) {
+        this.enemy = enemy;
+    }
 
     public void DisableRoutine () {
         StopAllCoroutines();
@@ -47,10 +81,6 @@ public class EnemyController : MonoBehaviour {
         explosion.transform.position = transform.position;
         explosion.Play();
         EnemyHitEvent.Invoke();
-    }
-
-    public void Init (Enemy enemy) {
-        this.enemy = enemy;
     }
 
     public void Disable () {
@@ -65,6 +95,25 @@ public class EnemyController : MonoBehaviour {
         halo.Stop();
     }
 
+    public void InvokeEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
+        EnemyAttackEvent.Invoke(enemyAttackEventArgs);
+    }
+
+    public void InvokeEnemyShotEvent (EnemyShotEventArgs enemyShotEventArgs) {
+        EnemyShotEvent.Invoke(enemyShotEventArgs);
+    }
+
     #endregion
 
+    #region Private Behaviour
+
+    private IEnumerator EnemyRoutine () {
+        hit = false;
+        ChangeState<ShootingState>();  
+        yield return new WaitForSeconds(routineTime); // Depends on ShootingRoutine() in the ShootingState
+        ChangeState<IdleState>();
+    }
+
+    #endregion
+	
 }

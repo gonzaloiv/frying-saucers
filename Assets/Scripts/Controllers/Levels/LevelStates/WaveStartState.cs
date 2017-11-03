@@ -12,6 +12,7 @@ namespace LevelStates {
         public override void Enter () {
             waveController.InitWave(GetCurrentLevelData().LevelType, GetCurrentWaveData());
             waveRefillBehaviour.enabled = GetCurrentLevelData().LevelType != LevelType.TutorialLevel;
+            levelController.ToWaveState();
         }
 
         #endregion

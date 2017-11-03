@@ -101,7 +101,7 @@ public class WaveController : MonoBehaviour {
 
     private IEnumerator EnemyHitRoutine () {
         yield return new WaitForSeconds(1);
-        if (currentWaveEnemies.Length == 0)
+        if (currentWaveEnemies.Where(enemy => enemy.activeInHierarchy).Count() == 0)
             WaveEndEvent.Invoke();
     }
 

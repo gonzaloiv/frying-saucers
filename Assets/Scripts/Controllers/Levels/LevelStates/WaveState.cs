@@ -18,11 +18,13 @@ namespace LevelStates {
         public override void Enter () {
             base.Enter();
             StartCoroutine(WaveRoutine());
+            gestureManager.SetActive(true);
         }
 
         public override void Exit () {
             base.Exit();
             StopAllCoroutines();
+            gestureManager.SetActive(false);
         }
 
         public override void Play () {
@@ -33,6 +35,7 @@ namespace LevelStates {
 
         public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
             StopCoroutine(WaveRoutine());
+            levelController.ToRestartState();
         }
 
         #endregion
@@ -59,13 +62,13 @@ namespace LevelStates {
             float routineTime = Random.Range(waveRoutineTime[0], waveRoutineTime[1]);
             yield return new WaitForSeconds(1);
             GameObject currentEnemy = waveController.GetRandomActiveEnemy();
-            currentEnemy.GetComponent<EnemyBehaviour>().Play(routineTime);
+            currentEnemy.GetComponent<EnemyController>().Play(routineTime);
             yield return new WaitForSeconds(routineTime);
             playing = false;
         }
 
         private void OnWaveEndEvent () {
-            levelController.ToNewWaveState();
+            levelController.ToWaveStartState();
         }
 
         #endregion

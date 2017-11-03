@@ -10,16 +10,12 @@ public class GestureRecognizer : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] private GestureIndicatorController gestureIndicatorController;
     private List<Gesture> trainingSet = new List<Gesture>();
 
     public int CurrentPointAmount { get { return points.Count; } }
     private List<Point> points = new List<Point>();
 
-    private List<LineRenderer> gestureLines = new List<LineRenderer>();
-    private LineRenderer currentGestureLine;
-
-    private int strokeId = 0;
+    private int strokeID = 0;
     private int vertexCount = 0;
     private Vector2 currentPointPosition = Vector2.zero;
 
@@ -37,11 +33,7 @@ public class GestureRecognizer : MonoBehaviour {
     #region Public Behaviour
 
     public void NewLine (Transform position) {
-        if (gestureLines.Count >= 2) // Problems with time based recognition
-            return; 
-        currentGestureLine = gestureIndicatorController.SpawnGestureLineRenderer(position);
-        gestureLines.Add(currentGestureLine);
-        ++strokeId;
+        ++strokeID;
         vertexCount = 0;
     }
 
@@ -50,10 +42,7 @@ public class GestureRecognizer : MonoBehaviour {
             return;
         ++vertexCount;
         currentPointPosition = position;
-        points.Add(new Point(position.x, -position.y, strokeId));
-        Vector2 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 1));
-        currentGestureLine.positionCount = vertexCount;
-        currentGestureLine.SetPosition(vertexCount - 1, worldPosition);
+        points.Add(new Point(position.x, -position.y, strokeID));
     }
 
     public Result RecognizeGesture () {
@@ -61,13 +50,8 @@ public class GestureRecognizer : MonoBehaviour {
     }
 
     public void ResetGestureLines () {
-        strokeId = 0;
+        strokeID = 0;
         points.Clear();
-        foreach (LineRenderer lineRenderer in gestureLines) {
-            lineRenderer.positionCount = 0;
-            lineRenderer.gameObject.SetActive(false);
-        }
-        gestureLines.Clear();
     }
 
     #endregion

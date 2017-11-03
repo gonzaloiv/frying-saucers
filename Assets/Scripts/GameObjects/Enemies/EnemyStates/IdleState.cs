@@ -9,10 +9,12 @@ namespace EnemyBehaviourStates {
         #region Public Behaviour
 
         public override void Enter () {
+            base.Enter();
             transform.rotation = Quaternion.identity;
         }
 
         public override void Play () {
+            base.Play();
             transform.position = !hit ? Vector2.Lerp(transform.position, enemyController.Enemy.Position, GameConfig.EnemyMaxSpeed / 2 * Time.deltaTime) : (Vector2) transform.position;
         }
 

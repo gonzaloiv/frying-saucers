@@ -39,13 +39,13 @@ public class TutorialScreenController : MonoBehaviour {
     }
 
     void OnEnable () {
-        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
+        EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
         Player.PlayerHitEvent += OnPlayerHitEvent;
     }
 
     void OnDisable () {
-        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
+        EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
         Player.PlayerHitEvent -= OnPlayerHitEvent;
     }

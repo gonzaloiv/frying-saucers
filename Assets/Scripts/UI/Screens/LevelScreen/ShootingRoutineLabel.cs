@@ -22,12 +22,12 @@ public class ShootingRoutineLabel : MonoBehaviour {
     }
 
     void OnEnable () {
-        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
+        EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
     }
 
     void OnDisable () {
-        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
+        EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
     }
 

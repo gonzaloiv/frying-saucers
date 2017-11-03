@@ -17,12 +17,12 @@ public class CameraController : MonoBehaviour {
 
     void OnEnable () {
         Player.PlayerHitEvent += OnPlayerHitEvent;
-        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInput;
+        GestureManager.RightGestureInputEvent += OnRightGestureInput;
     }
 
     void OnDisable () {
         Player.PlayerHitEvent -= OnPlayerHitEvent;
-        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInput;
+        GestureManager.RightGestureInputEvent -= OnRightGestureInput;
     }
 
     #endregion
@@ -33,7 +33,7 @@ public class CameraController : MonoBehaviour {
         StartCoroutine(CameraShakeRoutine());
     }
 
-    public void OnRightGestureInput (RightGestureInputEventArgs rightGestureInputEventArgs) {
+    public void OnRightGestureInput (GestureInputEventArgs gestureInputEventArgs) {
         StartCoroutine(CameraShakeRoutine());
     }
 

@@ -13,7 +13,6 @@ public class LevelScreenController : MonoBehaviour {
     private const string LIVES_TEXT = "LIVES";
     private string[] EMOJIS = new string[] { "ʘ.ʘ", "╥_╥", "＾∇＾", "˘ڡ˘" };
 
-    [SerializeField] private GameObject gestureManager;
     [SerializeField] private ResultIndicatorController resultIndicatorController;
     [SerializeField] private Text emojiLabel;
     [SerializeField] private Text scoreLabel;
@@ -25,10 +24,6 @@ public class LevelScreenController : MonoBehaviour {
 
     #region Mono Behaviour
 
-    void Awake() {
-        gestureManager.SetActive(false);
-    }
-
     void Update () {
         scoreLabel.text = SCORE_TEXT + "\n" + player.Score;
     }
@@ -36,17 +31,15 @@ public class LevelScreenController : MonoBehaviour {
     void OnEnable () {
         DOTween.Sequence().Append(scoreLabel.DOFade(0, FADE_IN_TIME / 2)).Append(scoreLabel.DOFade(1, FADE_IN_TIME / 2));
         DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
-        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInputEvent;
-        EnemyBehaviour.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
+        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
         Player.PlayerHitEvent += OnPlayerHitEvent;
-        gestureManager.SetActive(true);
     }
 
     void OnDisable () {
-        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInputEvent;
-        EnemyBehaviour.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
+        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
         Player.PlayerHitEvent -= OnPlayerHitEvent;
-        gestureManager.SetActive(false);
     }
 
     #endregion
@@ -59,14 +52,14 @@ public class LevelScreenController : MonoBehaviour {
         UpdateLivesLabel(player.Lives);
     }
 
-    public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
+    public void OnRightGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
         IEnumerator emojiRoutine = player.Combo >= 5 ? EmojiRoutine(EMOJIS[3], 3) : EmojiRoutine(EMOJIS[2], 1);
         StartCoroutine(emojiRoutine);
         player.IncreaseCombo();
-        player.IncreaseScore((int) Mathf.Ceil(GameConfig.EnemyScore * player.Combo * GestureMultiplier(rightGestureInputEventArgs.GestureInputEventArgs.Time)));
+        player.IncreaseScore((int) Mathf.Ceil(GameConfig.EnemyScore * player.Combo * GestureMultiplier(gestureInputEventArgs.Time)));
     }
 
-    public void OnWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputArgs) {
+    public void OnWrongGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
         player.ResetCombo();
         StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
     }

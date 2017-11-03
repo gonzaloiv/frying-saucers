@@ -12,19 +12,23 @@ public class ResultIndicatorController : MonoBehaviour {
     private static string[] RESULT_TEXT = new string[] {"Perfect!", "Not bad", "Too fast", "Too slow", "Gross"};
     private const string COMBO_TEXT = "x";
 
-    [SerializeField] private Text resultLabel;
-    [SerializeField] private Text comboLabel;
+    [SerializeField] private GameObject resultLabelPrefab;
+    [SerializeField] private GameObject comboLabelPrefab;
 
     private Player player;
     private Vector2 cursorPosition = Vector2.zero;
+    private Text resultLabel;
+    private Text comboLabel;
 
     #endregion
 
     #region Mono Behaviour
 
     void Awake () {
-        comboLabel.enabled = false;
+        resultLabel = Instantiate(resultLabelPrefab, transform).GetComponent<Text>();
         resultLabel.enabled = false;
+        comboLabel = Instantiate(comboLabelPrefab, transform).GetComponent<Text>();
+        comboLabel.enabled = false;
     }
 
     void Update () {
@@ -32,13 +36,13 @@ public class ResultIndicatorController : MonoBehaviour {
     }
 
     void OnEnable () {
-        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInputEvent;
-        EnemyBehaviour.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
+        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
     }
 
     void OnDisable () {
-        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInputEvent;
-        EnemyBehaviour.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
+        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
     }
 
     #endregion
@@ -53,11 +57,11 @@ public class ResultIndicatorController : MonoBehaviour {
         this.cursorPosition = cursorPosition;
     }
 
-    public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
-        StartCoroutine(ResultRoutine(rightGestureInputEventArgs.GestureInputEventArgs.Time, true));
+    public void OnRightGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
+        StartCoroutine(ResultRoutine(gestureInputEventArgs.Time, true));
     }
 
-    public void OnWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputEventArgs) {
+    public void OnWrongGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
         StartCoroutine(ResultRoutine(GestureTime.Gross, false));
     }
 

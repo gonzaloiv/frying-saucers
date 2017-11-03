@@ -15,8 +15,7 @@ namespace LevelStates {
             playerController.gameObject.SetActive(true);
             levelScreenController.Init(player);
             levelScreenController.gameObject.SetActive(true);
-            waveController.InitWave(GetCurrentLevelData().LevelType, GetCurrentWaveData());
-            levelController.ToWaveState();
+            levelController.ToWaveStartState();
         }
 
         #endregion

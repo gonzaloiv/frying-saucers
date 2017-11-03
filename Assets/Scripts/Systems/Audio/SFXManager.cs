@@ -42,12 +42,12 @@ public class SFXManager : MonoBehaviour {
     void AddListeners () {
 
         // Input
-        EnemyBehaviour.RightGestureInputEvent += OnRightGestureInputEvent;
-        EnemyBehaviour.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
+        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
 
         // Game Mechanics
-        EnemyBehaviour.EnemyAttackEvent += OnEnemyAttackEvent;
-        EnemyBehaviour.EnemyShotEvent += OnEnemyShotEvent;
+        EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
+        EnemyController.EnemyShotEvent += OnEnemyShotEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
         PlayerWeaponController.PlayerShotEvent += OnPlayerShotEvent;
         Player.PlayerHitEvent += OnPlayerHitEvent;
@@ -61,12 +61,12 @@ public class SFXManager : MonoBehaviour {
     void RemoveListeners () {
 
         // Input
-        EnemyBehaviour.RightGestureInputEvent -= OnRightGestureInputEvent;
-        EnemyBehaviour.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
+        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
 
         // Game Mechanics
-        EnemyBehaviour.EnemyAttackEvent -= OnEnemyAttackEvent;
-        EnemyBehaviour.EnemyShotEvent -= OnEnemyShotEvent;
+        EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
+        EnemyController.EnemyShotEvent -= OnEnemyShotEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
         PlayerWeaponController.PlayerShotEvent -= OnPlayerShotEvent;
         Player.PlayerHitEvent -= OnPlayerHitEvent;
@@ -82,13 +82,13 @@ public class SFXManager : MonoBehaviour {
     #region Public Behaviour
 
     // Input
-    public void OnRightGestureInputEvent (RightGestureInputEventArgs rightGestureInputEventArgs) {
+    public void OnRightGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
         audioSource.PlayOneShot(rightGesture[Random.Range(0, rightGesture.Length)]);
         if (enemyAttackRoutine != null)
             StopCoroutine(enemyAttackRoutine);
     }
 
-    public void OnWrongGestureInputEvent (WrongGestureInputEventArgs wrongGestureInputEventArgs) {
+    public void OnWrongGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
         audioSource.PlayOneShot(wrongGesture[Random.Range(0, wrongGesture.Length)]);
         if (enemyAttackRoutine != null)
             StopCoroutine(enemyAttackRoutine);
