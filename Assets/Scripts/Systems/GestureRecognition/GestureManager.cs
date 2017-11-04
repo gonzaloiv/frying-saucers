@@ -13,13 +13,7 @@ public class GestureManager : MonoBehaviour {
     [SerializeField] private GestureIndicatorController gestureIndicatorController;
     private GestureRecognizer gestureRecognizer;
     
-    private List<LineRenderer> gestureLines = new List<LineRenderer>();
-    private LineRenderer currentGestureLine;
-
-    private bool listening = false;
-    private bool mouseUp = true;
-    private float sectionTime;
-    private EnemyType enemyType;
+    private EnemyAttackEventArgs currentEnemyAttack;
 
     #endregion
 
@@ -36,46 +30,17 @@ public class GestureManager : MonoBehaviour {
     #region Mono Behaviour
 
     void Awake () {
-        gestureRecognizer = GetComponentInChildren<GestureRecognizer>();
+        gestureRecognizer = new GestureRecognizer();
     }
 
     void OnEnable () {
         EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
     }
 
-    void Update () {
-        
-        Vector3 virtualKeyPosition = Vector3.zero;
-
-        if (Input.GetMouseButtonDown(0)) {
-            if (!listening)
-                StartCoroutine(GestureRoutine(sectionTime));
-            currentGestureLine = gestureIndicatorController.SpawnGestureLineRenderer(transform);
-            gestureLines.Add(currentGestureLine);
-            gestureRecognizer.NewLine(transform);
-            mouseUp = false;
-        }
-
-        if (Input.GetMouseButton(0)) {
-            virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 1));
-            handIndicatorController.SetHand(0, cam.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
-            gestureRecognizer.NewPoint(virtualKeyPosition);
-            currentGestureLine.positionCount++;
-            currentGestureLine.SetPosition(currentGestureLine.positionCount - 1, worldPosition);
-        }
-
-        if (Input.GetMouseButtonUp(0)) {
-            mouseUp = true;
-            resultIndicatorController.SetCursorPosition(cam.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
-        }
-
-    }
-
     void OnDisable () {
-        gestureRecognizer.ResetGestureLines();
-        handIndicatorController.RemoveHand();
         EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
+        handIndicatorController.RemoveHand();
+        ResetGestures();
     }
 
     #endregion
@@ -83,51 +48,65 @@ public class GestureManager : MonoBehaviour {
     #region Public Behaviour
 
     public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
-        sectionTime = enemyAttackEventArgs.SectionTime;
-        enemyType = enemyAttackEventArgs.EnemyType;
+        currentEnemyAttack = enemyAttackEventArgs;
+        StartCoroutine(GestureRecognitionRoutine());
     }
 
     #endregion
 
     #region Private Behaviour
 
-    private IEnumerator GestureRoutine (float sectionTime) {
+    private IEnumerator GestureRecognitionRoutine () {
 
-        listening = true;
         float initialTime = Time.time;
+        GestureTime gestureTime = GestureTime.Gross;
+        Vector3 virtualKeyPosition = Vector3.zero;
+        Vector2 worldPosition = virtualKeyPosition;
 
-        while (!mouseUp)
-            yield return null;
+        while (Time.time < initialTime + currentEnemyAttack.RoutineTime) { 
 
-        yield return new WaitForSeconds(GameConfig.GestureStrokeTime);
+            if (Input.GetMouseButton(0)) {
+                virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
+                worldPosition = cam.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 1));
+            }
 
-        while (!mouseUp)
-            yield return null;
+            if (Input.GetMouseButtonDown(0)) {
+                initialTime = Time.time;
+                gestureRecognizer.NewLine();
+                gestureIndicatorController.SpawnGestureLineRenderer(worldPosition);
+            }
 
-        GestureTime gestureTime = SetGestureTime(initialTime, sectionTime);
+            if (Input.GetMouseButton(0)) { // Depends on the GetMouseButtonDown() above
+                gestureRecognizer.NewPoint(virtualKeyPosition);
+                gestureIndicatorController.SetNewPosition(worldPosition);
+                handIndicatorController.SetHand(0, cam.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+            }
 
-        if (mouseUp && gestureRecognizer.CurrentPointAmount > 5) // The library doesn't support one click inputs
-            RecognizeGesture(gestureTime);
+            if (Input.GetMouseButtonUp(0)) {
+                resultIndicatorController.SetCursorPosition(cam.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
+                gestureTime = SetGestureTime(initialTime, currentEnemyAttack.SectionTime);
+                if (IsRightGesture(gestureRecognizer.RecognizeGesture()))
+                    break;
+            }
 
-        gestureRecognizer.ResetGestureLines();
+            yield return 0;
 
-        foreach (LineRenderer lineRenderer in gestureLines) {
-            lineRenderer.positionCount = 0;
-            lineRenderer.gameObject.SetActive(false);
         }
-        gestureLines.Clear();
 
-        listening = false;
+        RecognizeGesture(gestureTime);
+        ResetGestures();
+
+        yield return 0;
 
     }
 
     private void RecognizeGesture (GestureTime gestureTime) {
         Result result = gestureRecognizer.RecognizeGesture();
-        GestureInputEventArgs gestureInputEventArgs = new GestureInputEventArgs(result.GestureClass.ToString(), result.Score, gestureTime);
-        if (result.Score < GameConfig.GestureMinScore || (int) gestureInputEventArgs.Type != (int) enemyType) {
-            WrongGestureInputEvent.Invoke(gestureInputEventArgs);
-        } else {
+        GestureInputEventArgs gestureInputEventArgs = new GestureInputEventArgs(result.GestureClass, result.Score, gestureTime);
+        if (IsRightGesture(result)) {
             RightGestureInputEvent.Invoke(gestureInputEventArgs);
+        } else {
+            WrongGestureInputEvent.Invoke(gestureInputEventArgs);
         }
     }
 
@@ -137,11 +116,20 @@ public class GestureManager : MonoBehaviour {
             return GestureTime.TooFast;
         } else if (finalTime > 5 * sectionTime) {
             return GestureTime.TooSlow; 
-        } else if (finalTime > 2 * sectionTime && finalTime < 5 * sectionTime) {
+        } else if (finalTime > 2 * sectionTime && finalTime < 4 * sectionTime) {
             return GestureTime.Perfect; 
         } else {
             return GestureTime.Ok;
         }
+    }
+
+    private bool IsRightGesture (Result result) {
+        return result.Score > GameConfig.GestureMinScore && result.GestureClass.ToUpper() == currentEnemyAttack.EnemyType.ToString().ToUpper();
+    }
+
+    private void ResetGestures () {
+        gestureRecognizer.Reset();
+        gestureIndicatorController.ResetGestureLines();
     }
 
     #endregion

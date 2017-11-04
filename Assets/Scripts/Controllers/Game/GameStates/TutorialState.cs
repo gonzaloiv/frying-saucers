@@ -6,14 +6,21 @@ namespace GameStates {
 
     public class TutorialState : BaseState {
 
+        #region Fields / Properties
+
+        private const float TUTORIAL_ENDING_TIME = 0.6f;
+
+        #endregion
+
         #region Public Behaviour
 
         public override void Enter () {
             base.Enter();
-            levelController.gameObject.SetActive(true);
-            levelController.ToInitState(GetTutorialLevelData());
             levelScreen.SetActive(true);
             tutorialScreen.SetActive(true);
+            tutorialScreen.GetComponent<TutorialScreenController>().Init();
+            levelController.gameObject.SetActive(true);
+            levelController.ToInitState(GetTutorialLevelData());
         }
 
         public override void Exit () {
@@ -26,7 +33,7 @@ namespace GameStates {
         }
 
         public void OnWaveEndEvent () {
-            gameController.ToMainMenuState();
+            StartCoroutine(WaveEndEventRoutine());
         }
 
         #endregion
@@ -41,6 +48,15 @@ namespace GameStates {
         protected override void RemoveListeners () {
             Player.PlayerHitEvent -= OnPlayerHitEvent;
             WaveController.WaveEndEvent -= OnWaveEndEvent;
+        }
+
+        #endregion
+
+        #region Private Behaviour
+
+        private IEnumerator WaveEndEventRoutine() {
+            yield return StartCoroutine(TimeManager.WaitForRealTime(TUTORIAL_ENDING_TIME));
+            gameController.ToMainMenuState();
         }
 
         #endregion

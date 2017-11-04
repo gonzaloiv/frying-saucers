@@ -31,27 +31,16 @@ public class PlayerWeaponController : MonoBehaviour {
     }
 
     void OnEnable () {
-        GestureManager.RightGestureInputEvent += OnRightGestureInput;
-        EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
         enemyPosition = Vector2.zero; 
-    }
-
-    void OnDisable () {
-        GestureManager.RightGestureInputEvent -= OnRightGestureInput;
-        EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
     }
 
     #endregion
 
     #region Public Behaviour
 
-    public void OnRightGestureInput (GestureInputEventArgs gestureInputEventArgs) {
+    public void Shoot (Vector2 enemyPosition) {
         laser.Play();
-        PlayerShotEvent.Invoke();
-    }
-
-    public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
-        enemyPosition = enemyAttackEventArgs.Position;
+        this.enemyPosition = enemyPosition;
     }
 
     #endregion

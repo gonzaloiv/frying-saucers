@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour {
     public void OnRightGestureInput (GestureInputEventArgs gestureInputEventArgs) {
         nextPosition.x = enemyPosition.x;
         rightGesture = true;
+        playerWeapon.Shoot(enemyPosition);
     }
 
     #endregion

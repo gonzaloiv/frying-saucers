@@ -38,6 +38,10 @@ namespace LevelStates {
             levelController.ToRestartState();
         }
 
+        public void OnWaveEndEvent () {
+            levelController.ToWaveStartState();
+        }
+
         #endregion
 
         #region Protected Behaviour
@@ -65,10 +69,6 @@ namespace LevelStates {
             currentEnemy.GetComponent<EnemyController>().Play(routineTime);
             yield return new WaitForSeconds(routineTime);
             playing = false;
-        }
-
-        private void OnWaveEndEvent () {
-            levelController.ToWaveStartState();
         }
 
         #endregion

@@ -19,7 +19,7 @@ public class GameConfigData : ScriptableObject {
 
     [Header("Game")]
     public int GameTimeScale = 1;
-    public int ShootingRoutineSections = 6;
+    public int ShootingRoutineSections = 5;
 
     [Header("Input")]
     public float GestureStrokeTime = 0.5f;

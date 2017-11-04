@@ -5,52 +5,52 @@ using System.Collections.Generic;
 // and Gamelogic Extension's: https://www.assetstore.unity3d.com/en/#!/content/19323
 public class GameObjectPool : IPool {
 
-  #region Fields
+    #region Fields
 
-  private GameObject prefab;
-  private List<GameObject> objects = new List<GameObject>();
-  GameObject poolGameObject;
+    private GameObject prefab;
+    private List<GameObject> objects = new List<GameObject>();
+    GameObject poolGameObject;
 
-  #endregion
+    #endregion
 
-  #region Contructors
+    #region Contructors
 
-	public GameObjectPool(string poolName, GameObject prefab, int initialObjectAmount, Transform parent) {
-    this.prefab = prefab;
-    poolGameObject = new GameObject(poolName);
-    poolGameObject.transform.parent = parent;
-    Prepopulate(initialObjectAmount);
-  }
+    public GameObjectPool (string poolName, GameObject prefab, int initialObjectAmount, Transform parent) {
+        this.prefab = prefab;
+        poolGameObject = new GameObject(poolName);
+        poolGameObject.transform.parent = parent;
+        Prepopulate(initialObjectAmount);
+    }
 
-  #endregion
+    #endregion
 
-  #region Public Behaviour
+    #region Public Behaviour
 
-  public GameObject PopObject() {
-    foreach (GameObject obj in objects) {
-      if (!obj.activeInHierarchy)
+    public GameObject PopObject () {
+        foreach (GameObject obj in objects) {
+            if (!obj.activeInHierarchy)
+                return obj;
+        }
+        return PushObject();
+    }
+
+    public GameObject PushObject () {
+        GameObject obj = MonoBehaviour.Instantiate(prefab, poolGameObject.transform);
+        obj.SetActive(false);
+        objects.Add(obj);
+
         return obj;
     }
-    return PushObject();
-  }
 
-  public GameObject PushObject() {
-    GameObject obj = MonoBehaviour.Instantiate(prefab, poolGameObject.transform);
-    obj.SetActive(false);
-    objects.Add(obj);
+    #endregion
 
-    return obj;
-  }
+    #region Private Behaviour
 
-  #endregion
+    private void Prepopulate (int objectAmount) {
+        for (int i = 0; i < objectAmount; i++)
+            PushObject(); 
+    }
 
-  #region Private Behaviour
-
-  private void Prepopulate(int objectAmount) {
-    for (int i = 0; i < objectAmount; i++)
-      PushObject(); 
-  }
-
-  #endregion
+    #endregion
 
 }

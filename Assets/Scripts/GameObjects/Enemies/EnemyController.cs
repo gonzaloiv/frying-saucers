@@ -57,8 +57,9 @@ public class EnemyController : StateMachine {
 
     #region IEnemyBehaviour
 
-    public void Init (GameObject player) {
+    public void Init (GameObject player, Enemy enemy) {
         this.player = player;
+        this.enemy = enemy;
         ChangeState<IdleState>();
     }
 
@@ -69,10 +70,6 @@ public class EnemyController : StateMachine {
 
     public void Stop () {
         StopAllCoroutines();
-    }
-
-    public void Init (Enemy enemy) {
-        this.enemy = enemy;
     }
 
     public void DisableRoutine () {

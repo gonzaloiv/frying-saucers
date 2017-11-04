@@ -1,90 +1,78 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class TutorialScreenController : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] private GameObject[] infoScreenPrefabs;
-    [SerializeField] private GameObject[] errorScreenPrefabs;
+    private const float ANIMATION_TIME = 0.3f;
 
-    private InputManager inputManager;
-    private IInfoScreenController[] infoScreens;
-    private IInfoScreenController[] errorScreens;
-    private int currentInfoScreen = 0;
-    private int currentErrorScreen = 0;
+    [SerializeField] private Text infoPanelLabel;
+
+    [SerializeField] private InfoScreen introInfoScreen;
+    [SerializeField] private InfoScreen endingInfoScreen;
+    [SerializeField] private InfoScreen errorInfoScreen;
+
+    private InfoScreen currentInfoScreen;
 
     #endregion
 
     #region Mono Behaviour
 
-    void Awake () {
-        infoScreens = new IInfoScreenController[infoScreenPrefabs.Length];
-        for (int i = 0; i < infoScreenPrefabs.Length; i++) {
-            GameObject infoScreen = Instantiate(infoScreenPrefabs[i], transform);
-            infoScreen.SetActive(false);
-            infoScreens[i] = infoScreen.GetComponent<IInfoScreenController>();
-            infoScreens[i].Initialize(this);
-        }
-
-        errorScreens = new IInfoScreenController[errorScreenPrefabs.Length];
-        for (int i = 0; i < errorScreenPrefabs.Length; i++) {
-            GameObject errorScreen = Instantiate(errorScreenPrefabs[i], transform);
-            errorScreen.SetActive(false);
-            errorScreens[i] = errorScreen.GetComponent<IInfoScreenController>();
-            errorScreens[i].Initialize(this);
-        }
-
-    }
-
     void OnEnable () {
-        EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
+        InputManager.TapInputEvent += OnTapInputEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
-        Player.PlayerHitEvent += OnPlayerHitEvent;
+        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
     }
 
     void OnDisable () {
-        EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
+        InputManager.TapInputEvent -= OnTapInputEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
-        Player.PlayerHitEvent -= OnPlayerHitEvent;
+        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
     }
 
     #endregion
 
     #region Public Behaviour
 
-    public void NextInfoScreen () {
-        if (currentInfoScreen < infoScreens.Length) {
-            if (currentInfoScreen > 0)
-                infoScreens[currentInfoScreen - 1].Stop();
-            infoScreens[currentInfoScreen].Play();
-        }
-        currentInfoScreen++;
+    public void Init(){
+        introInfoScreen.ResetInfoScreenIndex();
+        currentInfoScreen = introInfoScreen;
+        SetInfoPanelLabelText();
     }
 
-    public void NextErrorScreen () {
-        if (currentErrorScreen < errorScreens.Length) {
-            infoScreens[currentInfoScreen].Stop();
-            errorScreens[currentErrorScreen].Play();
-        }
-        currentErrorScreen++;
-    }
-
-    public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
-        NextInfoScreen();
-        currentErrorScreen = 0;
+    public void OnTapInputEvent () {
+        if(!currentInfoScreen.IsLastInfoScreenText)
+            currentInfoScreen.IncreaseInfoScreenIndex();
+        SetInfoPanelLabelText();
     }
 
     public void OnEnemyHitEvent () {
-        NextInfoScreen();
+        currentInfoScreen = endingInfoScreen;
+        currentInfoScreen.ResetInfoScreenIndex();
+        SetInfoPanelLabelText();
     }
 
-    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
-        NextErrorScreen();
-        currentInfoScreen--;
+    public void OnWrongGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
+        currentInfoScreen = errorInfoScreen;
+        currentInfoScreen.ResetInfoScreenIndex();
+        SetInfoPanelLabelText();
     }
 
+    #endregion
+
+    #region Private Behaviour
+
+    private void SetInfoPanelLabelText() {
+        string infoPanelLabelText = string.Empty;
+        currentInfoScreen.CurrentInfoScreenText.ForEach(line => infoPanelLabelText += line + "\n");
+        infoPanelLabel.text = infoPanelLabelText;
+        Time.timeScale = currentInfoScreen.IsLastInfoScreenText ? GameConfig.GameTimeScale : 0;
+        DOTween.Sequence().Append(infoPanelLabel.DOFade(0, ANIMATION_TIME)).Append(infoPanelLabel.DOFade(1, ANIMATION_TIME));
+    }
 
     #endregion
 
