@@ -9,11 +9,11 @@ namespace EnemyBehaviourStates {
         #region Fields
 
         protected EnemyController enemyController;
-        protected Animator animator;
         protected GameObject player;
-        protected ParticleSystem laser;
-        protected bool hit;
-        protected float routineTime;
+        protected Enemy enemy;
+        protected ParticleSystem laserPS;
+        protected ParticleSystem explosionPS;
+        protected Animator anim;
 
         #endregion
 
@@ -21,12 +21,11 @@ namespace EnemyBehaviourStates {
 
         void Awake () {
             enemyController = GetComponent<EnemyController>();
-            animator = GetComponent<Animator>();
             player = enemyController.Player;
-            laser = enemyController.Laser;
-            enemyController = GetComponent<EnemyController>();
-            hit = enemyController.Hit;
-            routineTime = enemyController.RoutineTime;
+            enemy = enemyController.Enemy;
+            laserPS = enemyController.LaserPS;
+            explosionPS = enemyController.ExplosionPS;
+            anim = GetComponent<Animator>();
         }
 
         #endregion

@@ -1,73 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerStates;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : StateMachine {
 
     #region Fields
 
     [SerializeField] GameObject jetPrefab;
     [SerializeField] GameObject explosionPrefab;
 
-    private GameObject jet;
-    private ParticleSystem explosion;
-    private Animator anim;
-    private Collider2D col;
+    public Player Player { get { return player; } }
+    public ParticleSystem ExplosionPS { get { return explosionPS; } }
 
     private Player player;
-    private PlayerWeaponController playerWeapon;
-
-    private Vector2 nextPosition;
-    private Vector2 enemyPosition;
-    private bool rightGesture;
-    private bool shot;
+    private ParticleSystem explosionPS;
+    private Animator anim;
 
     #endregion
 
     #region Mono Behaviour
 
     void Awake () {
+        Instantiate(jetPrefab, transform);
+        explosionPS = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
         anim = GetComponent<Animator>();
-        jet = Instantiate(jetPrefab, transform);
-        explosion = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
-        playerWeapon = GetComponent<PlayerWeaponController>();
-        col = GetComponent<Collider2D>();
     }
 
-    void OnEnable () {
-        nextPosition = new Vector2(0, GameConfig.PlayerInitialYPosition);
+    void OnEnable(){
         anim.Play("Spawn");
-        AddListeners();
-    }
-
-    void Update () {
-        transform.position = Vector2.Lerp(transform.position, nextPosition, GameConfig.PlayerMaxSpeed * Time.deltaTime);
-    }
-
-    void OnDisable () {
-        jet.SetActive(false);
-        RemoveListeners();
-    }
-
-    void OnParticleCollision (GameObject particle) {
-        if (!shot && particle.layer == (int) CollisionLayer.Enemy) {
-            player.DecreaseLives();
-            anim.Play("Disable");
-            explosion.Play();
-            shot = true;
-        }
-    }
-
-    void AddListeners () {
-        EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
-        EnemyController.EnemyShotEvent += OnEnemyShotEvent;
-        GestureManager.RightGestureInputEvent += OnRightGestureInput;
-    }
-
-    void RemoveListeners () {
-        EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
-        EnemyController.EnemyShotEvent -= OnEnemyShotEvent;
-        GestureManager.RightGestureInputEvent -= OnRightGestureInput;
     }
 
     #endregion
@@ -76,47 +37,22 @@ public class PlayerController : MonoBehaviour {
 
     public void Init (Player player) {
         this.player = player;
+        ToWaveState();
     }
 
-    public void Reset () {
-        playerWeapon.enabled = true;
-        jet.SetActive(true);
-        shot = false;
+    public void ToWaveState () {
+        ChangeState<WaveState>();
+    }
+
+    public void ToWaveRestartState () {
+        ChangeState<WaveRestartState>();
     }
 
     public void Disable () {
         gameObject.SetActive(false);
     }
 
-    public void OnEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {
-        enemyPosition = enemyAttackEventArgs.Position;
-        rightGesture = false;
-    }
-
-    public void OnEnemyShotEvent (EnemyShotEventArgs enemyShotEventArgs) {
-        if (rightGesture)
-            StartCoroutine(EvasionRoutine());
-    }
-
-    public void OnRightGestureInput (GestureInputEventArgs gestureInputEventArgs) {
-        nextPosition.x = enemyPosition.x;
-        rightGesture = true;
-        playerWeapon.Shoot(enemyPosition);
-    }
-
     #endregion
 
-    #region Private Behaivour
-
-    private IEnumerator EvasionRoutine () {
-        nextPosition.x = nextPosition.x + new float[]{ -2.5f, 2.5f }[Random.Range(0, 2)];
-        col.enabled = false;
-        yield return new WaitForSeconds(1);
-        col.enabled = true;
-        nextPosition.x = 0;
-        rightGesture = false;
-    }
-
-    #endregion
 
 }

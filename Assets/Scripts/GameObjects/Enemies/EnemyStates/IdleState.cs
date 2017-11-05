@@ -15,7 +15,7 @@ namespace EnemyBehaviourStates {
 
         public override void Play () {
             base.Play();
-            transform.position = !hit ? Vector2.Lerp(transform.position, enemyController.Enemy.Position, GameConfig.EnemyMaxSpeed / 2 * Time.deltaTime) : (Vector2) transform.position;
+            transform.position = Vector2.Lerp(transform.position, enemyController.Enemy.Position, GameConfig.EnemyMaxSpeed / 2 * Time.deltaTime);
         }
 
         #endregion

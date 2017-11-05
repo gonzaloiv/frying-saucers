@@ -32,7 +32,7 @@ public class UFOGridController : MonoBehaviour {
             yield return new WaitForSeconds(disablingSpeed);
             List<GameObject> activeUFOs = ufos.Where(x => x.activeSelf).ToList();
             if (activeUFOs.Count() > 0) {
-                activeUFOs[Random.Range(0, activeUFOs.Count())].GetComponent<EnemyController>().DisableRoutine();
+                activeUFOs[Random.Range(0, activeUFOs.Count())].GetComponent<EnemyController>().ToDisableState();
             } else {
                 StartCoroutine(RestartGridRoutine());
             }

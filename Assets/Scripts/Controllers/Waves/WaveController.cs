@@ -55,10 +55,10 @@ public class WaveController : MonoBehaviour {
         enemyTypeLabelSpawner.Init();
         switch (levelType) {
         case LevelType.RandomLevel:
-            currentWaveEnemies = waveSpawner.SpawnRandomWaveEnemies(player);
+            currentWaveEnemies = waveSpawner.SpawnRandomWaveEnemies(waveData, player);
             break;
         default:
-            currentWaveEnemies = waveSpawner.SpawnWaveEnemies(waveData.EnemyTypes, player);
+            currentWaveEnemies = waveSpawner.SpawnWaveEnemies(waveData, player);
             break;
         }
         foreach (GameObject enemy in currentWaveEnemies)
@@ -67,12 +67,11 @@ public class WaveController : MonoBehaviour {
     }
 
     public void ResetWaveEnemies () {
-        if (currentWaveEnemies != null) {
-            foreach (GameObject enemy in currentWaveEnemies) {
-                if (enemy != null)
-                    enemy.SetActive(false);
-            }
-        }
+        if (currentWaveEnemies == null)
+            return;
+        foreach (GameObject enemy in currentWaveEnemies)
+            if (enemy != null)
+                enemy.SetActive(false);
         currentWaveEnemies = null;
     }
 

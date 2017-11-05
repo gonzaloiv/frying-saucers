@@ -63,11 +63,10 @@ namespace LevelStates {
         private IEnumerator WaveRoutine () {
             playing = true;
             float[] waveRoutineTime = GetCurrentWaveData().RoutineTime; 
-            float routineTime = Random.Range(waveRoutineTime[0], waveRoutineTime[1]);
             yield return new WaitForSeconds(1);
-            GameObject currentEnemy = waveController.GetRandomActiveEnemy();
-            currentEnemy.GetComponent<EnemyController>().Play(routineTime);
-            yield return new WaitForSeconds(routineTime);
+            EnemyController currentEnemyController = waveController.GetRandomActiveEnemy().GetComponent<EnemyController>();
+            currentEnemyController.ToShootState();
+            yield return new WaitForSeconds(currentEnemyController.Enemy.ShootRoutineTime);
             playing = false;
         }
 

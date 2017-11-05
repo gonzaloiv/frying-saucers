@@ -11,10 +11,10 @@ namespace LevelStates {
 
         public override void Enter () {
             player = new Player(GetCurrentLevelData().PlayerInitialLives);
-            playerController.Init(player);
             playerController.gameObject.SetActive(true);
-            levelScreenController.Init(player);
+            playerController.Init(player);
             levelScreenController.gameObject.SetActive(true);
+            levelScreenController.Init(player);
             levelController.ToWaveStartState();
         }
 

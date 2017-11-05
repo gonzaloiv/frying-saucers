@@ -1,27 +1,29 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public struct Enemy {
+public class Enemy {
 
     #region Fields
 
     public EnemyType EnemyType { get { return enemyType; } }
-    private EnemyType enemyType;
-
     public Vector2 Position { get { return position; } }
-    private Vector2 position;
-
     public EnemyScore EnemyScore { get { return enemyScore; } }
+    public float ShootRoutineTime { get { return shootRoutineTime; } }
+
+    private EnemyType enemyType;
+    private Vector2 position;
     private EnemyScore enemyScore;
+    private float shootRoutineTime;
 
     #endregion
 
     #region Public Behaviour
 
-    public Enemy (EnemyType enemyType, Vector2 position, EnemyScore enemyScore) {
+    public Enemy (EnemyType enemyType, Vector2 position, EnemyScore enemyScore, float shootRoutineTime) {
         this.enemyType = enemyType;
         this.position = position;
         this.enemyScore = enemyScore;
+        this.shootRoutineTime = shootRoutineTime;
     }
 
     public void SetRandomType () {

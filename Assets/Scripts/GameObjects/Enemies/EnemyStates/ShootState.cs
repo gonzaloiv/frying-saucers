@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EnemyBehaviourStates {
 
-    public class ShootingState : BaseState {
+    public class ShootState : BaseState {
     
         #region Fields
 
@@ -17,7 +17,7 @@ namespace EnemyBehaviourStates {
         public override void Enter () {
             base.Enter();
             shootingPosition = Board.EmptyEnemyShotPosition();
-            StartCoroutine(ShootingRoutine());
+            StartCoroutine(ShootRoutine());
         }
 
         public override void Play () {
@@ -25,9 +25,7 @@ namespace EnemyBehaviourStates {
         }
 
         public void OnRightGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
-            hit = true;
-            RemoveListeners();
-            enemyController.DisableRoutine();
+            enemyController.ToDisableState();
         }
 
         #endregion
@@ -46,20 +44,17 @@ namespace EnemyBehaviourStates {
 
         #region Private Behaviour
 
-        private IEnumerator ShootingRoutine () {
-
-            enemyController.InvokeEnemyAttackEvent(new EnemyAttackEventArgs(enemyController.Enemy.EnemyType, shootingPosition, routineTime));
-            animator.Play("Shooting");
-
-            yield return new WaitForSeconds(routineTime / 4 * 3);
+        private IEnumerator ShootRoutine () {
+            enemyController.InvokeEnemyAttackEvent(new EnemyAttackEventArgs(enemyController.Enemy.EnemyType, shootingPosition, enemy.ShootRoutineTime));
+            anim.Play("Shooting");
+            yield return new WaitForSeconds(enemy.ShootRoutineTime / 4 * 3);
             enemyController.InvokeEnemyShotEvent(new EnemyShotEventArgs(transform.position));
             transform.rotation = QuaternionToPlayer();
             GetComponent<SpriteRenderer>().flipY = true;
-            laser.Play();
-
-            yield return new WaitForSeconds(routineTime / 4);
+            laserPS.Play();
+            yield return new WaitForSeconds(enemy.ShootRoutineTime / 4);
             GetComponent<SpriteRenderer>().flipY = false;
-
+            enemyController.ToIdleState();
         }
 
         private Quaternion QuaternionToPlayer () {
