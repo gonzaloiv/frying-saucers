@@ -18,6 +18,22 @@ namespace GameStates {
             leaderboardScreen.SetActive(false);
         }
 
+        public void OnTapInputEvent() {
+            gameController.ToMainMenuState();
+        }
+
+        #endregion
+
+        #region Protected Behaviour
+
+        protected override void AddListeners () {
+            InputManager.TapInputEvent += OnTapInputEvent;
+        }
+
+        protected override void RemoveListeners () {
+            InputManager.TapInputEvent -= OnTapInputEvent;
+        }
+
         #endregion
 
     }

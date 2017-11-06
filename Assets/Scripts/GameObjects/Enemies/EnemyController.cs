@@ -17,11 +17,8 @@ public class EnemyController : StateMachine {
     
     private Enemy enemy;
     private GameObject player;
-
     private ParticleSystem laserPS;
     private ParticleSystem explosionPS;
-
-    private float routineTime;
 
     #endregion
 
@@ -59,8 +56,8 @@ public class EnemyController : StateMachine {
         ChangeState<IdleState>();
     }
 
-    public void ToShootState () {
-        ChangeState<ShootState>();
+    public void ToAttackState () {
+        ChangeState<AttackState>();
     }
 
     public void ToDisableState () {

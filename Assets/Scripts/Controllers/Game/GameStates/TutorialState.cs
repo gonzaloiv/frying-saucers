@@ -28,10 +28,6 @@ namespace GameStates {
             tutorialScreen.SetActive(false);
         }
 
-        public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
-            levelController.ToRestartState();
-        }
-
         public void OnWaveEndEvent () {
             StartCoroutine(WaveEndEventRoutine());
         }
@@ -41,12 +37,10 @@ namespace GameStates {
         #region Protected Behaviour
 
         protected override void AddListeners () {
-            Player.PlayerHitEvent += OnPlayerHitEvent;
             WaveController.WaveEndEvent += OnWaveEndEvent;
         }
 
         protected override void RemoveListeners () {
-            Player.PlayerHitEvent -= OnPlayerHitEvent;
             WaveController.WaveEndEvent -= OnWaveEndEvent;
         }
 

@@ -15,22 +15,6 @@ namespace GameStates {
             levelScreen.SetActive(true);
         }
 
-        public void OnEscapeInputEvent () {
-            levelController.ToPauseState();
-        }
-
-        #endregion
-
-        #region Protected Behaviour
-
-        protected override void AddListeners () {
-            InputManager.EscapeInputEvent += OnEscapeInputEvent;
-        }
-
-        protected override void RemoveListeners () {
-            InputManager.EscapeInputEvent -= OnEscapeInputEvent;
-        }
-
         #endregion
 
     }

@@ -9,11 +9,10 @@ namespace PlayerStates {
         #region Fields
 
         protected PlayerController playerController;
-        protected PlayerWeaponController playerWeaponController;
         protected Player player;
         protected ParticleSystem explosionPS;
+        protected ParticleSystem laserPS;
         protected Animator anim;
-        protected Collider col;
 
         #endregion
 
@@ -21,11 +20,32 @@ namespace PlayerStates {
 
         void Awake () {
             playerController = GetComponent<PlayerController>();
-            playerWeaponController = GetComponent<PlayerWeaponController>();
             player = playerController.Player;
             explosionPS = playerController.ExplosionPS;
+            laserPS = playerController.LaserPS;
             anim = GetComponent<Animator>();
-            col = GetComponent<Collider>();
+        }
+
+        #endregion
+
+        #region Protected Behaviour
+
+        protected Vector2 GetEnemyPosition() {
+            return playerController.EnemyPosition;
+        }
+
+        protected void SetEnemyPosition(Vector2 enemyPosition) {
+            playerController.EnemyPosition = enemyPosition;
+        }
+
+        protected Quaternion QuaternionToEnemy () {
+            Quaternion quaternion = Quaternion.identity;
+            Vector2 moveDirection = (Vector2) transform.position - (Vector2) GetEnemyPosition(); 
+            if (moveDirection != Vector2.zero) {
+                float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+                quaternion = Quaternion.AngleAxis(angle + 90, Vector3.forward);
+            }
+            return quaternion;
         }
 
         #endregion

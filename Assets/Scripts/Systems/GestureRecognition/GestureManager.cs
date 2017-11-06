@@ -31,6 +31,7 @@ public class GestureManager : MonoBehaviour {
 
     void Awake () {
         gestureRecognizer = new GestureRecognizer();
+        gestureIndicatorController.Init(cam);
     }
 
     void OnEnable () {
@@ -61,31 +62,28 @@ public class GestureManager : MonoBehaviour {
         float initialTime = Time.time;
         GestureTime gestureTime = GestureTime.Gross;
         Vector3 virtualKeyPosition = Vector3.zero;
-        Vector2 worldPosition = virtualKeyPosition;
 
-        while (Time.time < initialTime + currentEnemyAttack.RoutineTime) { 
+        while (Time.time < initialTime + currentEnemyAttack.RoutineTime - currentEnemyAttack.RoutineTime / 2) { 
 
-            if (Input.GetMouseButton(0)) {
+            if (Input.GetMouseButton(0))
                 virtualKeyPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y);
-                worldPosition = cam.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 1));
-            }
 
             if (Input.GetMouseButtonDown(0)) {
                 initialTime = Time.time;
                 gestureRecognizer.NewLine();
-                gestureIndicatorController.SpawnGestureLineRenderer(worldPosition);
+                gestureIndicatorController.SpawnGestureLineRenderer(virtualKeyPosition);
             }
 
             if (Input.GetMouseButton(0)) { // Depends on the GetMouseButtonDown() above
                 gestureRecognizer.NewPoint(virtualKeyPosition);
-                gestureIndicatorController.SetNewPosition(worldPosition);
+                gestureIndicatorController.SetNewPosition(virtualKeyPosition);
                 handIndicatorController.SetHand(0, cam.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
             }
 
             if (Input.GetMouseButtonUp(0)) {
                 resultIndicatorController.SetCursorPosition(cam.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
                 gestureTime = SetGestureTime(initialTime, currentEnemyAttack.SectionTime);
-                if (IsRightGesture(gestureRecognizer.RecognizeGesture()))
+                if (gestureRecognizer.StrokeIndex == 2 || currentEnemyAttack.EnemyType != EnemyType.Cross) // TODO: Refactoring this...
                     break;
             }
 

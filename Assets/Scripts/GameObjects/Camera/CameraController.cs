@@ -6,10 +6,8 @@ public class CameraController : MonoBehaviour {
 
     #region Fields
 
-    private float SHAKING_TIME = 0.3f;
+    private float SHAKE_TIME = 0.3f;
     private float SHAKE_AMOUNT = 0.1f;
-
-    private float shake;
 
     #endregion
 
@@ -43,7 +41,7 @@ public class CameraController : MonoBehaviour {
 
     private IEnumerator CameraShakeRoutine () {
         float currentTime = Time.unscaledTime;
-        while (Time.unscaledTime < currentTime + SHAKING_TIME) {
+        while (Time.unscaledTime < currentTime + SHAKE_TIME) {
             Vector2 position = Random.insideUnitCircle * SHAKE_AMOUNT;
             transform.localPosition = new Vector3(position.x, position.y, transform.position.z);
             yield return null;

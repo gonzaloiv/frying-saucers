@@ -31,8 +31,10 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void Init () {
+    public void Init (GameObject[] currentWaveEnemies) {
         ResetGestures();
+        foreach (GameObject enemy in currentWaveEnemies)
+            AddGesture(enemy.GetComponent<EnemyController>().Enemy);
     }
 
     public void AddGesture (Enemy enemy) {
@@ -49,10 +51,6 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
 
     public void ShowGesture (int index, float time) {
         StartCoroutine(ShowGestureRoutine(index, time));
-    }
-
-    public void HideGestures () {
-        StartCoroutine(HideGesturesRoutine());
     }
 
     #endregion
@@ -78,13 +76,6 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
         gesture.SetActive(true);
         yield return new WaitForSeconds(time);
         gesture.SetActive(false);
-    }
-
-    private IEnumerator HideGesturesRoutine () {
-        for (int i = 0; i < gestures.Count; i++) {
-            gestures[i].SetActive(false);
-            yield return new WaitForSeconds(.15f);
-        }
     }
 
     private void ResetGestures () {

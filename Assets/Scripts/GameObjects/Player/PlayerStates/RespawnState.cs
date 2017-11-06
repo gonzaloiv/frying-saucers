@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PlayerStates {
 
-    public class WaveRestartState : BaseState {
+    public class RespawnState : BaseState {
 
         #region Public Behaviour
 

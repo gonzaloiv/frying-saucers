@@ -20,14 +20,35 @@ public class Enemy {
     #region Public Behaviour
 
     public Enemy (EnemyType enemyType, Vector2 position, EnemyScore enemyScore, float shootRoutineTime) {
-        this.enemyType = enemyType;
-        this.position = position;
-        this.enemyScore = enemyScore;
-        this.shootRoutineTime = shootRoutineTime;
+        Init(enemyType, position, enemyScore, shootRoutineTime);
+    }
+
+    public Enemy (EnemyType enemyType, Vector2 position, float[] waveRoutineTime) {
+        EnemyScore enemyScore = (EnemyScore) (int) enemyType;
+        float enemyShootRoutineTime = Random.Range(waveRoutineTime[0], waveRoutineTime[1]);
+        Init(enemyType, position, enemyScore, enemyShootRoutineTime);
+    }
+
+    // Random EnemyType Constructor
+    public Enemy (Vector2 position, float[] waveRoutineTime) {
+        EnemyType enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length - 1);
+        float enemyShootRoutineTime = Random.Range(waveRoutineTime[0], waveRoutineTime[1]);
+        Init(enemyType, position, enemyScore, enemyShootRoutineTime);
     }
 
     public void SetRandomType () {
         this.enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length - 1);
+    }
+
+    #endregion
+
+    #region Private Behaviour
+
+    private void Init (EnemyType enemyType, Vector2 position, EnemyScore enemyScore, float shootRoutineTime) {
+        this.enemyType = enemyType;
+        this.position = position;
+        this.enemyScore = enemyScore;
+        this.shootRoutineTime = shootRoutineTime;
     }
 
     #endregion

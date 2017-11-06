@@ -2,19 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using WaveStates;
 
-public class WaveController : MonoBehaviour {
+public class WaveController : StateMachine {
 
     #region Fields
 
+    [SerializeField] private GameObject gestureManager;
     [SerializeField] private GameObject enemyTypeLabelPrefab;
 
+    public GameObject GestureManager { get { return gestureManager; } }
+    public EnemyTypeLabelSpawner EnemyTypeLabelSpawner { get { return enemyTypeLabelSpawner; } }
+    public WaveSpawner WaveSpawner { get { return waveSpawner; } }
+    public GameObject Player { get { return player; } }
+
     public GameObject[] CurrentWaveEnemies { get { return currentWaveEnemies; } }
+    public WaveData CurrentWaveData { get { return currentWaveData; } }
 
     private EnemyTypeLabelSpawner enemyTypeLabelSpawner;
     private WaveSpawner waveSpawner;
-    private GameObject[] currentWaveEnemies;
     private GameObject player;
+
+    private GameObject[] currentWaveEnemies;
+    private WaveData currentWaveData;
 
     #endregion
 
@@ -32,14 +42,8 @@ public class WaveController : MonoBehaviour {
         waveSpawner = GetComponent<WaveSpawner>();
     }
 
-    void OnEnable () {
-        Player.PlayerHitEvent += OnPlayerHitEvent;
-        EnemyController.EnemyHitEvent += OnEnemyHitEvent;
-    }
-
     void OnDisable () {
-        Player.PlayerHitEvent -= OnPlayerHitEvent;
-        EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
+        gestureManager.SetActive(false);
     }
 
     #endregion
@@ -51,57 +55,44 @@ public class WaveController : MonoBehaviour {
     }
 
     public void InitWave (LevelType levelType, WaveData waveData) {
+        this.currentWaveData = waveData;
         ResetWaveEnemies();
-        enemyTypeLabelSpawner.Init();
-        switch (levelType) {
-        case LevelType.RandomLevel:
-            currentWaveEnemies = waveSpawner.SpawnRandomWaveEnemies(waveData, player);
-            break;
-        default:
-            currentWaveEnemies = waveSpawner.SpawnWaveEnemies(waveData, player);
-            break;
-        }
-        foreach (GameObject enemy in currentWaveEnemies)
-            enemyTypeLabelSpawner.AddGesture(enemy.GetComponent<EnemyController>().Enemy);
-        enemyTypeLabelSpawner.ShowGestures(2);
+        currentWaveEnemies = levelType == LevelType.RandomLevel ? waveSpawner.SpawnRandomWaveEnemies(waveData, player) : waveSpawner.SpawnWaveEnemies(waveData, player);
+        enemyTypeLabelSpawner.Init(currentWaveEnemies);
+        ToWaveStartState();
     }
 
-    public void ResetWaveEnemies () {
-        if (currentWaveEnemies == null)
-            return;
-        foreach (GameObject enemy in currentWaveEnemies)
-            if (enemy != null)
-                enemy.SetActive(false);
-        currentWaveEnemies = null;
+    public void ToWaveStartState () {
+        ChangeState<WaveStartState>();
     }
 
-    public void AddEnemy (int index) {
-        GameObject enemy = waveSpawner.SpawnRandomEnemy(index, player);
-        currentWaveEnemies[index] = enemy;
-        enemyTypeLabelSpawner.SetGestureByIndex(index, enemy.GetComponent<EnemyController>().Enemy);
-        enemyTypeLabelSpawner.ShowGestures(1);
+    public void ToWaveRefillState () {
+        ChangeState<WaveRefillState>();
     }
 
-    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
-        enemyTypeLabelSpawner.ShowGestures(2);
+    public void ToPlayerRespawnState () {
+        ChangeState<PlayerRespawnState>();
     }
 
-    public void OnEnemyHitEvent () {
-        StartCoroutine(EnemyHitRoutine());
+    public void ToEnemyAttackState () {
+        ChangeState<EnemyAttackState>();
     }
 
-    public GameObject GetRandomActiveEnemy () {
-        return currentWaveEnemies[Random.Range(0, currentWaveEnemies.Length)];
+    public void InvokeWaveEndEvent () {
+        WaveEndEvent.Invoke();
     }
 
     #endregion
 
     #region Private Behaviour
 
-    private IEnumerator EnemyHitRoutine () {
-        yield return new WaitForSeconds(1);
-        if (currentWaveEnemies.Where(enemy => enemy.activeInHierarchy).Count() == 0)
-            WaveEndEvent.Invoke();
+    private void ResetWaveEnemies () {
+        if (currentWaveEnemies == null)
+            return;
+        foreach (GameObject enemy in currentWaveEnemies)
+            if (enemy != null)
+                enemy.SetActive(false);
+        currentWaveEnemies = null;
     }
 
     #endregion

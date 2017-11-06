@@ -7,8 +7,9 @@ public class GestureIndicatorController : MonoBehaviour {
     #region Fields
 
     [SerializeField] private GameObject gestureLineRendererPrefab;
-    private GameObjectPool gestureLineRendererPool;
 
+    private GameObjectPool gestureLineRendererPool;
+    private Camera cam;
     private List<LineRenderer> gestureLinesRenderers = new List<LineRenderer>();
     private LineRenderer currentGestureLineRenderer;
 
@@ -24,8 +25,14 @@ public class GestureIndicatorController : MonoBehaviour {
 
     #region Public Behaviour
 
-    public void SpawnGestureLineRenderer (Vector2 initialPosition) {
-        
+    public void Init (Camera camera) {
+        this.cam = camera;   
+    }
+
+    public void SpawnGestureLineRenderer (Vector2 virtualInitialPosition) {
+
+        Vector2 initialPosition = cam.ScreenToWorldPoint(new Vector3(virtualInitialPosition.x, virtualInitialPosition.y, 1));
+            
         GameObject gesture = gestureLineRendererPool.PopObject();
         gesture.transform.position = transform.position;
         gesture.transform.rotation = transform.rotation;
@@ -36,16 +43,17 @@ public class GestureIndicatorController : MonoBehaviour {
         gestureLineRenderer.SetPosition(0, initialPosition);
 
         gestureLinesRenderers.Add(gestureLineRenderer);
-        currentGestureLineRenderer =  gestureLineRenderer;
+        currentGestureLineRenderer = gestureLineRenderer;
 
     }
 
-    public void SetNewPosition(Vector2 position) {
+    public void SetNewPosition (Vector2 virtualPosition) {
+        Vector2 position = cam.ScreenToWorldPoint(new Vector3(virtualPosition.x, virtualPosition.y, 1));
         currentGestureLineRenderer.positionCount++;
         currentGestureLineRenderer.SetPosition(currentGestureLineRenderer.positionCount - 1, position);
     }
 
-    public void ResetGestureLines() {
+    public void ResetGestureLines () {
         foreach (LineRenderer lineRenderer in gestureLinesRenderers) {
             lineRenderer.positionCount = 0;
             lineRenderer.gameObject.SetActive(false);

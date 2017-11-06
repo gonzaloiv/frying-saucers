@@ -10,9 +10,11 @@ public class GestureRecognizer {
 
     #region Fields
 
+    public int StrokeIndex { get { return strokeIndex; } } 
+
     private List<Gesture> trainingSet;
     private List<Point> points;
-    private int strokeID;
+    private int strokeIndex;
     private Vector2 currentPointPosition;
 
     #endregion
@@ -22,21 +24,21 @@ public class GestureRecognizer {
     public GestureRecognizer () {
         this.trainingSet = new List<Gesture>();
         this.points = new List<Point>();
-        this.strokeID = 0;
+        this.strokeIndex = 0;
         this.currentPointPosition = Vector2.zero;
         foreach (TextAsset gestureXml in Resources.LoadAll<TextAsset>("GestureSet/"))
             trainingSet.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
     }
 
     public void NewLine () {
-        ++strokeID;
+        strokeIndex++;
     }
 
     public void NewPoint (Vector2 position) {
         if (currentPointPosition == position)
             return;
         currentPointPosition = position;
-        points.Add(new Point(position.x, -position.y, strokeID));
+        points.Add(new Point(position.x, -position.y, strokeIndex));
     }
 
     public Result RecognizeGesture () {
@@ -44,7 +46,7 @@ public class GestureRecognizer {
     }
 
     public void Reset () {
-        strokeID = 0;
+        strokeIndex = 0;
         points.Clear();
     }
 

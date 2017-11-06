@@ -9,13 +9,24 @@ public class PlayerController : StateMachine {
 
     [SerializeField] GameObject jetPrefab;
     [SerializeField] GameObject explosionPrefab;
+    [SerializeField] private GameObject laserPrefab;
 
     public Player Player { get { return player; } }
     public ParticleSystem ExplosionPS { get { return explosionPS; } }
+    public ParticleSystem LaserPS { get { return laserPS; } } 
+    public Vector2 EnemyPosition { get { return enemyPosition; } set { enemyPosition = value; } }
 
     private Player player;
     private ParticleSystem explosionPS;
-    private Animator anim;
+    private ParticleSystem laserPS;
+    private Vector2 enemyPosition;
+
+    #endregion
+
+    #region Events
+
+    public delegate void PlayerShotEventHandler ();
+    public static event PlayerShotEventHandler PlayerShotEvent = delegate {};
 
     #endregion
 
@@ -23,12 +34,12 @@ public class PlayerController : StateMachine {
 
     void Awake () {
         Instantiate(jetPrefab, transform);
+        laserPS = Instantiate(laserPrefab, transform).GetComponent<ParticleSystem>();
         explosionPS = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
-        anim = GetComponent<Animator>();
     }
 
-    void OnEnable(){
-        anim.Play("Spawn");
+    void OnEnable() {
+        ToIdleState();
     }
 
     #endregion
@@ -37,18 +48,29 @@ public class PlayerController : StateMachine {
 
     public void Init (Player player) {
         this.player = player;
-        ToWaveState();
     }
 
-    public void ToWaveState () {
-        ChangeState<WaveState>();
+    public void ToIdleState () {
+        ChangeState<IdleState>();
     }
 
-    public void ToWaveRestartState () {
-        ChangeState<WaveRestartState>();
+    public void ToEnemyAttackState () {
+        ChangeState<EnemyAttackState>();
     }
 
-    public void Disable () {
+    public void ToEvasionState () {
+        ChangeState<EvasionState>();
+    }
+
+    public void ToRespawnState () {
+        ChangeState<RespawnState>();
+    }
+
+    public void InvokePlayerShotEvent() {
+        PlayerShotEvent.Invoke();
+    }
+
+    public void Disable () { // Called from "Disable" animation
         gameObject.SetActive(false);
     }
 

@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
-namespace LevelStates {
+namespace WaveStates {
 
-    public class WaveRestartState : BaseState {
+    public class PlayerRespawnState : BaseState {
 
         #region State Behaviour
 
         public override void Enter () {
+            base.Enter();
             StartCoroutine(WaveRestartRoutine());
         }
 
@@ -21,7 +21,7 @@ namespace LevelStates {
             yield return new WaitForSeconds(0.8f);
             playerController.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.2f);
-            levelController.ToWaveState();
+            waveController.ToWaveStartState();
         }
 
         #endregion

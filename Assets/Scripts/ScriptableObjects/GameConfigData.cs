@@ -12,7 +12,7 @@ public class GameConfigData : ScriptableObject {
 
     [Header("Player")]
     public float PlayerInitialYPosition = -1f;
-    public float PlayerMaxSpeed = 10f;
+    public float PlayerMaxSpeed = 7f;
 
     [Header("Waves")]    
     public int RandomWaveEnemyAmount = 4;

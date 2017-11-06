@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EnemyBehaviourStates {
 
-    public class ShootState : BaseState {
+    public class AttackState : BaseState {
     
         #region Fields
 
@@ -46,7 +46,7 @@ namespace EnemyBehaviourStates {
 
         private IEnumerator ShootRoutine () {
             enemyController.InvokeEnemyAttackEvent(new EnemyAttackEventArgs(enemyController.Enemy.EnemyType, shootingPosition, enemy.ShootRoutineTime));
-            anim.Play("Shooting");
+            anim.Play("Attack");
             yield return new WaitForSeconds(enemy.ShootRoutineTime / 4 * 3);
             enemyController.InvokeEnemyShotEvent(new EnemyShotEventArgs(transform.position));
             transform.rotation = QuaternionToPlayer();

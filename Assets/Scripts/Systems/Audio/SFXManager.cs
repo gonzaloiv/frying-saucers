@@ -49,7 +49,7 @@ public class SFXManager : MonoBehaviour {
         EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
         EnemyController.EnemyShotEvent += OnEnemyShotEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
-        PlayerWeaponController.PlayerShotEvent += OnPlayerShotEvent;
+        PlayerController.PlayerShotEvent += OnPlayerShotEvent;
         Player.PlayerHitEvent += OnPlayerHitEvent;
 
         // Game
@@ -68,7 +68,7 @@ public class SFXManager : MonoBehaviour {
         EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
         EnemyController.EnemyShotEvent -= OnEnemyShotEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
-        PlayerWeaponController.PlayerShotEvent -= OnPlayerShotEvent;
+        PlayerController.PlayerShotEvent -= OnPlayerShotEvent;
         Player.PlayerHitEvent -= OnPlayerHitEvent;
 
         // Game
