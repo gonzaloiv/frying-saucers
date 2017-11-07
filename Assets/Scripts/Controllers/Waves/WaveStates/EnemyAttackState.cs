@@ -48,8 +48,11 @@ namespace WaveStates {
         #region Private Behaviour
 
         private IEnumerator EnemyAttackRoutine () {
-            float[] waveRoutineTime = GetCurrentWaveData().RoutineTime; 
+            Wave currentWave = GetCurrentWave();
+            float[] waveRoutineTime = currentWave.RoutineTime; 
+            GameObject[] currentWaveEnemies = currentWave.Enemies;
             EnemyController enemyController = currentWaveEnemies[Random.Range(0, currentWaveEnemies.Length)].GetComponent<EnemyController>();
+            Debug.Log("EnemyAttackRoutine " + enemyController.gameObject.activeInHierarchy);
             enemyController.ToAttackState();
             yield return new WaitForSeconds(enemyController.Enemy.ShootRoutineTime);
         }

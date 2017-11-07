@@ -50,6 +50,7 @@ public class LevelScreenController : MonoBehaviour {
         this.player = player;
         resultIndicatorController.Init(player);
         UpdateLivesLabel(player.Lives);
+        emojiLabel.text = EMOJIS[0];
     }
 
     public void OnRightGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
@@ -68,9 +69,8 @@ public class LevelScreenController : MonoBehaviour {
         if (playerHitEventArgs.IsDead) {
             StopAllCoroutines();
             StartCoroutine(EmojiRoutine(EMOJIS[1], 4));
-        } else {
-            UpdateLivesLabel(playerHitEventArgs.Lives);
         }
+        UpdateLivesLabel(playerHitEventArgs.Lives);
     }
 
     #endregion

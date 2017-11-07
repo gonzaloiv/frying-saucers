@@ -29,8 +29,7 @@ public class Enemy {
         Init(enemyType, position, enemyScore, enemyShootRoutineTime);
     }
 
-    // Random EnemyType Constructor
-    public Enemy (Vector2 position, float[] waveRoutineTime) {
+    public Enemy (Vector2 position, float[] waveRoutineTime) { // Random EnemyType Constructor
         EnemyType enemyType = (EnemyType) UnityEngine.Random.Range(0, EnemyType.GetNames(typeof(EnemyType)).Length - 1);
         float enemyShootRoutineTime = Random.Range(waveRoutineTime[0], waveRoutineTime[1]);
         Init(enemyType, position, enemyScore, enemyShootRoutineTime);

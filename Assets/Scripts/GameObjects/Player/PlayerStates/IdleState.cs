@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace PlayerStates {
 
@@ -51,15 +52,16 @@ namespace PlayerStates {
 
         #region Private Behaviour
 
-        private IEnumerator IdleRoutine() {
-            nextPosition = new Vector2(Random.Range(-2, 2), GameConfig.PlayerInitialYPosition);
-            while(gameObject.activeInHierarchy) {
-                yield return new WaitForSeconds(Random.Range(1f, 2f));
+        private IEnumerator IdleRoutine () {
+            nextPosition = new Vector2(new int[2]{ -2, 2 }[Random.Range(0, 2)], GameConfig.PlayerInitialYPosition);
+            while (gameObject.activeInHierarchy) {
+                float animationTime = Random.Range(1f, 2f);
                 nextPosition = new Vector2(-nextPosition.x, nextPosition.y);
                 transform.rotation = Quaternion.Euler(Vector3.zero);
+                anim.Play(Random.Range(0, 2) == 0 ? "Return01" : "Return02");
+                yield return new WaitForSeconds(animationTime);
             }
         }
-
 
         #endregion
 

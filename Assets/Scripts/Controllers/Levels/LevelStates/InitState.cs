@@ -10,7 +10,7 @@ namespace LevelStates {
         #region State Behaviour
 
         public override void Enter () {
-            player = new Player(GetCurrentLevelData().PlayerInitialLives);
+            player.Init(GetCurrentLevelData().PlayerInitialLives);
             playerController.gameObject.SetActive(true);
             playerController.Init(player);
             levelScreenController.gameObject.SetActive(true);

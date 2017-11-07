@@ -27,7 +27,7 @@ public class Player {
 
     #region Public Behaviour
 
-    public Player (int lives) {
+    public void Init (int lives) {
         this.score = 0;
         this.combo = 0;
         this.lives = lives;

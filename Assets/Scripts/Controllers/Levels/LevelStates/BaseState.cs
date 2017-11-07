@@ -26,6 +26,7 @@ namespace LevelStates {
             playerController = levelController.PlayerController;
             levelScreenController = levelController.LevelScreenController;
             pauseScreen = levelController.PauseScreen;
+            player = new Player();
         }
 
         #endregion

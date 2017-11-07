@@ -103,7 +103,7 @@ public class GestureManager : MonoBehaviour {
         GestureInputEventArgs gestureInputEventArgs = new GestureInputEventArgs(result.GestureClass, result.Score, gestureTime);
         if (IsRightGesture(result)) {
             RightGestureInputEvent.Invoke(gestureInputEventArgs);
-        } else {
+        } else if(result.Score > GameConfig.GestureMinScore / 2) { // Otherwise the event is triggered even without input by the player
             WrongGestureInputEvent.Invoke(gestureInputEventArgs);
         }
     }

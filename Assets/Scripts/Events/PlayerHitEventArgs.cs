@@ -23,7 +23,7 @@ public class PlayerHitEventArgs {
         this.lives = lives;
         this.score = score;
         this.isDead = isDead;
-        Debug.Log("PlayerHitEventArgs " + this.lives + " " + lives);
+        Debug.Log("PlayerHitEventArgs " + this.lives);
     }
 
     #endregion

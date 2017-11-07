@@ -59,7 +59,6 @@ public class GameObjectArrayPool : IPool {
         GameObject obj = MonoBehaviour.Instantiate(prefab, pool.transform);
         obj.SetActive(false);
         objects.Add(new KeyValuePair<int, GameObject>(index, obj));
-
         return obj;
     }
 

@@ -30,13 +30,11 @@ namespace PlayerStates {
         }
 
         public void OnEnemyShotEvent (EnemyShotEventArgs enemyShotEventArgs) {
-            StartCoroutine(WaitForGestureRoutine());
+            playerController.ToRespawnState();
         }
 
         public void OnRightGestureInput (GestureInputEventArgs gestureInputEventArgs) {
-            laserPS.Play();
-            playerController.InvokePlayerShotEvent();
-            playerController.ToIdleState();
+            StartCoroutine(AttackRoutine());
         }
 
         #endregion
@@ -57,9 +55,11 @@ namespace PlayerStates {
 
         #region Private Behaviour
 
-        private IEnumerator WaitForGestureRoutine () {
-            yield return new WaitForSeconds(0.1f);
-            playerController.ToRespawnState();
+        private IEnumerator AttackRoutine () {
+            laserPS.Play();
+            playerController.InvokePlayerShotEvent();
+            yield return new WaitForSeconds(0.3f);
+            playerController.ToIdleState();
         }
 
         #endregion

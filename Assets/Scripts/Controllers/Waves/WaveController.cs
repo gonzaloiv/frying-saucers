@@ -14,17 +14,13 @@ public class WaveController : StateMachine {
     public GameObject GestureManager { get { return gestureManager; } }
     public EnemyTypeLabelSpawner EnemyTypeLabelSpawner { get { return enemyTypeLabelSpawner; } }
     public WaveSpawner WaveSpawner { get { return waveSpawner; } }
+    public Wave CurrentWave { get { return currentWave; } }
     public GameObject Player { get { return player; } }
-
-    public GameObject[] CurrentWaveEnemies { get { return currentWaveEnemies; } }
-    public WaveData CurrentWaveData { get { return currentWaveData; } }
 
     private EnemyTypeLabelSpawner enemyTypeLabelSpawner;
     private WaveSpawner waveSpawner;
+    private Wave currentWave;
     private GameObject player;
-
-    private GameObject[] currentWaveEnemies;
-    private WaveData currentWaveData;
 
     #endregion
 
@@ -40,6 +36,7 @@ public class WaveController : StateMachine {
     void Awake () {
         enemyTypeLabelSpawner = Instantiate(enemyTypeLabelPrefab, transform).GetComponent<EnemyTypeLabelSpawner>();
         waveSpawner = GetComponent<WaveSpawner>();
+        currentWave = new Wave();
     }
 
     void OnDisable () {
@@ -55,10 +52,8 @@ public class WaveController : StateMachine {
     }
 
     public void InitWave (LevelType levelType, WaveData waveData) {
-        this.currentWaveData = waveData;
-        ResetWaveEnemies();
-        currentWaveEnemies = levelType == LevelType.RandomLevel ? waveSpawner.SpawnRandomWaveEnemies(waveData, player) : waveSpawner.SpawnWaveEnemies(waveData, player);
-        enemyTypeLabelSpawner.Init(currentWaveEnemies);
+        GameObject[] waveEnemies = levelType == LevelType.RandomLevel ? waveSpawner.SpawnRandomWaveEnemies(waveData, player) : waveSpawner.SpawnWaveEnemies(waveData, player);
+        currentWave.Init(waveData, waveEnemies);
         ToWaveStartState();
     }
 
@@ -83,19 +78,5 @@ public class WaveController : StateMachine {
     }
 
     #endregion
-
-    #region Private Behaviour
-
-    private void ResetWaveEnemies () {
-        if (currentWaveEnemies == null)
-            return;
-        foreach (GameObject enemy in currentWaveEnemies)
-            if (enemy != null)
-                enemy.SetActive(false);
-        currentWaveEnemies = null;
-    }
-
-    #endregion
-
 
 }

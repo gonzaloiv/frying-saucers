@@ -17,6 +17,7 @@ namespace WaveStates {
 
         public override void Enter () {
             base.Enter();
+            enemyTypeLabelSpawner.HideGestures();
             StartCoroutine(WaveRoutine());
         }
 
@@ -25,7 +26,7 @@ namespace WaveStates {
         #region Private Behaviour
 
         private IEnumerator WaveRoutine () {
-            enemyTypeLabelSpawner.ShowGestures(2);
+            enemyTypeLabelSpawner.ShowGestures(GetCurrentWave().Enemies, 2);
             yield return new WaitForSeconds(2);
             waveController.ToEnemyAttackState();
         }

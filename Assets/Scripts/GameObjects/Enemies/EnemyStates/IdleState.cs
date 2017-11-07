@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EnemyBehaviourStates {
+namespace EnemyStates {
 
     public class IdleState : BaseState {
 

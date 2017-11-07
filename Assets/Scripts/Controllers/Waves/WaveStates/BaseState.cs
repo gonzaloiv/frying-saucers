@@ -14,7 +14,6 @@ namespace WaveStates {
         protected WaveSpawner waveSpawner;
         protected GameObject player;
         protected PlayerController playerController;
-        protected GameObject[] currentWaveEnemies;
 
         #endregion
 
@@ -27,15 +26,14 @@ namespace WaveStates {
             waveSpawner = waveController.WaveSpawner;
             player = waveController.Player;
             playerController = player.GetComponent<PlayerController>();
-            currentWaveEnemies = waveController.CurrentWaveEnemies;
         }
 
         #endregion
 
         #region Protected Behaviour
 
-        protected WaveData GetCurrentWaveData() {
-            return waveController.CurrentWaveData;
+        protected Wave GetCurrentWave() {
+            return waveController.CurrentWave;
         }
 
         #endregion

@@ -12,7 +12,6 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
     [SerializeField] private GameObject[] gesturePrefabs;
 
     private GameObjectArrayPool gesturePool;
-    private List<Enemy> currentEnemies;
     private List<GameObject> gestures;
 
     #endregion
@@ -23,45 +22,33 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
         gesturePool = new GameObjectArrayPool("GesturePool", gesturePrefabs, 16, transform);
     }
 
-    void OnDisable () {
-        StopAllCoroutines();
-    }
-
     #endregion
 
     #region Public Behaviour
 
-    public void Init (GameObject[] currentWaveEnemies) {
-        ResetGestures();
-        foreach (GameObject enemy in currentWaveEnemies)
-            AddGesture(enemy.GetComponent<EnemyController>().Enemy);
+    public void ShowGestures (GameObject[] enemies, float time) {
+        StartCoroutine(ShowGesturesRoutine(enemies, time));
     }
 
-    public void AddGesture (Enemy enemy) {
-        currentEnemies.Add(enemy);
+    public void ShowGesture (GameObject enemy, float time) {
+        StartCoroutine(ShowGestureRoutine(enemy, time));
     }
 
-    public void SetGestureByIndex (int index, Enemy enemy) {
-        currentEnemies[index] = enemy;
-    }
-
-    public void ShowGestures (float time) {
-        StartCoroutine(ShowGesturesRoutine(time));
-    }
-
-    public void ShowGesture (int index, float time) {
-        StartCoroutine(ShowGestureRoutine(index, time));
+    public void HideGestures() {
+        if(gestures != null)
+            gestures.ForEach(gesture => gesture.SetActive(false));
     }
 
     #endregion
 
     #region Private Behaviour
 
-    private IEnumerator ShowGesturesRoutine (float time) {
+    private IEnumerator ShowGesturesRoutine (GameObject[] currentEnemies, float time) {
         gestures = new List<GameObject>(); 
-        for (int i = 0; i < currentEnemies.Count; i++) {
-            GameObject gesture = gesturePool.PopObject((int) currentEnemies[i].EnemyType);
-            gesture.transform.position = currentEnemies[i].Position + new Vector2(0, -0.7f);
+        for (int i = 0; i < currentEnemies.Length; i++) {
+            Enemy enemy = currentEnemies[i].GetComponent<EnemyController>().Enemy;
+            GameObject gesture = gesturePool.PopObject((int) enemy.EnemyType);
+            gesture.transform.position = enemy.Position + new Vector2(0, -0.7f);
             gesture.SetActive(true);
             gestures.Add(gesture);
         }
@@ -69,19 +56,14 @@ public class EnemyTypeLabelSpawner : MonoBehaviour {
         gestures.ForEach(gesture => gesture.SetActive(false));
     }
 
-    private IEnumerator ShowGestureRoutine (int index, float time) {
+    private IEnumerator ShowGestureRoutine (GameObject currentEnemy, float time) {
         GameObject gesture = new GameObject();
-        gesture = gesturePool.PopObject((int) currentEnemies[index].EnemyType - 1);
-        gesture.transform.position = currentEnemies[index].Position + new Vector2(0, -0.7f);
+        Enemy enemy = currentEnemy.GetComponent<EnemyController>().Enemy;
+        gesture = gesturePool.PopObject((int) enemy.EnemyType - 1);
+        gesture.transform.position = enemy.Position + new Vector2(0, -0.7f);
         gesture.SetActive(true);
         yield return new WaitForSeconds(time);
         gesture.SetActive(false);
-    }
-
-    private void ResetGestures () {
-        if (gestures != null)
-            gestures.ForEach(gesture => gesture.SetActive(false));
-        currentEnemies = new List<Enemy>();       
     }
 
     #endregion

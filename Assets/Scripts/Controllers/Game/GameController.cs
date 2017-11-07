@@ -97,12 +97,12 @@ public class GameController : StateMachine {
     public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
         if (playerHitEventArgs.IsDead) {
             DataManager.AddNewScore(new LeaderboardEntry(playerHitEventArgs.Score, DateTime.Now));
-            ToGameOverState();
+            StartCoroutine(GameOverRoutine());
         }
     }
 
     public void OnLevelEndEvent () {
-        ToMainMenuState();
+        ToMainMenuState(); // TODO: Increasing currentLevelIndex and initializing next level
     }
 
     #endregion
@@ -116,6 +116,11 @@ public class GameController : StateMachine {
         leaderboardScreen.SetActive(false);
         creditsScreen.SetActive(false);
         tutorialScreen.SetActive(false);       
+    }
+
+    private IEnumerator GameOverRoutine() {
+        yield return new WaitForSeconds(0.3f);
+        ToGameOverState();
     }
 
     #endregion

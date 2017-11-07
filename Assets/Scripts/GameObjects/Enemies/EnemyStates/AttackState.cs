@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EnemyBehaviourStates {
+namespace EnemyStates {
 
     public class AttackState : BaseState {
     
@@ -18,6 +18,11 @@ namespace EnemyBehaviourStates {
             base.Enter();
             shootingPosition = Board.EmptyEnemyShotPosition();
             StartCoroutine(ShootRoutine());
+        }
+
+        public override void Exit() {
+            base.Exit();
+            StopAllCoroutines();
         }
 
         public override void Play () {
