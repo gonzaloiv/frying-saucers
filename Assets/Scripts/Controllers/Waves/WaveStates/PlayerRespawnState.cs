@@ -19,7 +19,7 @@ namespace WaveStates {
 
         private IEnumerator WaveRestartRoutine () {
             yield return new WaitForSeconds(0.8f);
-            playerController.gameObject.SetActive(true);
+            player.SetActive(true);
             yield return new WaitForSeconds(0.2f);
             waveController.ToWaveStartState();
         }

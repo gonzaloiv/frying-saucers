@@ -5,14 +5,19 @@ using System;
 
 public class GestureInputEventArgs : EventArgs {
 
+    #region Fields / Properties
+
     public GestureType Type { get { return type; } }
-    private  GestureType type;
-
     public float Score { get { return score; } }
-    private float score;
-
     public GestureTime Time { get { return time; } }
+
+    private  GestureType type;
+    private float score;
     private GestureTime time;
+
+    #endregion
+
+    #region Public Behaviour
 
     public GestureInputEventArgs (string gestureClass, float score, GestureTime time) {
 
@@ -34,5 +39,7 @@ public class GestureInputEventArgs : EventArgs {
         this.time = time;
 
     }
+
+    #endregion
 
 }

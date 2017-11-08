@@ -8,6 +8,9 @@ namespace LevelStates {
 
         #region Fields
 
+        protected LevelData currentLevelData { get { return GetCurrentLevelData(); } }
+        protected WaveData currentWaveData { get { return GetCurrentWaveData(); } }
+
         protected LevelController levelController;
         protected WaveController waveController;
         protected PlayerController playerController;
@@ -33,11 +36,11 @@ namespace LevelStates {
 
         #region Public Behaviour
 
-        protected LevelData GetCurrentLevelData () {
+        private LevelData GetCurrentLevelData () {
             return levelController.CurrentLevelData;
         }
 
-        protected WaveData GetCurrentWaveData () {
+        private WaveData GetCurrentWaveData () {
             return levelController.CurrentWaveData;
         }
 

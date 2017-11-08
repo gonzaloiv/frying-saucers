@@ -53,9 +53,9 @@ namespace PlayerStates {
         #region Private Behaviour
 
         private IEnumerator IdleRoutine () {
-            nextPosition = new Vector2(new int[2]{ -2, 2 }[Random.Range(0, 2)], GameConfig.PlayerInitialYPosition);
+            nextPosition = new Vector2(new float[2]{ -1.5f, 1.5f }[Random.Range(0, 2)], GameConfig.PlayerInitialYPosition);
             while (gameObject.activeInHierarchy) {
-                float animationTime = Random.Range(1f, 2f);
+                float animationTime = Random.Range(1f, 1.5f);
                 nextPosition = new Vector2(-nextPosition.x, nextPosition.y);
                 transform.rotation = Quaternion.Euler(Vector3.zero);
                 anim.Play(Random.Range(0, 2) == 0 ? "Return01" : "Return02");

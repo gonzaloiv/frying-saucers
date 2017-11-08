@@ -17,6 +17,9 @@ namespace WaveStates {
 
         public override void Enter () {
             base.Enter();
+            currentWave.SetEnemies(waveSpawner.SpawnWaveEnemies(currentWave.WaveData));
+            currentWave.DecreaseRemainingRounds();
+            Debug.Log("CurrentWave.RemainingRounds " + currentWave.RemainingRounds);
             enemyTypeLabelSpawner.HideGestures();
             StartCoroutine(WaveRoutine());
         }
@@ -26,8 +29,11 @@ namespace WaveStates {
         #region Private Behaviour
 
         private IEnumerator WaveRoutine () {
-            enemyTypeLabelSpawner.ShowGestures(GetCurrentWave().Enemies, 2);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(currentWave.WaveStartTime);
+            enemyTypeLabelSpawner.ShowGestures(currentWave.Enemies, currentWave.WaveStartGesturesTime);
+            yield return new WaitForSeconds(currentWave.WaveStartGesturesTime);
+            if (currentWave.WaveStartPauseTime != 0)
+                yield return new WaitForSeconds(currentWave.WaveStartPauseTime);
             waveController.ToEnemyAttackState();
         }
 

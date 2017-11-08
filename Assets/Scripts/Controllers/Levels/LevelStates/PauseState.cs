@@ -21,7 +21,7 @@ namespace LevelStates {
         }
 
         public void OnTapInputEvent()   {
-            levelController.ToLevelState();
+            levelController.ToWaveState();
         }
 
         #endregion

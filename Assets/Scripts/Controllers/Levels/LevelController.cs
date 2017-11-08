@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using LevelStates;
 
 public class LevelController : StateMachine {
 
@@ -53,20 +54,24 @@ public class LevelController : StateMachine {
         currentWaveIndex = -1;
         currentLevelData = levelData;
         NewLevelEvent.Invoke();
-        ChangeState<LevelStates.InitState>();
+        ChangeState<InitState>();
     }
 
-    public void ToLevelState () {
-        if (currentWaveIndex < currentLevelData.WavesData.Count) {
-            currentWaveIndex++;
-            ChangeState<LevelStates.LevelState>();
-        } else {
+    public void ToWaveStartState() {
+        currentWaveIndex++;
+        if (currentWaveIndex >= currentLevelData.WavesData.Count) {
             LevelEndEvent.Invoke();
+        } else {
+            ChangeState<WaveStartState>();
         }
     }
 
+    public void ToWaveState () {
+        ChangeState<WaveState>();
+    }
+
     public void ToPauseState () {
-        ChangeState<LevelStates.PauseState>();
+        ChangeState<PauseState>();
     }
 
     #endregion

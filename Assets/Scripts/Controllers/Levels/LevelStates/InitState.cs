@@ -10,12 +10,12 @@ namespace LevelStates {
         #region State Behaviour
 
         public override void Enter () {
-            player.Init(GetCurrentLevelData().PlayerInitialLives);
+            player.Init(currentLevelData.PlayerInitialLives);
             playerController.gameObject.SetActive(true);
             playerController.Init(player);
             levelScreenController.gameObject.SetActive(true);
             levelScreenController.Init(player);
-            levelController.ToLevelState();
+            levelController.ToWaveStartState();
         }
 
         #endregion

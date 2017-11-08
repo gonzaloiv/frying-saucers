@@ -25,7 +25,7 @@ public class EnemySpawner : MonoBehaviour {
         GameObject enemyObject = ufoPool.PopObject((int) enemy.EnemyType); // - 1 to match null enemy type
         enemyObject.transform.position = Board.GetRandomOutOfBoardPosition();
         enemyObject.GetComponent<SpriteRenderer>().flipY = false;
-        enemyObject.GetComponent<EnemyController>().Init(player, enemy);
+        enemyObject.GetComponent<EnemyController>().Init(enemy, player);
         enemyObject.SetActive(true);
         return enemyObject;
     }

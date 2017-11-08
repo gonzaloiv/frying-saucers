@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
+using GameStates;
 
 public class GameController : StateMachine {
 
@@ -13,8 +14,9 @@ public class GameController : StateMachine {
     [SerializeField] private GameData gameData;
     [SerializeField] private GameConfigData gameConfigData;
 
-    [Header("Game Controllers")]
+    [Header("Game Objects")]
     [SerializeField] private LevelController levelController;
+    [SerializeField] private Camera gameCamera;
 
     [Header("Game Screens")]
     [SerializeField] private GameObject mainMenuScreen;
@@ -27,6 +29,7 @@ public class GameController : StateMachine {
     public GameData GameData { get { return gameData; } }
     public GameConfigData GameConfigData { get { return gameConfigData; } }
     public LevelController LevelController { get { return levelController; } }
+    public Camera GameCamera { get { return gameCamera; } }
     public GameObject MainMenuScreen { get { return mainMenuScreen; } }
     public GameObject LevelScreen { get { return levelScreen; } }
     public GameObject GameOverScreen { get { return gameOverScreen; } }
@@ -51,17 +54,15 @@ public class GameController : StateMachine {
     #region Mono Behaviour
 
     void Awake () {
-        Reset();
-        ChangeState<GameStates.InitState>();
+        ResetGameScreens();
+        ChangeState<InitState>();
     }
         
     void OnEnable () {
-        Player.PlayerHitEvent += OnPlayerHitEvent;
         LevelController.LevelEndEvent += OnLevelEndEvent;
     }
 
     void OnDisable () {
-        Player.PlayerHitEvent -= OnPlayerHitEvent;
         LevelController.LevelEndEvent -= OnLevelEndEvent;
     }
 
@@ -71,56 +72,44 @@ public class GameController : StateMachine {
 
     public void ToMainMenuState () {
         NewGameEvent.Invoke();
-        ChangeState<GameStates.MainMenuState>();
+        ChangeState<MainMenuState>();
     }
 
     public void ToLevelState () {
-        ChangeState<GameStates.LevelState>();
+        ChangeState<LevelState>();
     }
 
     public void ToTutorialState () {
-        ChangeState<GameStates.TutorialState>();
+        ChangeState<TutorialState>();
     }
 
     public void ToGameOverState () {
-        ChangeState<GameStates.GameOverState>();
+        ChangeState<GameOverState>();
     }
 
     public void ToLeaderboardState () {
-        ChangeState<GameStates.LeaderboardState>();
+        ChangeState<LeaderboardState>();
     }
 
     public void ToCreditsState () {
-        ChangeState<GameStates.CreditsState>();
-    }
-
-    public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
-        if (playerHitEventArgs.IsDead) {
-            DataManager.AddNewScore(new LeaderboardEntry(playerHitEventArgs.Score, DateTime.Now));
-            StartCoroutine(GameOverRoutine());
-        }
+        ChangeState<CreditsState>();
     }
 
     public void OnLevelEndEvent () {
-        ToMainMenuState(); // TODO: Increasing currentLevelIndex and initializing next level
+        ToMainMenuState(); // TODO: Increasing currentLevelIndex and initializing next level, at this moment: Level ≈ Mode
     }
 
     #endregion
 
     #region Private Behaviour
 
-    private void Reset () {
+    private void ResetGameScreens () {
         mainMenuScreen.SetActive(false);
         levelScreen.SetActive(false);
         gameOverScreen.SetActive(false);
         leaderboardScreen.SetActive(false);
         creditsScreen.SetActive(false);
         tutorialScreen.SetActive(false);       
-    }
-
-    private IEnumerator GameOverRoutine() {
-        yield return new WaitForSeconds(0.3f);
-        ToGameOverState();
     }
 
     #endregion

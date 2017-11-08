@@ -5,11 +5,28 @@ using System.Linq;
 [CreateAssetMenu(fileName = "WaveData", menuName = "ScriptableObject/Wave", order = 1)]
 public class WaveData : ScriptableObject {
 
-    public EnemyType[] EnemyTypes { get { return enemyTypes; } }
-    public float[] RoutineTime { get { return routineTime; } }
+    // Wave Data
+    public int[] Rounds { get { return rounds; } }
+    public WaveEnemies WaveEnemies { get { return waveEnemies; } }
 
-    [Header("Empty for random spawning")]
-    [SerializeField] private EnemyType[] enemyTypes;
-    [SerializeField] private float[] routineTime = new float[2];
+    // Wave Time
+    public float WaveStartGesturesTime { get { return waveStartGesturesTime; } }
+    public float WaveStartTime { get { return waveStartTime; } }
+    public float WaveStartPauseTime { get { return waveStartPauseTime; } }
+    public float WaveRefillGesturesTime { get { return waveRefillGesturesTime; } }
+    public float WaveRefillPauseTime { get { return waveRefillPauseTime; } }
+    public float[] EnemyRoutineTime { get { return enemyRoutineTime; } }
+
+    // Wave Data
+    [SerializeField] private int[] rounds = new int[2];
+    [SerializeField] private WaveEnemies waveEnemies;
+
+    // Wave Time
+    [SerializeField] private float waveStartTime;
+    [SerializeField] private float waveStartGesturesTime;
+    [SerializeField] private float waveStartPauseTime;
+    [SerializeField] private float waveRefillGesturesTime;
+    [SerializeField] private float waveRefillPauseTime;
+    [SerializeField] private float[] enemyRoutineTime = new float[2];
         
 }

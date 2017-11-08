@@ -7,44 +7,45 @@ namespace WaveStates {
 
     public class WaveRefillState : BaseState {
 
-        #region Fields / Properties
-
-        private Wave currentWave;
-
-        #endregion
-
         #region Public Behaviour
 
         public override void Enter () {
             base.Enter();
-            currentWave = GetCurrentWave();
-            StartCoroutine(EnemyHitRoutine());
+            currentWave.SetEnemies(currentWave.Enemies.Where(enemy => enemy.activeInHierarchy).ToArray());
+            if (currentWave.IsFinished) {
+                waveController.ToWaveStartState();
+            } else {
+                StartCoroutine(WaveRefillRoutine());
+            }
         }
 
-        public override void Play () {
-            base.Play();
-            FillWave();
+        public override void Exit () {
+            base.Exit();
+            StopAllCoroutines();
         }
 
         #endregion
 
         #region Private Behaviour
 
-        private void FillWave () {
-            for (int i = 0; i < currentWave.Enemies.Length; i++) {
-                if (!currentWave.Enemies[i].activeInHierarchy) {
-                    GameObject enemy = waveSpawner.SpawnRandomEnemy(i, player);
-                    currentWave.Enemies[i] = enemy;
-                    enemyTypeLabelSpawner.ShowGestures(currentWave.Enemies, 2);
-                }
-            }
+        private IEnumerator WaveRefillRoutine () {
+            if (currentWave.RemainingEnemies != 0) // The routine is called even if there're no enemies to spawn
+                FillWave();
+            if (currentWave.WaveRefillGesturesTime != 0)
+                enemyTypeLabelSpawner.ShowGestures(currentWave.Enemies, currentWave.WaveRefillGesturesTime);
+            yield return new WaitForSeconds(currentWave.WaveRefillGesturesTime);
+            yield return new WaitForSeconds(currentWave.WaveStartPauseTime);
+            waveController.ToEnemyAttackState();
         }
 
-        private IEnumerator EnemyHitRoutine () {
-            yield return new WaitForSeconds(2);
-            if (currentWave.Enemies.Where(enemy => enemy.activeInHierarchy).Count() == 0)
-                waveController.InvokeWaveEndEvent();
-            waveController.ToWaveStartState();
+        private void FillWave () {
+            currentWave.DecreaseRemainingEnemies();
+            for (int i = 0; i < currentWave.Enemies.Length; i++) {
+                if (!currentWave.Enemies[i].activeInHierarchy) {
+                    GameObject enemy = waveSpawner.SpawnEnemy(currentWave.WaveData, i);
+                    currentWave.Enemies[i] = enemy;
+                }
+            }
         }
 
         #endregion

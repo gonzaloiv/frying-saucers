@@ -10,10 +10,10 @@ namespace GameStates {
 
         public override void Enter () {
             base.Enter();
-            new Board();
+            new Board(gameCamera);
             GameConfig.Init(gameConfigData);
             levelController.gameObject.SetActive(false);
-            DataManager.Init(); // Has to be called the last because of DataLoadedEvent.
+            DataManager.Init(); // Called the last because of DataLoadedEvent.
         }
 
         public void OnDataLoadedEvent (DataLoadedEventArgs dataLoadedEventArgs) {

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LevelStates {
 
-    public class LevelState : BaseState {
+    public class WaveStartState : BaseState {
 
         #region Fields / Properties
 
@@ -18,27 +18,11 @@ namespace LevelStates {
 
         #region State Behaviour
 
-        public override void Enter() {
+        public override void Enter () {
             base.Enter();
-            levelType = GetCurrentLevelData().LevelType;
+            levelType = currentLevelData.LevelType;
             levelInitTime = levelType == LevelType.TutorialLevel ? TUTORIAL_LEVEL_INIT_TIME : 0;
             StartCoroutine(WaveStartRoutine(levelInitTime));
-        }
-
-        public void OnEscapeInputEvent () {
-            levelController.ToPauseState();
-        }
-
-        #endregion
-
-        #region Protected Behaviour
-
-        protected override void AddListeners () {
-            InputManager.EscapeInputEvent += OnEscapeInputEvent;
-        }
-
-        protected override void RemoveListeners () {
-            InputManager.EscapeInputEvent -= OnEscapeInputEvent;
         }
 
         #endregion
@@ -47,7 +31,8 @@ namespace LevelStates {
 
         private IEnumerator WaveStartRoutine (float levelInitTime) {
             yield return new WaitForSeconds(levelInitTime);
-            waveController.InitWave(levelType, GetCurrentWaveData());
+            waveController.InitWave(levelType, currentWaveData);
+            levelController.ToWaveState();
         }
 
         #endregion

@@ -14,9 +14,6 @@ public class GameConfig {
     public static float PlayerInitialYPosition;
     public static float PlayerMaxSpeed;
 
-    // Waves
-    public static int RandomWaveEnemyAmount;
-
     // Game
     public static int GameTimeScale;
     public static int ShootingRoutineSections;
@@ -35,7 +32,6 @@ public class GameConfig {
         EnemyInitialYPosition = gameConfigData.EnemyInitialYPosition;
         PlayerInitialYPosition = gameConfigData.PlayerInitialYPosition;
         PlayerMaxSpeed = gameConfigData.PlayerMaxSpeed;
-        RandomWaveEnemyAmount = gameConfigData.RandomWaveEnemyAmount;
         GameTimeScale = gameConfigData.GameTimeScale;
         ShootingRoutineSections = gameConfigData.ShootingRoutineSections;
         GestureStrokeTime = gameConfigData.GestureStrokeTime;

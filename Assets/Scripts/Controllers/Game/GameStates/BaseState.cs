@@ -12,6 +12,7 @@ namespace GameStates {
         protected GameConfigData gameConfigData;
         protected GameController gameController;
         protected LevelController levelController;
+        protected Camera gameCamera;
         protected GameObject mainMenuScreen;
         protected GameObject levelScreen;
         protected GameObject gameOverScreen;
@@ -28,6 +29,7 @@ namespace GameStates {
             gameData = gameController.GameData;
             gameConfigData = gameController.GameConfigData;
             levelController = gameController.LevelController;
+            gameCamera = gameController.GameCamera;
             mainMenuScreen = gameController.MainMenuScreen;
             levelScreen = gameController.LevelScreen;
             gameOverScreen = gameController.GameOverScreen;

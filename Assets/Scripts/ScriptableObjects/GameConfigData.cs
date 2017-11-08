@@ -14,9 +14,6 @@ public class GameConfigData : ScriptableObject {
     public float PlayerInitialYPosition = -1f;
     public float PlayerMaxSpeed = 7f;
 
-    [Header("Waves")]    
-    public int RandomWaveEnemyAmount = 4;
-
     [Header("Game")]
     public int GameTimeScale = 1;
     public int ShootingRoutineSections = 5;

@@ -46,9 +46,9 @@ public class EnemyController : StateMachine {
 
     #region IEnemyBehaviour
 
-    public void Init (GameObject player, Enemy enemy) {
-        this.player = player;
+    public void Init (Enemy enemy, GameObject player) {
         this.enemy = enemy;
+        this.player = player;
         ToIdleState();
     }
 

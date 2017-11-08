@@ -12,15 +12,15 @@ public class WaveController : StateMachine {
     [SerializeField] private GameObject enemyTypeLabelPrefab;
 
     public GameObject GestureManager { get { return gestureManager; } }
+    public GameObject Player { get { return player; } }
     public EnemyTypeLabelSpawner EnemyTypeLabelSpawner { get { return enemyTypeLabelSpawner; } }
     public WaveSpawner WaveSpawner { get { return waveSpawner; } }
     public Wave CurrentWave { get { return currentWave; } }
-    public GameObject Player { get { return player; } }
 
+    private GameObject player;
     private EnemyTypeLabelSpawner enemyTypeLabelSpawner;
     private WaveSpawner waveSpawner;
     private Wave currentWave;
-    private GameObject player;
 
     #endregion
 
@@ -35,8 +35,6 @@ public class WaveController : StateMachine {
 
     void Awake () {
         enemyTypeLabelSpawner = Instantiate(enemyTypeLabelPrefab, transform).GetComponent<EnemyTypeLabelSpawner>();
-        waveSpawner = GetComponent<WaveSpawner>();
-        currentWave = new Wave();
     }
 
     void OnDisable () {
@@ -49,16 +47,22 @@ public class WaveController : StateMachine {
 
     public void Init (GameObject player) {
         this.player = player;
+        waveSpawner = GetComponent<WaveSpawner>();
+        waveSpawner.Init(player);
+        currentWave = new Wave();
     }
 
     public void InitWave (LevelType levelType, WaveData waveData) {
-        GameObject[] waveEnemies = levelType == LevelType.RandomLevel ? waveSpawner.SpawnRandomWaveEnemies(waveData, player) : waveSpawner.SpawnWaveEnemies(waveData, player);
-        currentWave.Init(waveData, waveEnemies);
+        currentWave.Init(waveData);
         ToWaveStartState();
     }
 
     public void ToWaveStartState () {
-        ChangeState<WaveStartState>();
+        if (currentWave.RemainingRounds <= 0) {
+            InvokeWaveEndEvent();
+        } else {
+            ChangeState<WaveStartState>();
+        }
     }
 
     public void ToWaveRefillState () {
@@ -71,6 +75,10 @@ public class WaveController : StateMachine {
 
     public void ToEnemyAttackState () {
         ChangeState<EnemyAttackState>();
+    }
+
+    public void ToBaseState () {
+        ChangeState<BaseState>();
     }
 
     public void InvokeWaveEndEvent () {
