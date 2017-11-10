@@ -29,7 +29,7 @@ public class Player {
 
     public void Init (int lives) {
         this.score = 0;
-        this.combo = 0;
+        this.combo = 1;
         this.lives = lives;
     }
 
@@ -38,8 +38,8 @@ public class Player {
         InvokePlayerHitEvent();
     }
 
-    public void IncreaseScore (int scoreAmount) {
-        this.score += scoreAmount;
+    public void IncreaseScore (GestureTime gestureTime) {
+        this.score += (int) Mathf.Ceil(GameConfig.EnemyScore * GetGestureMultiplier(gestureTime) * combo);
     }
 
     public void ResetCombo () {
@@ -56,6 +56,19 @@ public class Player {
 
     private void InvokePlayerHitEvent () {
         PlayerHitEvent.Invoke(new PlayerHitEventArgs(this.lives, this.score, this.IsDead));
+    }
+
+    private float GetGestureMultiplier (GestureTime gestureTime) {
+        switch (gestureTime) {
+        case GestureTime.Perfect:
+            return 2;
+        case GestureTime.TooFast:
+            return .5f;
+        case GestureTime.TooSlow:
+            return .5f;
+        default:
+            return 1;
+        }
     }
 
     #endregion

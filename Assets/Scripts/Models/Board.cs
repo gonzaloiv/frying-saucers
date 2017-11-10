@@ -30,6 +30,11 @@ public class Board {
         return position;
     }
  
+    public static Vector2 GetEnemyGridPosition (int enemyAmount, int index) {
+        float positionXSize = boardSize.x / (enemyAmount + 2);
+        return new Vector2(-boardSize.x / 2 + ((positionXSize) * (index + 1)) + positionXSize / 2, GameConfig.EnemyInitialYPosition);
+    }
+
     public static Vector2[] EnemyGrid (int enemyAmount) {
         Vector2[] grid = new Vector2[enemyAmount];
         float positionXSize = boardSize.x / (grid.Length + 2);

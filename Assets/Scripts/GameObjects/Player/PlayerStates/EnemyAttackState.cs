@@ -33,8 +33,14 @@ namespace PlayerStates {
             playerController.ToRespawnState();
         }
 
-        public void OnRightGestureInput (GestureInputEventArgs gestureInputEventArgs) {
+        public void OnRightGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
             StartCoroutine(AttackRoutine());
+            player.IncreaseCombo();
+            player.IncreaseScore(gestureInputEventArgs.Time);
+        }
+
+        public void OnWrongGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
+            player.ResetCombo();
         }
 
         #endregion
@@ -43,12 +49,14 @@ namespace PlayerStates {
 
         protected override void AddListeners () {
             EnemyController.EnemyShotEvent += OnEnemyShotEvent;
-            GestureManager.RightGestureInputEvent += OnRightGestureInput;
+            GestureRecognitionController.RightGestureInputEvent += OnRightGestureInputEvent;
+            GestureRecognitionController.WrongGestureInputEvent += OnWrongGestureInputEvent;
         }
 
         protected override void RemoveListeners () {
             EnemyController.EnemyShotEvent -= OnEnemyShotEvent;
-            GestureManager.RightGestureInputEvent -= OnRightGestureInput;
+            GestureRecognitionController.RightGestureInputEvent -= OnRightGestureInputEvent;
+            GestureRecognitionController.WrongGestureInputEvent -= OnWrongGestureInputEvent;
         }
 
         #endregion

@@ -9,7 +9,6 @@ public class WaveSpawner : MonoBehaviour {
     [SerializeField] private GameObject enemiesPrefab;
     private EnemySpawner enemySpawner;
     private GameObject player;
-    private Vector2[] currentWaveEnemyGrid;
 
     #endregion
 
@@ -28,11 +27,10 @@ public class WaveSpawner : MonoBehaviour {
     }
 
     public GameObject[] SpawnWaveEnemies (WaveData waveData) {
-        currentWaveEnemyGrid = Board.EnemyGrid(waveData.WaveEnemies.EnemyGridAmount);
         GameObject[] currentWaveEnemies = new GameObject[waveData.WaveEnemies.EnemyGridAmount];
         for (int i = 0; i < waveData.WaveEnemies.EnemyGridAmount; i++) {
             EnemyType enemyType = waveData.WaveEnemies.EnemyTypes[Random.Range(0, waveData.WaveEnemies.EnemyTypes.Length)];
-            Enemy enemy = new Enemy(enemyType, currentWaveEnemyGrid[i], waveData.EnemyRoutineTime);
+            Enemy enemy = new Enemy(enemyType, Board.GetEnemyGridPosition(waveData.WaveEnemies.EnemyGridAmount, i), waveData.EnemyRoutineTime);
             currentWaveEnemies[i] = enemySpawner.SpawnEnemy(enemy, player);
         }
         return currentWaveEnemies;
@@ -40,7 +38,7 @@ public class WaveSpawner : MonoBehaviour {
 
     public GameObject SpawnEnemy (WaveData waveData, int index) { // TODO: This method should receive an Enemy and spawn from its information
         EnemyType enemyType = waveData.WaveEnemies.EnemyTypes[Random.Range(0, waveData.WaveEnemies.EnemyTypes.Length)];
-        Enemy enemy = new Enemy(enemyType, currentWaveEnemyGrid[index], waveData.EnemyRoutineTime);
+        Enemy enemy = new Enemy(enemyType, Board.GetEnemyGridPosition(waveData.WaveEnemies.EnemyGridAmount, index), waveData.EnemyRoutineTime);
         return enemySpawner.SpawnEnemy(enemy, player);
     }
 

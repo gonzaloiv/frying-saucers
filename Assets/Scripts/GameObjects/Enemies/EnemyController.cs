@@ -42,6 +42,10 @@ public class EnemyController : StateMachine {
         explosionPS = Instantiate(explosionPrefab, transform).GetComponent<ParticleSystem>();
     }
 
+    void OnDisable() {
+        ToIdleState();
+    }
+
     #endregion
 
     #region IEnemyBehaviour
@@ -49,7 +53,6 @@ public class EnemyController : StateMachine {
     public void Init (Enemy enemy, GameObject player) {
         this.enemy = enemy;
         this.player = player;
-        ToIdleState();
     }
 
     public void ToIdleState () {
@@ -64,8 +67,10 @@ public class EnemyController : StateMachine {
         ChangeState<DisableState>();
     }
 
-    public void Disable () {
+    public void Disable () { // Called from "Disable" animation
         gameObject.SetActive(false);
+        ChangeState<IdleState>();
+        StopAllCoroutines();
     }
 
     public void InvokeEnemyAttackEvent (EnemyAttackEventArgs enemyAttackEventArgs) {

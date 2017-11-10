@@ -11,18 +11,16 @@ namespace WaveStates {
 
         public override void Enter () {
             base.Enter();
-            gestureManager.SetActive(true); // Needs to start listening before EnemyAttackRoutine()
             StartCoroutine(EnemyAttackRoutine());
         }
 
         public override void Exit () {
             base.Exit();
-            gestureManager.SetActive(false);
+            StopAllCoroutines();
         }
 
         public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
-            if (!playerHitEventArgs.IsDead)
-                waveController.ToPlayerRespawnState();
+            waveController.ToPlayerRespawnState();
         }
 
         public void OnEnemyHitEvent () {
@@ -49,12 +47,13 @@ namespace WaveStates {
 
         private IEnumerator EnemyAttackRoutine () {
             float[] waveRoutineTime = currentWave.RoutineTime; 
-            EnemyController enemyController = currentWave.Enemies[Random.Range(0, currentWave.Enemies.Length)].GetComponent<EnemyController>();
+            EnemyController enemyController = currentWave.RandomActiveEnemy.GetComponent<EnemyController>();
             enemyController.ToAttackState();
             yield return new WaitForSeconds(enemyController.Enemy.ShootRoutineTime);
         }
 
         private IEnumerator EnemyRefillRoutine () {
+            Debug.Log("EnemyRefillRoutine " + Time.time);
             yield return new WaitForSeconds(1f); // Waiting for Enemy "Disable" animation...
             waveController.ToWaveRefillState(); // TODO: Getting to the next wave or restarting the current wave if the rounds are not finished
         }

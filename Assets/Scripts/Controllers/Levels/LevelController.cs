@@ -57,13 +57,11 @@ public class LevelController : StateMachine {
         ChangeState<InitState>();
     }
 
-    public void ToWaveStartState() {
+    public void ToWaveStartState () {
         currentWaveIndex++;
-        if (currentWaveIndex >= currentLevelData.WavesData.Count) {
-            LevelEndEvent.Invoke();
-        } else {
-            ChangeState<WaveStartState>();
-        }
+        if (currentWaveIndex >= currentLevelData.WavesData.Count) // Keep playing the last wave until the player loses
+            currentWaveIndex--;
+        ChangeState<WaveStartState>();
     }
 
     public void ToWaveState () {

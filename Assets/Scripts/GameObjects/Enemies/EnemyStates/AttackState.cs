@@ -38,11 +38,11 @@ namespace EnemyStates {
         #region Protected Behaviour
 
         protected override void AddListeners () {
-            GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
+            GestureRecognitionController.RightGestureInputEvent += OnRightGestureInputEvent;
         }
 
         protected override void RemoveListeners () {
-            GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
+            GestureRecognitionController.RightGestureInputEvent -= OnRightGestureInputEvent;
         }
 
         #endregion

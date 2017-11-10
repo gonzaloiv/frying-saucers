@@ -15,12 +15,12 @@ public class CameraController : MonoBehaviour {
 
     void OnEnable () {
         Player.PlayerHitEvent += OnPlayerHitEvent;
-        GestureManager.RightGestureInputEvent += OnRightGestureInput;
+        GestureRecognitionController.RightGestureInputEvent += OnRightGestureInput;
     }
 
     void OnDisable () {
         Player.PlayerHitEvent -= OnPlayerHitEvent;
-        GestureManager.RightGestureInputEvent -= OnRightGestureInput;
+        GestureRecognitionController.RightGestureInputEvent -= OnRightGestureInput;
     }
 
     #endregion

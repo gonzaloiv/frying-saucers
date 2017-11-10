@@ -31,14 +31,14 @@ public class LevelScreenController : MonoBehaviour {
     void OnEnable () {
         DOTween.Sequence().Append(scoreLabel.DOFade(0, FADE_IN_TIME / 2)).Append(scoreLabel.DOFade(1, FADE_IN_TIME / 2));
         DOTween.Sequence().Append(livesLabel.DOFade(0, FADE_IN_TIME / 2)).Append(livesLabel.DOFade(1, FADE_IN_TIME / 2));
-        GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
-        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureRecognitionController.RightGestureInputEvent += OnRightGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent += OnWrongGestureInputEvent;
         Player.PlayerHitEvent += OnPlayerHitEvent;
     }
 
     void OnDisable () {
-        GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
-        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureRecognitionController.RightGestureInputEvent -= OnRightGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent -= OnWrongGestureInputEvent;
         Player.PlayerHitEvent -= OnPlayerHitEvent;
     }
 
@@ -56,12 +56,9 @@ public class LevelScreenController : MonoBehaviour {
     public void OnRightGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
         IEnumerator emojiRoutine = player.Combo >= 5 ? EmojiRoutine(EMOJIS[3], 3) : EmojiRoutine(EMOJIS[2], 1);
         StartCoroutine(emojiRoutine);
-        player.IncreaseCombo();
-        player.IncreaseScore((int) Mathf.Ceil(GameConfig.EnemyScore * player.Combo * GestureMultiplier(gestureInputEventArgs.Time)));
     }
 
     public void OnWrongGestureInputEvent (GestureInputEventArgs gestureInputEventArgs) {
-        player.ResetCombo();
         StartCoroutine(EmojiRoutine(EMOJIS[1], 1));
     }
 
@@ -81,19 +78,6 @@ public class LevelScreenController : MonoBehaviour {
         emojiLabel.text = emoji;
         yield return new WaitForSeconds(time);
         emojiLabel.text = EMOJIS[0];
-    }
-
-    private float GestureMultiplier (GestureTime gestureTime) {
-        switch (gestureTime) {
-        case GestureTime.Perfect:
-            return 2;
-        case GestureTime.TooFast:
-            return .5f;
-        case GestureTime.TooSlow:
-            return .5f;
-        default:
-            return 1;
-        }
     }
 
     private void UpdateLivesLabel (int amount) {

@@ -26,13 +26,13 @@ public class HandIndicatorController : MonoBehaviour {
     }
 
     void OnEnable () {
-        GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
-        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureRecognitionController.RightGestureInputEvent += OnRightGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent += OnWrongGestureInputEvent;
     }
 
     void OnDisable () {
-        GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
-        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureRecognitionController.RightGestureInputEvent -= OnRightGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent -= OnWrongGestureInputEvent;
     }
 
     #endregion

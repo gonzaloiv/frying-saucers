@@ -13,12 +13,12 @@ public class WaveController : StateMachine {
 
     public GameObject GestureManager { get { return gestureManager; } }
     public GameObject Player { get { return player; } }
-    public EnemyTypeLabelSpawner EnemyTypeLabelSpawner { get { return enemyTypeLabelSpawner; } }
+    public EnemyGestureSpawner EnemyGestureSpawner { get { return enemyGestureSpawner; } }
     public WaveSpawner WaveSpawner { get { return waveSpawner; } }
     public Wave CurrentWave { get { return currentWave; } }
 
     private GameObject player;
-    private EnemyTypeLabelSpawner enemyTypeLabelSpawner;
+    private EnemyGestureSpawner enemyGestureSpawner;
     private WaveSpawner waveSpawner;
     private Wave currentWave;
 
@@ -29,16 +29,20 @@ public class WaveController : StateMachine {
     public delegate void WaveEndEventHandler ();
     public static event WaveEndEventHandler WaveEndEvent = delegate {};
 
+    public delegate void EnemyAttackStartEventHandler (float time);
+    public static event EnemyAttackStartEventHandler EnemyAttackStartEvent = delegate {};
+
     #endregion
 
     #region Mono Behaviour
 
     void Awake () {
-        enemyTypeLabelSpawner = Instantiate(enemyTypeLabelPrefab, transform).GetComponent<EnemyTypeLabelSpawner>();
+        enemyGestureSpawner = Instantiate(enemyTypeLabelPrefab, transform).GetComponent<EnemyGestureSpawner>();
     }
 
     void OnDisable () {
         gestureManager.SetActive(false);
+        currentWave.ResetWaveEnemies();
     }
 
     #endregion
@@ -54,14 +58,15 @@ public class WaveController : StateMachine {
 
     public void InitWave (LevelType levelType, WaveData waveData) {
         currentWave.Init(waveData);
-        ToWaveStartState();
+        ToRoundStartState();
+        gestureManager.SetActive(true);
     }
 
-    public void ToWaveStartState () {
+    public void ToRoundStartState () {
         if (currentWave.RemainingRounds <= 0) {
             InvokeWaveEndEvent();
         } else {
-            ChangeState<WaveStartState>();
+            ChangeState<RoundStartState>();
         }
     }
 
@@ -83,6 +88,10 @@ public class WaveController : StateMachine {
 
     public void InvokeWaveEndEvent () {
         WaveEndEvent.Invoke();
+    }
+
+    public void InvokeEnemyAttackStartEvent (float time) {
+        EnemyAttackStartEvent.Invoke(time);
     }
 
     #endregion

@@ -10,7 +10,8 @@ namespace WaveStates {
 
         public override void Enter () {
             base.Enter();
-            StartCoroutine(WaveRestartRoutine());
+            if (!playerController.Player.IsDead)
+                StartCoroutine(WaveRestartRoutine());
         }
 
         #endregion
@@ -19,9 +20,17 @@ namespace WaveStates {
 
         private IEnumerator WaveRestartRoutine () {
             yield return new WaitForSeconds(0.8f);
-            player.SetActive(true);
+            playerController.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.2f);
-            waveController.ToWaveStartState();
+            if (currentWave.WaveStartGesturesTime != 0) {
+                enemyGestureSpawner.ShowGestures(currentWave.ActiveEnemies, currentWave.WaveStartGesturesTime);
+                yield return new WaitForSeconds(currentWave.WaveStartGesturesTime);
+            }
+            if (currentWave.WaveStartPauseTime != 0) {
+                waveController.InvokeEnemyAttackStartEvent(currentWave.WaveStartPauseTime);
+                yield return new WaitForSeconds(currentWave.WaveStartPauseTime);
+            }
+            waveController.ToEnemyAttackState();
         }
 
         #endregion

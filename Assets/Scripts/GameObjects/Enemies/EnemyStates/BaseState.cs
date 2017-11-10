@@ -10,7 +10,7 @@ namespace EnemyStates {
 
         protected EnemyController enemyController;
         protected GameObject player;
-        protected Enemy enemy;
+        protected Enemy enemy  { get { return enemyController.Enemy; } }
         protected ParticleSystem laserPS;
         protected ParticleSystem explosionPS;
         protected Animator anim;
@@ -22,7 +22,6 @@ namespace EnemyStates {
         void Awake () {
             enemyController = GetComponent<EnemyController>();
             player = enemyController.Player;
-            enemy = enemyController.Enemy;
             laserPS = enemyController.LaserPS;
             explosionPS = enemyController.ExplosionPS;
             anim = GetComponent<Animator>();

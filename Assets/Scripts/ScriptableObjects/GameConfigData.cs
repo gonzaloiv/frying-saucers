@@ -13,6 +13,7 @@ public class GameConfigData : ScriptableObject {
     [Header("Player")]
     public float PlayerInitialYPosition = -1f;
     public float PlayerMaxSpeed = 7f;
+    public float PlayerInitialCombo = 1;
 
     [Header("Game")]
     public int GameTimeScale = 1;

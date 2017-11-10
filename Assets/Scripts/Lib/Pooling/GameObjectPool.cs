@@ -38,7 +38,6 @@ public class GameObjectPool : IPool {
         GameObject obj = MonoBehaviour.Instantiate(prefab, poolGameObject.transform);
         obj.SetActive(false);
         objects.Add(obj);
-
         return obj;
     }
 

@@ -15,7 +15,8 @@ namespace EnemyStates {
 
         public override void Play () {
             base.Play();
-            transform.position = Vector2.Lerp(transform.position, enemyController.Enemy.Position, GameConfig.EnemyMaxSpeed / 2 * Time.deltaTime);
+            if (enemy != null)
+                transform.position = Vector2.Lerp(transform.position, enemy.Position, GameConfig.EnemyMaxSpeed / 2 * Time.deltaTime);
         }
 
         #endregion

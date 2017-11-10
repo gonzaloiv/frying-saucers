@@ -5,13 +5,7 @@ using System.Linq;
 
 namespace WaveStates {
 
-    public class WaveStartState : BaseState {
-
-        #region Fields
-
-        private bool playing;
-
-        #endregion
+    public class RoundStartState : BaseState {
 
         #region Public Behaviour
 
@@ -19,8 +13,7 @@ namespace WaveStates {
             base.Enter();
             currentWave.SetEnemies(waveSpawner.SpawnWaveEnemies(currentWave.WaveData));
             currentWave.DecreaseRemainingRounds();
-            Debug.Log("CurrentWave.RemainingRounds " + currentWave.RemainingRounds);
-            enemyTypeLabelSpawner.HideGestures();
+            enemyGestureSpawner.HideGestures();
             StartCoroutine(WaveRoutine());
         }
 
@@ -30,10 +23,12 @@ namespace WaveStates {
 
         private IEnumerator WaveRoutine () {
             yield return new WaitForSeconds(currentWave.WaveStartTime);
-            enemyTypeLabelSpawner.ShowGestures(currentWave.Enemies, currentWave.WaveStartGesturesTime);
+            enemyGestureSpawner.ShowGestures(currentWave.ActiveEnemies, currentWave.WaveStartGesturesTime);
             yield return new WaitForSeconds(currentWave.WaveStartGesturesTime);
-            if (currentWave.WaveStartPauseTime != 0)
+            if (currentWave.WaveStartPauseTime != 0) {
+                waveController.InvokeEnemyAttackStartEvent(currentWave.WaveStartPauseTime);
                 yield return new WaitForSeconds(currentWave.WaveStartPauseTime);
+            }
             waveController.ToEnemyAttackState();
         }
 

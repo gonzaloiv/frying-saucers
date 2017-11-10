@@ -9,7 +9,7 @@ public class ResultIndicatorController : MonoBehaviour {
     #region Fields
 
     private const float ANIMATION_TIME = 0.3f;
-    private static string[] RESULT_TEXT = new string[] {"Perfect!", "Not bad", "Too fast", "Too slow", "Gross"};
+    private static string[] RESULT_TEXT = new string[] { "Perfect!", "Not bad", "Too fast", "Too slow", "Gross" };
     private const string COMBO_TEXT = "x";
 
     [SerializeField] private GameObject resultLabelPrefab;
@@ -31,18 +31,14 @@ public class ResultIndicatorController : MonoBehaviour {
         comboLabel.enabled = false;
     }
 
-    void Update () {
-        comboLabel.text = COMBO_TEXT + player.Combo;
-    }
-
     void OnEnable () {
-        GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
-        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureRecognitionController.RightGestureInputEvent += OnRightGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent += OnWrongGestureInputEvent;
     }
 
     void OnDisable () {
-        GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
-        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureRecognitionController.RightGestureInputEvent -= OnRightGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent -= OnWrongGestureInputEvent;
     }
 
     #endregion
@@ -78,6 +74,7 @@ public class ResultIndicatorController : MonoBehaviour {
 
 
         if (combo) {
+            comboLabel.text = COMBO_TEXT + player.Combo;
             comboLabel.transform.position = cursorPosition + new Vector2(1, 0.2f);
             comboLabel.enabled = true;
             DOTween.Sequence().Append(comboLabel.DOFade(0, 0.001f)).Append(comboLabel.DOFade(1, ANIMATION_TIME));

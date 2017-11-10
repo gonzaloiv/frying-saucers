@@ -25,13 +25,13 @@ public class TutorialScreenController : MonoBehaviour {
     void OnEnable () {
         InputManager.TapInputEvent += OnTapInputEvent;
         EnemyController.EnemyHitEvent += OnEnemyHitEvent;
-        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent += OnWrongGestureInputEvent;
     }
 
     void OnDisable () {
         InputManager.TapInputEvent -= OnTapInputEvent;
         EnemyController.EnemyHitEvent -= OnEnemyHitEvent;
-        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent -= OnWrongGestureInputEvent;
     }
 
     #endregion

@@ -10,8 +10,8 @@ namespace WaveStates {
 
         protected WaveController waveController;
         protected GameObject gestureManager;
-        protected GameObject player;
-        protected EnemyTypeLabelSpawner enemyTypeLabelSpawner;
+        protected PlayerController playerController;
+        protected EnemyGestureSpawner enemyGestureSpawner;
         protected WaveSpawner waveSpawner;
         protected Wave currentWave;
 
@@ -22,8 +22,8 @@ namespace WaveStates {
         void Awake () {
             waveController = GetComponent<WaveController>();
             gestureManager = waveController.GestureManager;
-            player = waveController.Player;
-            enemyTypeLabelSpawner = waveController.EnemyTypeLabelSpawner;
+            playerController = waveController.Player.GetComponent<PlayerController>();
+            enemyGestureSpawner = waveController.EnemyGestureSpawner;
             waveSpawner = waveController.WaveSpawner;
             currentWave = waveController.CurrentWave;
         }

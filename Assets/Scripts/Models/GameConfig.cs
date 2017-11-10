@@ -13,6 +13,7 @@ public class GameConfig {
     // Player
     public static float PlayerInitialYPosition;
     public static float PlayerMaxSpeed;
+    public static float PlayerInitialCombo;
 
     // Game
     public static int GameTimeScale;
@@ -32,6 +33,7 @@ public class GameConfig {
         EnemyInitialYPosition = gameConfigData.EnemyInitialYPosition;
         PlayerInitialYPosition = gameConfigData.PlayerInitialYPosition;
         PlayerMaxSpeed = gameConfigData.PlayerMaxSpeed;
+        PlayerInitialCombo = gameConfigData.PlayerInitialCombo;
         GameTimeScale = gameConfigData.GameTimeScale;
         ShootingRoutineSections = gameConfigData.ShootingRoutineSections;
         GestureStrokeTime = gameConfigData.GestureStrokeTime;

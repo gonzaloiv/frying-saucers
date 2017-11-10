@@ -42,8 +42,8 @@ public class SFXManager : MonoBehaviour {
     void AddListeners () {
 
         // Input
-        GestureManager.RightGestureInputEvent += OnRightGestureInputEvent;
-        GestureManager.WrongGestureInputEvent += OnWrongGestureInputEvent;
+        GestureRecognitionController.RightGestureInputEvent += OnRightGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent += OnWrongGestureInputEvent;
 
         // Game Mechanics
         EnemyController.EnemyAttackEvent += OnEnemyAttackEvent;
@@ -55,14 +55,15 @@ public class SFXManager : MonoBehaviour {
         // Game
         GameController.NewGameEvent += OnNewGameEvent;
         LevelController.NewLevelEvent += OnNewLevelEvent;
+        WaveController.WaveEndEvent += OnWaveEndEvent;
 
     }
 
     void RemoveListeners () {
 
         // Input
-        GestureManager.RightGestureInputEvent -= OnRightGestureInputEvent;
-        GestureManager.WrongGestureInputEvent -= OnWrongGestureInputEvent;
+        GestureRecognitionController.RightGestureInputEvent -= OnRightGestureInputEvent;
+        GestureRecognitionController.WrongGestureInputEvent -= OnWrongGestureInputEvent;
 
         // Game Mechanics
         EnemyController.EnemyAttackEvent -= OnEnemyAttackEvent;
@@ -74,6 +75,7 @@ public class SFXManager : MonoBehaviour {
         // Game
         GameController.NewGameEvent -= OnNewGameEvent;
         LevelController.NewLevelEvent -= OnNewLevelEvent;
+        WaveController.WaveEndEvent -= OnWaveEndEvent;
 
     }
 
@@ -113,11 +115,7 @@ public class SFXManager : MonoBehaviour {
     }
 
     public void OnPlayerHitEvent (PlayerHitEventArgs playerHitEventArgs) {
-        if (playerHitEventArgs.IsDead) {
-            audioSource.PlayOneShot(gameOver);
-        } else {
-            audioSource.PlayOneShot(playerHit);
-        }
+        audioSource.PlayOneShot(playerHitEventArgs.IsDead ? gameOver : playerHit);
     }
 
     // Game
@@ -126,6 +124,10 @@ public class SFXManager : MonoBehaviour {
     }
 
     public void OnNewLevelEvent () {
+        audioSource.PlayOneShot(newLevel);
+    }
+
+    public void OnWaveEndEvent () {
         audioSource.PlayOneShot(newLevel);
     }
 

@@ -30,7 +30,7 @@ public class UFOGridController : MonoBehaviour {
         ufos.ForEach(ufo => ufo.SetActive(true));
         while (gameObject.activeSelf) {
             yield return new WaitForSeconds(disablingSpeed);
-            List<GameObject> activeUFOs = ufos.Where(x => x.activeSelf).ToList();
+            List<GameObject> activeUFOs = ufos.Where(x => x.activeInHierarchy).ToList();
             if (activeUFOs.Count() > 0) {
                 activeUFOs[Random.Range(0, activeUFOs.Count())].GetComponent<EnemyController>().ToDisableState();
             } else {
@@ -42,6 +42,7 @@ public class UFOGridController : MonoBehaviour {
     private IEnumerator RestartGridRoutine () {
         for (int i = 0; i < ufos.Count(); i++) { 
             ufos[i].SetActive(true);
+            ufos[i].GetComponent<EnemyController>().ToIdleState();
             yield return new WaitForSeconds(.1f); 
         }
     }

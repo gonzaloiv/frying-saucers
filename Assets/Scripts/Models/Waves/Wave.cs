@@ -7,12 +7,14 @@ public class Wave {
 
     #region Fields / Properties
 
+    // Wave State
+
     public WaveData WaveData { get { return waveData; } }
     public GameObject[] Enemies { get { return enemies; } }
-
-    // Wave State
-    public bool IsFinished { get { return enemies.Where(enemy => enemy.activeInHierarchy).Count() == 0 && remainingEnemies == 0; } }
+    public GameObject[] ActiveEnemies { get { return enemies.Where(enemy => enemy.activeInHierarchy).ToArray(); } }
+    public GameObject RandomActiveEnemy { get { return ActiveEnemies[Random.Range(0, ActiveEnemies.Length)]; } }
     public float RemainingRounds { get { return remainingRounds; } }
+    public bool IsFinished { get { return ActiveEnemies.Count() == 0 && remainingRounds == 0; } }
     public int RemainingEnemies { get { return remainingEnemies; } }
 
     // Wave Times
@@ -44,29 +46,32 @@ public class Wave {
     }
 
     public void SetEnemies (GameObject[] enemies) {
-        ResetWaveEnemies();
         this.enemies = new GameObject[waveData.WaveEnemies.EnemyGridAmount];
         this.enemies = enemies;
+    }
+
+    public void SetEnemy (GameObject enemy, int index) {
+        this.enemies[index] = enemy;
+        DecreaseRemainingEnemies();
     }
 
     public void DecreaseRemainingRounds () {
         remainingRounds--;
     }
 
-    public void DecreaseRemainingEnemies () {
-        remainingEnemies--;
+    public void ResetWaveEnemies () {
+        if (enemies == null)
+            return;
+        foreach (GameObject enemy in enemies)
+            enemy.SetActive(false);
     }
 
     #endregion
 
     #region Private Behaviour
 
-    private void ResetWaveEnemies () {
-        if (enemies != null) {
-            foreach (GameObject enemy in enemies)
-                enemy.SetActive(false);
-            enemies = null;
-        }
+    private void DecreaseRemainingEnemies () {
+        remainingEnemies--;
     }
 
     #endregion
